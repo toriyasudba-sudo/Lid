@@ -12,7 +12,7 @@
     {
       "binding": "DB",
       "database_name": "toriya-nova-mini-app",
-      "database_id": "REPLACE_AFTER_D1_CREATE"
+      "database_id": "403bec72-57da-4777-9070-135b51767b33"
     }
   ],
   "vars": {
