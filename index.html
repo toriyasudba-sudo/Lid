@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TORIYA NOVA — MINI APP GAME</title>
+<style>
+:root{
+  --bg:#f3efe7;--ink:#18232d;--muted:#737b80;--line:#cbc6bc;
+  --bronze:#967552;--dark:#202a32;--white:#fbfaf7;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#ddd8cf;color:var(--ink);
+font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.app{width:100%;max-width:480px;min-height:100svh;margin:auto;background:var(--bg);overflow:hidden}
+.top{height:66px;padding:0 19px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:11px;letter-spacing:.2em}.counter{font-size:10px;letter-spacing:.12em;color:var(--muted)}
+.screen{display:none;min-height:calc(100svh - 66px);padding:25px 19px 26px;flex-direction:column}
+.screen:target{display:flex}
+#s0{display:flex}
+.kicker{font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--bronze);margin-bottom:13px}
+h1{font-size:44px;line-height:.94;letter-spacing:-.055em;margin:0 0 18px;font-weight:650}
+h2{font-size:31px;line-height:1;letter-spacing:-.045em;margin:0 0 17px;font-weight:620}
+.lead{font-size:18px;line-height:1.4}
+.small{font-size:11px;line-height:1.45;color:var(--muted)}
+.spacer{flex:1}
+.video{
+  height:205px;background:var(--dark);margin:19px 0;
+  border:1px solid #35414a;position:relative;display:grid;place-items:center;color:#fff;
+}
+.video .label{position:absolute;top:12px;left:13px;font-size:8px;letter-spacing:.17em;color:#aab3b7}
+.video .play{width:56px;height:56px;border:1px solid rgba(255,255,255,.75);
+border-radius:50%;display:grid;place-items:center;font-size:18px}
+.video .hint{position:absolute;bottom:12px;left:13px;font-size:9px;color:#aab3b7}
+.btn{display:block;width:100%;padding:16px 15px;border:1px solid var(--ink);
+background:var(--ink);color:#fff;text-decoration:none;font-size:15px;text-align:left}
+.btn.alt{background:transparent;color:var(--ink)}
+.options{display:grid;gap:9px;margin-top:21px}
+.option{display:block;border:1px solid var(--line);padding:16px 14px;text-decoration:none;color:var(--ink);background:transparent}
+.option b{display:block;font-weight:500;font-size:16px}.option span{display:block;font-size:11px;color:var(--muted);margin-top:5px}
+.option:active{border-color:var(--bronze)}
+.path{border-left:1px solid var(--ink);padding-left:14px;margin:21px 0}
+.node{padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px}
+.node b{font-size:11px;font-weight:550}.node span{font-size:10px;color:var(--muted);text-align:right}
+.message{border:1px solid var(--line);background:rgba(255,255,255,.32);padding:15px;margin:18px 0}
+.tag{font-size:9px;letter-spacing:.13em;color:var(--bronze);margin-bottom:8px}
+.event{display:grid;grid-template-columns:47px 1fr auto;gap:8px;padding:11px 0;border-bottom:1px solid var(--line);font-size:12px}
+.event time,.event em{font-style:normal;color:var(--muted);font-size:10px}.event em{color:var(--bronze)}
+.data{margin:18px 0}.data div{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:12px}
+.data strong{font-size:22px;font-weight:500}.data em{font-size:9px;color:var(--bronze);font-style:normal}
+.gift{border:1px solid var(--bronze);padding:20px;background:rgba(255,255,255,.35)}
+.quote{font-size:23px;line-height:1.17;letter-spacing:-.025em}
+.footer{padding:22px 19px 35px;font-size:9px;color:var(--muted);letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div class="logo">TORIYA NOVA</div><div class="counter">MINI APP / GAME</div></header>
+
+<section class="screen" id="s0">
+  <div class="kicker">ARCHITECTURE GAME</div>
+  <h1>Собери путь клиента.</h1>
+  <p class="lead">Ты сейчас не будешь читать презентацию. Ты примешь несколько решений — и увидишь, во что они складываются.</p>
+  <div class="spacer"></div>
+  <div class="video"><div class="label">ВИДЕО ТОРИИ</div><video controls playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover" src="/01_START_TORIYA.mp4"></video></div>
+  <a class="btn" href="#s1">Начать →</a>
+</section>
+
+<section class="screen" id="s1">
+  <div class="kicker">ХОД 01 / ВХОД</div>
+  <h2>Человек увидел твой пост.</h2>
+  <p class="lead">Нажал. Открыл Mini App.</p>
+  <div class="path">
+    <div class="node"><b>ПОСТ</b><span>первое касание</span></div>
+    <div class="node"><b>MINI APP</b><span>человек внутри</span></div>
+  </div>
+  <p class="small">Что ты хочешь сделать первым?</p>
+  <div class="options">
+    <a class="option" href="#s2a"><b>Помочь ему понять ситуацию</b><span>Сначала смысл.</span></a>
+    <a class="option" href="#s2b"><b>Довести до действия</b><span>Сразу двигаем маршрут.</span></a>
+    <a class="option" href="#s2c"><b>Вести в продукт</b><span>Сразу показываем предложение.</span></a>
+  </div>
+</section>
+
+<section class="screen" id="s2a">
+  <div class="kicker">ХОД 02 / ВЫБОР</div>
+  <h2>Ты выбрала: понять ситуацию.</h2>
+  <p class="lead">Человек получил первое понимание. Что ты делаешь дальше?</p>
+  <div class="options">
+    <a class="option" href="#s3material"><b>Дать материал</b><span>Продолжить через пользу.</span></a>
+    <a class="option" href="#s3break"><b>Дать разбор</b><span>Перевести понимание в конкретику.</span></a>
+    <a class="option" href="#s3return"><b>Сохранить и вернуть позже</b><span>Оставить точку возврата.</span></a>
+  </div>
+</section>
+
+<section class="screen" id="s2b">
+  <div class="kicker">ХОД 02 / ВЫБОР</div>
+  <h2>Ты выбрала: довести до действия.</h2>
+  <p class="lead">Человек готов что-то сделать. Куда ведёшь?</p>
+  <div class="options">
+    <a class="option" href="#s3product"><b>В продукт</b><span>Следующий шаг — покупка.</span></a>
+    <a class="option" href="#s3break"><b>В разбор</b><span>Сначала уточнить задачу.</span></a>
+    <a class="option" href="#s3return"><b>Сохранить и вернуть позже</b><span>Не терять человека.</span></a>
+  </div>
+</section>
+
+<section class="screen" id="s2c">
+  <div class="kicker">ХОД 02 / ВЫБОР</div>
+  <h2>Ты выбрала: вести в продукт.</h2>
+  <p class="lead">Человек уже видит предложение. Что должно удержать его в маршруте?</p>
+  <div class="options">
+    <a class="option" href="#s3product"><b>Следующий шаг к покупке</b><span>Не обрывать путь.</span></a>
+    <a class="option" href="#s3break"><b>Сначала показать разбор</b><span>Уточнить, что ему действительно нужно.</span></a>
+    <a class="option" href="#s3return"><b>Оставить возврат</b><span>Дать человеку возможность вернуться.</span></a>
+  </div>
+</section>
+
+<section class="screen" id="s3material">
+  <div class="kicker">ТВОЙ МАРШРУТ</div>
+  <h2>Материал — не конечная точка.</h2>
+  <div class="path">
+    <div class="node"><b>ПОСТ</b><span>вход</span></div><div class="node"><b>MINI APP</b><span>понимание</span></div>
+    <div class="node"><b>МАТЕРИАЛ</b><span>получил</span></div><div class="node"><b>?</b><span>что дальше?</span></div>
+  </div>
+  <div class="message"><div class="tag">АРХИТЕКТУРНЫЙ ВОПРОС</div><p>Если человек получил материал и ушёл — что ты хочешь увидеть потом?</p></div>
+  <a class="btn" href="#s4">Посмотреть, что происходит с человеком →</a>
+</section>
+
+<section class="screen" id="s3break">
+  <div class="kicker">ТВОЙ МАРШРУТ</div>
+  <h2>Разбор — тоже не финал.</h2>
+  <div class="path">
+    <div class="node"><b>ПОСТ</b><span>вход</span></div><div class="node"><b>MINI APP</b><span>понимание</span></div>
+    <div class="node"><b>РАЗБОР</b><span>конкретика</span></div><div class="node"><b>?</b><span>что дальше?</span></div>
+  </div>
+  <div class="message"><div class="tag">АРХИТЕКТУРНЫЙ ВОПРОС</div><p>Как понимание должно превратиться в следующее действие?</p></div>
+  <a class="btn" href="#s4">Посмотреть, что происходит с человеком →</a>
+</section>
+
+<section class="screen" id="s3product">
+  <div class="kicker">ТВОЙ МАРШРУТ</div>
+  <h2>Продукт — не просто кнопка «купить».</h2>
+  <div class="path">
+    <div class="node"><b>ПОСТ</b><span>вход</span></div><div class="node"><b>MINI APP</b><span>действие</span></div>
+    <div class="node"><b>ПРОДУКТ</b><span>предложение</span></div><div class="node"><b>?</b><span>что помешает купить?</span></div>
+  </div>
+  <div class="message"><div class="tag">АРХИТЕКТУРНЫЙ ВОПРОС</div><p>Что человеку нужно понять прямо перед покупкой?</p></div>
+  <a class="btn" href="#s4">Посмотреть, что происходит с человеком →</a>
+</section>
+
+<section class="screen" id="s3return">
+  <div class="kicker">ТВОЙ МАРШРУТ</div>
+  <h2>Ты оставила точку возврата.</h2>
+  <div class="path">
+    <div class="node"><b>ПОСТ</b><span>вход</span></div><div class="node"><b>MINI APP</b><span>действие</span></div>
+    <div class="node"><b>DROP</b><span>остановился</span></div><div class="node"><b>RETURN</b><span>может вернуться</span></div>
+  </div>
+  <div class="message"><div class="tag">АРХИТЕКТУРНЫЙ ВОПРОС</div><p>Что должен получить человек после возвращения?</p></div>
+  <a class="btn" href="#s4">Посмотреть, что происходит с человеком →</a>
+</section>
+
+<section class="screen" id="s4">
+  <div class="kicker">ЖИВОЙ ПОЛЬЗОВАТЕЛЬ</div>
+  <h2>Теперь смотрим не на схему. На человека.</h2>
+  <div class="event"><time>20:31</time><span>Открыл Mini App</span><em>START</em></div>
+  <div class="event"><time>20:33</time><span>Сделал первый шаг</span><em>STEP</em></div>
+  <div class="event"><time>20:36</time><span>Дошёл до результата</span><em>RESULT</em></div>
+  <div class="event"><time>20:47</time><span>Остановился</span><em>DROP</em></div>
+  <div class="event"><time>00:47</time><span>Вернулся</span><em>RETURN</em></div>
+  <div class="spacer"></div>
+  <p class="lead">Вот зачем нужны события. Чтобы видеть путь, а не просто считать просмотры.</p>
+  <a class="btn" href="#s5">А теперь возьмём всех →</a>
+</section>
+
+<section class="screen" id="s5">
+  <div class="kicker">ДАННЫЕ</div>
+  <h2>20 человек — это ещё ничего не говорит.</h2>
+  <div class="data">
+    <div><span>Открыли</span><strong>20</strong><em>START</em></div>
+    <div><span>Начали</span><strong>14</strong><em>STEP</em></div>
+    <div><span>Дошли</span><strong>9</strong><em>RESULT</em></div>
+    <div><span>Вернулись</span><strong>7</strong><em>RETURN</em></div>
+    <div><span>Продолжили</span><strong>5</strong><em>RE-STEP</em></div>
+    <div><span>Перешли к предложению</span><strong>3</strong><em>CTA</em></div>
+  </div>
+  <div class="message"><div class="tag">СМОТРИМ ВЧЕРА / СЕГОДНЯ</div><p><b>Вчера:</b> 20 просмотров.<br><b>Сегодня:</b> 20 просмотров.<br>Но сегодня только <b>2 новых</b> и <b>18 вернувшихся</b>.</p></div>
+  <p class="small">Демонстрационные данные. В реальном Mini App фиксируются реальные события.</p>
+  <a class="btn" href="#s6">И что делать с теми, кто остановился? →</a>
+</section>
+
+<section class="screen" id="s6">
+  <div class="kicker">ВОЗВРАТ</div>
+  <h2>Человек ушёл. Но система его не потеряла.</h2>
+  <div class="message"><div class="tag">ЧЕРЕЗ 4 ЧАСА</div><p>«Ты остановился как раз там, где начиналось самое интересное. Вернуться?»</p></div>
+  <div class="path">
+    <div class="node"><b>DROP</b><span>остановился</span></div>
+    <div class="node"><b>RETURN</b><span>вернулся</span></div>
+    <div class="node"><b>RE-STEP</b><span>продолжил</span></div>
+  </div>
+  <p class="quote">Это не «бот напомнил». Это ещё одна точка клиентского пути.</p>
+  <a class="btn" href="#s7">И вот тут возникает главное возражение →</a>
+</section>
+
+<section class="screen" id="s7">
+  <div class="kicker">ВОЗРАЖЕНИЕ</div>
+  <h2>«Я сама могу это сделать».</h2>
+  <p class="lead">Да.</p>
+  <div class="message"><p>GitHub, конструктор, код, нейросеть — техническую часть действительно можно собрать самостоятельно.</p></div>
+  <p class="quote">Но вопрос вообще не в том, умеешь ли ты нажать кнопки.</p>
+  <p class="lead"><b>Вопрос — какую работу этот инструмент должен выполнять внутри твоей системы.</b></p>
+  <div class="video"><div class="label">ВИДЕО ТОРИИ</div><video controls playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover" src="/02_OBJECTION_SELF_BUILD.mp4"></video></div>
+  <a class="btn" href="#s8">Показать, что происходит до разработки →</a>
+</section>
+
+<section class="screen" id="s8">
+  <div class="kicker">ДО РАЗРАБОТКИ</div>
+  <h2>Вот откуда всё начинается.</h2>
+  <div class="path">
+    <div class="node"><b>ПОЗИЦИОНИРОВАНИЕ</b><span>кто ты / как звучишь</span></div>
+    <div class="node"><b>КАРТА СМЫСЛОВ</b><span>что действительно важно</span></div>
+    <div class="node"><b>СПРОС</b><span>Wordstat / формулировки людей</span></div>
+    <div class="node"><b>ПУТЬ</b><span>касание → действие → результат → следующий шаг</span></div>
+    <div class="node"><b>ДАННЫЕ</b><span>что измеряем и какие решения принимаем</span></div>
+    <div class="node"><b>MINI APP</b><span>инструмент, если он здесь действительно нужен</span></div>
+  </div>
+  <p class="lead">Поэтому я не начинаю с «давай сделаем тебе бота».</p>
+  <a class="btn" href="#s9">А теперь — подарок →</a>
+</section>
+
+<section class="screen" id="s9">
+  <div class="kicker">ПОДАРОК</div>
+  <h2>Не PDF. Не чек-лист.</h2>
+  <p class="lead">Ты уже собрала кусок маршрута. Поэтому подарок — следующая точка, которую стоит проверить.</p>
+  <div class="spacer"></div>
+  <div class="gift">
+    <div class="tag">АРХИТЕКТУРНЫЙ ПОДАРОК</div>
+    <p class="quote" style="font-size:25px">Мини-разбор клиентского пути</p>
+    <p class="small">В боевой версии здесь открывается форма получения подарка.</p>
+  </div>
+  <br>
+  <a class="btn" href="#s10">Забрать подарок →</a>
+</section>
+
+<section class="screen" id="s10">
+  <div class="kicker">ФИНАЛ</div>
+  <h2>Теперь ты понимаешь, зачем это вообще нужно.</h2>
+  <p class="lead">Можно самостоятельно собрать Mini App.</p>
+  <p class="lead" style="margin-top:12px">А можно сначала разобраться, <b>какую работу он должен выполнять</b> — и только потом строить.</p>
+  <div class="video"><div class="label">ФИНАЛЬНОЕ ВИДЕО ТОРИИ</div><video controls playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover" src="/03_FINAL_TORIYA.mp4"></video></div>
+  <div class="message">
+    <div class="tag">ЗДЕСЬ БУДУТ РЕАЛЬНЫЕ ССЫЛКИ</div>
+    <p><b>Консультация — 15 000 ₽</b><br><a class="btn" style="margin-top:10px" href="https://t.me/m/34To0OpXMDEy">Разобрать и спроектировать вместе</a><br><a class="btn" style="margin-top:10px" href="https://t.me/m/O17_swvxMzYy">Сделать Mini App под тебя — от 30 000 ₽</a></p>
+  </div>
+  <a class="btn alt" href="#s0">Пройти ещё раз ↺</a>
+</section>
+
+<div class="footer">TORIYA NOVA STUDIO · ARCHITECTURE / DIGITAL / CUSTOMER PATH</div>
+</div>
+<script src="https://telegram.org/js/telegram-web-app.js"></script><script src="/app.js"></script></body>
+</html>
