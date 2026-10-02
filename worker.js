@@ -1,917 +1,784 @@
-const textEncoder = new TextEncoder();
+/**
+ * TORIYA NOVA — LID Worker
+ * Fix: /v2 and /v2/ always serve the CURRENT public/index.html
+ * with no-store headers, while preserving the Mini App API routes.
+ */
+
+const HTML_HEADERS = {
+  "Content-Type": "text/html; charset=UTF-8",
+  "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+  "Pragma": "no-cache",
+  "Expires": "0",
+  "X-TORIYA-APP": "v2-current",
+};
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
     headers: {
-      'content-type': 'application/json; charset=utf-8',
-      'cache-control': 'no-store'
-    }
+      "Content-Type": "application/json; charset=UTF-8",
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
+function corsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  };
+}
+
+function withCors(response) {
+  const headers = new Headers(response.headers);
+
+  Object.entries(corsHeaders()).forEach(([k, v]) => {
+    headers.set(k, v);
+  });
+
+  return new Response(response.body, {
+    status: response.status,
+    headers,
   });
 }
 
 function hex(buffer) {
   return [...new Uint8Array(buffer)]
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
-}
-
-function timingSafeEqual(a, b) {
-  if (a.length !== b.length) return false;
-  let diff = 0;
-  for (let i = 0; i < a.length; i++) {
-    diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  }
-  return diff === 0;
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 async function hmac(keyBytes, message) {
   const key = await crypto.subtle.importKey(
-    'raw',
+    "raw",
     keyBytes,
-    { name: 'HMAC', hash: 'SHA-256' },
+    { name: "HMAC", hash: "SHA-256" },
     false,
-    ['sign']
+    ["sign"]
   );
 
   return new Uint8Array(
     await crypto.subtle.sign(
-      'HMAC',
+      "HMAC",
       key,
-      textEncoder.encode(message)
+      new TextEncoder().encode(message)
     )
   );
 }
 
-async function validateInitData(initData, botToken, maxAgeSec = 86400) {
-  if (!initData) {
-    return { ok: false, error: 'init_data_missing' };
-  }
-
-  if (!botToken) {
-    return { ok: false, error: 'bot_token_missing' };
+async function verifyTelegramInitData(
+  initData,
+  botToken,
+  maxAgeSec = 86400
+) {
+  if (!initData || !botToken) {
+    return {
+      ok: false,
+      reason: "missing_init_data_or_bot_token",
+    };
   }
 
   const params = new URLSearchParams(initData);
-  const hash = params.get('hash');
+  const receivedHash = params.get("hash");
 
-  if (!hash) {
-    return { ok: false, error: 'hash_missing' };
+  if (!receivedHash) {
+    return {
+      ok: false,
+      reason: "missing_hash",
+    };
   }
 
-  const authDate = Number(params.get('auth_date') || 0);
+  const authDate = Number(params.get("auth_date") || 0);
 
   if (
     !authDate ||
     Math.floor(Date.now() / 1000) - authDate > maxAgeSec
   ) {
-    return { ok: false, error: 'init_data_expired' };
+    return {
+      ok: false,
+      reason: "init_data_expired",
+    };
   }
 
-  const pairs = [];
+  params.delete("hash");
 
-  for (const [key, value] of params.entries()) {
-    if (key !== 'hash') {
-      pairs.push([key, value]);
-    }
-  }
-
-  pairs.sort((a, b) => a[0].localeCompare(b[0]));
-
-  const dataCheckString = pairs
+  const dataCheckString = [...params.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
     .map(([k, v]) => `${k}=${v}`)
-    .join('\n');
+    .join("\n");
 
-  const secretKey = await hmac(
-    textEncoder.encode('WebAppData'),
+  // Telegram Web Apps:
+  // secret_key = HMAC_SHA256(key="WebAppData", message=bot_token)
+  const secret = await hmac(
+    new TextEncoder().encode("WebAppData"),
     botToken
   );
 
   const calculated = hex(
-    await hmac(secretKey, dataCheckString)
+    await hmac(secret, dataCheckString)
   );
 
-  if (!timingSafeEqual(calculated, hash.toLowerCase())) {
-    return { ok: false, error: 'hash_mismatch' };
+  if (calculated !== receivedHash) {
+    return {
+      ok: false,
+      reason: "invalid_hash",
+    };
   }
 
   let user = null;
 
   try {
-    user = JSON.parse(params.get('user') || 'null');
+    user = JSON.parse(params.get("user") || "null");
   } catch {}
-
-  if (!user?.id) {
-    return {
-      ok: false,
-      error: 'telegram_user_not_found'
-    };
-  }
 
   return {
     ok: true,
     user,
-    authDate
+    authDate,
   };
 }
 
 async function telegram(env, method, body) {
-  const token = env.BOT_TOKEN;
-
-  if (!token) {
-    throw new Error('BOT_TOKEN missing');
+  if (!env.BOT_TOKEN) {
+    throw new Error("BOT_TOKEN is not configured");
   }
 
-  const r = await fetch(
-    `https://api.telegram.org/bot${token}/${method}`,
+  const response = await fetch(
+    `https://api.telegram.org/bot${env.BOT_TOKEN}/${method}`,
     {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'content-type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     }
   );
 
-  const data = await r.json();
+  const data = await response.json();
 
   if (!data.ok) {
-    const e = new Error(
-      data.description || `telegram_${method}_failed`
+    throw new Error(
+      data.description ||
+      `Telegram API error: ${method}`
     );
-
-    e.telegram = data;
-    throw e;
   }
 
   return data.result;
 }
 
-function channelId(env) {
-  return env.CHANNEL_ID || '@tori_ya_nova';
+async function getTelegramUser(initData, env) {
+  const maxAge = Number(
+    env.INIT_DATA_MAX_AGE_SEC || 86400
+  );
+
+  return verifyTelegramInitData(
+    initData,
+    env.BOT_TOKEN,
+    maxAge
+  );
 }
 
-async function ensureUser(env, user) {
-  const now = new Date().toISOString();
-
-  const username = user.username || null;
-  const firstName = user.first_name || null;
-  const lastName = user.last_name || null;
-  const language = user.language_code || null;
-
-  await env.DB.prepare(`
-    INSERT INTO users (
-      telegram_user_id,
-      username,
-      first_name,
-      last_seen
-    )
-    VALUES (?, ?, ?, ?)
-    ON CONFLICT(telegram_user_id) DO UPDATE SET
-      username=excluded.username,
-      first_name=excluded.first_name,
-      last_seen=excluded.last_seen
-  `)
-    .bind(
-      String(user.id),
-      username,
-      firstName,
-      now
-    )
-    .run();
-}
-
-async function accessCheck(env, user) {
-  if (!env.BOT_TOKEN) {
+async function isSubscribed(userId, env) {
+  if (!env.BOT_TOKEN || !env.CHANNEL_ID) {
     return {
-      allowed: false,
-      error: 'bot_token_missing'
-    };
-  }
-
-  const chatId = channelId(env);
-
-  if (!chatId) {
-    return {
-      allowed: false,
-      error: 'channel_id_missing'
+      ok: false,
+      subscribed: false,
+      reason: "bot_token_or_channel_missing",
     };
   }
 
   try {
-    await telegram(env, 'getChat', {
-      chat_id: chatId
-    });
-  } catch (e) {
-    const desc =
-      e?.telegram?.description ||
-      e?.message ||
-      '';
-
-    const lower = desc.toLowerCase();
-
-    if (
-      lower.includes('bot token') ||
-      lower.includes('unauthorized')
-    ) {
-      return {
-        allowed: false,
-        error: 'bot_token_invalid',
-        detail: desc
-      };
-    }
-
-    if (
-      lower.includes('chat not found') ||
-      lower.includes('username is invalid')
-    ) {
-      return {
-        allowed: false,
-        error: 'channel_not_found',
-        detail: desc
-      };
-    }
-
-    return {
-      allowed: false,
-      error: 'telegram_api_error',
-      detail: desc
-    };
-  }
-
-  let member;
-
-  try {
-    member = await telegram(env, 'getChatMember', {
-      chat_id: chatId,
-      user_id: user.id
-    });
-  } catch (e) {
-    const desc =
-      e?.telegram?.description ||
-      e?.message ||
-      '';
-
-    const lower = desc.toLowerCase();
-
-    if (
-      lower.includes('bot token') ||
-      lower.includes('unauthorized')
-    ) {
-      return {
-        allowed: false,
-        error: 'bot_token_invalid',
-        detail: desc
-      };
-    }
-
-    if (
-      lower.includes('chat not found') ||
-      lower.includes('username is invalid')
-    ) {
-      return {
-        allowed: false,
-        error: 'channel_not_found',
-        detail: desc
-      };
-    }
-
-    if (
-      lower.includes('administrator rights') ||
-      lower.includes('not enough rights') ||
-      lower.includes('member list')
-    ) {
-      return {
-        allowed: false,
-        error: 'bot_not_admin',
-        detail: desc
-      };
-    }
-
-    if (
-      lower.includes('user not found') ||
-      lower.includes('user_id_invalid')
-    ) {
-      return {
-        allowed: false,
-        error: 'telegram_user_not_found',
-        detail: desc
-      };
-    }
-
-    return {
-      allowed: false,
-      error: 'telegram_api_error',
-      detail: desc
-    };
-  }
-
-  const allowed =
-    ['member', 'administrator', 'creator'].includes(
-      member.status
-    ) ||
-    (
-      member.status === 'restricted' &&
-      member.is_member === true
+    const member = await telegram(
+      env,
+      "getChatMember",
+      {
+        chat_id: env.CHANNEL_ID,
+        user_id: Number(userId),
+      }
     );
 
-  return {
-    allowed,
-    error: allowed ? null : 'not_member',
-    memberStatus: member.status,
-    detail: allowed
-      ? null
-      : `Telegram status: ${member.status}`
-  };
+    const subscribed = [
+      "creator",
+      "administrator",
+      "member",
+    ].includes(member.status);
+
+    return {
+      ok: true,
+      subscribed,
+      status: member.status,
+    };
+  } catch (e) {
+    return {
+      ok: false,
+      subscribed: false,
+      reason: String(e.message || e),
+    };
+  }
 }
 
-function userLabel(user) {
-  const name = [
-    user.first_name,
-    user.last_name
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .trim();
-
-  const handle = user.username
-    ? `@${user.username}`
-    : 'без username';
-
-  return `${name || 'Без имени'} · ${handle} · ID ${user.id}`;
-}
-
-function prettyDiagnostic(d) {
-  const labels = {
-    context: 'Контекст',
-    client: 'Клиент',
-    competition: 'Конкуренты',
-    journey: 'Путь',
-    architecture: 'Система / MVP',
-    ai: 'AI-контекст'
-  };
-
-  const pct = d?.pct || {};
-
-  return Object.entries(pct)
-    .map(
-      ([k, v]) =>
-        `${labels[k] || k}: ${v}%`
-    )
-    .join(' · ');
-}
-
-async function sendOwner(env, title, lines) {
-  if (!env.OWNER_CHAT_ID || !env.BOT_TOKEN) {
+async function saveEvent(
+  env,
+  user,
+  type,
+  payload = {}
+) {
+  if (!env.DB || !user?.id) {
     return;
   }
 
-  const message = [
-    title,
-    ...lines
-  ].join('\n');
-
   try {
-    await telegram(env, 'sendMessage', {
-      chat_id: env.OWNER_CHAT_ID,
-      text: message,
-      disable_web_page_preview: true
-    });
-  } catch (_) {}
+    await env.DB
+      .prepare(
+        `INSERT INTO events
+         (user_id, event_type, payload, created_at)
+         VALUES (?, ?, ?, datetime('now'))`
+      )
+      .bind(
+        String(user.id),
+        type,
+        JSON.stringify(payload)
+      )
+      .run();
+  } catch {
+    // Do not break the Mini App if analytics schema differs.
+  }
 }
 
-async function handleAccess(request, env) {
-  const body = await request.json().catch(() => ({}));
+async function ensureUser(env, user) {
+  if (!env.DB || !user?.id) {
+    return;
+  }
 
-  const auth = await validateInitData(
-    body.initData,
-    env.BOT_TOKEN,
-    Number(
-      env.INIT_DATA_MAX_AGE_SEC || 86400
-    )
+  try {
+    await env.DB
+      .prepare(
+        `INSERT INTO users
+         (
+           telegram_id,
+           username,
+           first_name,
+           last_name,
+           created_at,
+           updated_at
+         )
+         VALUES (?, ?, ?, ?, datetime('now'), datetime('now'))
+         ON CONFLICT(telegram_id)
+         DO UPDATE SET
+           username=excluded.username,
+           first_name=excluded.first_name,
+           last_name=excluded.last_name,
+           updated_at=datetime('now')`
+      )
+      .bind(
+        String(user.id),
+        user.username || null,
+        user.first_name || null,
+        user.last_name || null
+      )
+      .run();
+  } catch {
+    // Best effort.
+  }
+}
+
+async function access(request, env) {
+  const initData =
+    request.headers.get(
+      "X-Telegram-Init-Data"
+    ) ||
+    new URL(request.url).searchParams.get(
+      "initData"
+    ) ||
+    "";
+
+  const auth = await getTelegramUser(
+    initData,
+    env
   );
 
   if (!auth.ok) {
     return json(
       {
+        ok: false,
         allowed: false,
-        error: auth.error
+        reason: auth.reason,
+        message: env.BOT_TOKEN
+          ? "Telegram authorization required"
+          : "BOT_TOKEN не настроен",
       },
       401
     );
   }
 
-  let member;
+  await ensureUser(env, auth.user);
 
-  try {
-    member = await telegram(env, 'getChatMember', {
-      chat_id:
-        env.CHANNEL_ID ||
-        '@tori_ya_nova',
-      user_id: Number(auth.user.id)
-    });
-  } catch (e) {
-    const desc =
-      e?.telegram?.description ||
-      e?.message ||
-      '';
-
-    const lower = desc.toLowerCase();
-
-    if (
-      lower.includes('unauthorized') ||
-      lower.includes('invalid token')
-    ) {
-      return json(
-        {
-          allowed: false,
-          error: 'bot_token_invalid',
-          detail: desc
-        },
-        502
-      );
-    }
-
-    if (
-      lower.includes('chat not found') ||
-      lower.includes('username is invalid')
-    ) {
-      return json(
-        {
-          allowed: false,
-          error: 'channel_not_found',
-          detail: desc
-        },
-        502
-      );
-    }
-
-    if (
-      lower.includes('administrator rights') ||
-      lower.includes('not enough rights') ||
-      lower.includes('member list')
-    ) {
-      return json(
-        {
-          allowed: false,
-          error: 'bot_not_admin',
-          detail: desc
-        },
-        502
-      );
-    }
-
-    if (
-      lower.includes('user not found') ||
-      lower.includes('user_id_invalid')
-    ) {
-      return json(
-        {
-          allowed: false,
-          error: 'telegram_user_not_found',
-          detail: desc
-        },
-        502
-      );
-    }
-
-    return json(
-      {
-        allowed: false,
-        error: 'telegram_api_error',
-        detail: desc
-      },
-      502
+  const subscription =
+    await isSubscribed(
+      auth.user.id,
+      env
     );
-  }
 
-  const allowed =
-    member.status === 'member' ||
-    member.status === 'administrator' ||
-    member.status === 'creator' ||
-    (
-      member.status === 'restricted' &&
-      member.is_member === true
-    );
+  await saveEvent(
+    env,
+    auth.user,
+    "access",
+    {
+      subscribed:
+        subscription.subscribed,
+      status:
+        subscription.status || null,
+    }
+  );
 
   return json({
-    allowed,
-    error: allowed
-      ? null
-      : 'not_member',
-    memberStatus: member.status,
-    user: {
-      id: String(auth.user.id),
-      first_name:
-        auth.user.first_name || '',
-      username:
-        auth.user.username || ''
-    }
+    ok: true,
+    allowed:
+      subscription.subscribed,
+    subscribed:
+      subscription.subscribed,
+    user: auth.user,
+    channel:
+      env.CHANNEL_ID || null,
+    reason:
+      subscription.reason || null,
   });
 }
 
-async function handleEvent(request, env) {
-  const body = await request.json().catch(() => ({}));
+async function eventEndpoint(
+  request,
+  env
+) {
+  if (request.method !== "POST") {
+    return json(
+      {
+        ok: false,
+        error: "POST required",
+      },
+      405
+    );
+  }
 
-  const auth = await validateInitData(
-    body.initData,
-    env.BOT_TOKEN,
-    Number(
-      env.INIT_DATA_MAX_AGE_SEC || 86400
-    )
-  );
+  const initData =
+    request.headers.get(
+      "X-Telegram-Init-Data"
+    ) || "";
+
+  const auth =
+    await getTelegramUser(
+      initData,
+      env
+    );
 
   if (!auth.ok) {
     return json(
       {
         ok: false,
-        error: auth.error
+        error: auth.reason,
       },
       401
     );
   }
 
-  await ensureUser(env, auth.user);
+  let body = {};
 
-  const now =
-    new Date().toISOString();
+  try {
+    body = await request.json();
+  } catch {}
 
-  await env.DB.prepare(`
-    INSERT INTO events (
-      telegram_user_id,
-      session_id,
-      event,
-      screen,
-      meta,
-      created_at
-    )
-    VALUES (?, ?, ?, ?, ?, ?)
-  `)
-    .bind(
-      String(auth.user.id),
-      body.session_id || null,
-      String(
-        body.event || 'EVENT'
-      ).slice(0, 80),
-      body.screen || null,
-      JSON.stringify(
-        body.meta || {}
-      ),
-      now
-    )
-    .run();
+  await ensureUser(
+    env,
+    auth.user
+  );
 
-  return json({ ok: true });
+  await saveEvent(
+    env,
+    auth.user,
+    body.type || "event",
+    body
+  );
+
+  return json({
+    ok: true,
+  });
 }
 
-async function handleConsultation(request, env) {
-  const body = await request.json().catch(() => ({}));
+async function consultation(
+  request,
+  env
+) {
+  if (request.method !== "POST") {
+    return json(
+      {
+        ok: false,
+        error: "POST required",
+      },
+      405
+    );
+  }
 
-  const auth = await validateInitData(
-    body.initData,
-    env.BOT_TOKEN,
-    Number(
-      env.INIT_DATA_MAX_AGE_SEC || 86400
-    )
-  );
+  const initData =
+    request.headers.get(
+      "X-Telegram-Init-Data"
+    ) || "";
+
+  const auth =
+    await getTelegramUser(
+      initData,
+      env
+    );
 
   if (!auth.ok) {
     return json(
       {
         ok: false,
-        error: auth.error
+        error: auth.reason,
       },
       401
     );
   }
 
-  await ensureUser(env, auth.user);
+  let body = {};
 
-  const access =
-    await accessCheck(
-      env,
-      auth.user
-    );
+  try {
+    body = await request.json();
+  } catch {}
 
-  if (!access.allowed) {
-    return json(
-      {
-        ok: false,
-        error: access.error
-      },
-      403
-    );
-  }
-
-  const product = String(
-    body.product || ''
-  )
-    .trim()
-    .slice(0, 4000);
-
-  const requestText = String(
-    body.request || ''
-  )
-    .trim()
-    .slice(0, 4000);
-
-  const diagnostic =
-    body.diagnostic || {};
-
-  const meta = {
-    product,
-    request: requestText,
-    diagnostic
-  };
-
-  const now =
-    new Date().toISOString();
-
-  await env.DB.prepare(`
-    INSERT INTO events (
-      telegram_user_id,
-      session_id,
-      event,
-      screen,
-      meta,
-      created_at
-    )
-    VALUES (?, ?, ?, ?, ?, ?)
-  `)
-    .bind(
-      String(auth.user.id),
-      body.session_id || null,
-      'CONSULTATION_REQUEST',
-      '#consultation',
-      JSON.stringify(meta),
-      now
-    )
-    .run();
-
-  await sendOwner(
+  await ensureUser(
     env,
-    '🎧 НОВАЯ ЗАЯВКА НА МИНИ-КОНСУЛЬТАЦИЮ',
-    [
-      `Кто: ${userLabel(auth.user)}`,
-      `Продукт / услуга: ${
-        product || 'не указано'
-      }`,
-      `Что хочет получить: ${
-        requestText || 'не указано'
-      }`,
-      `Результат: ${
-        diagnostic.overall ?? '—'
-      }%`,
-      `Главная точка: ${
-        diagnostic.weak || '—'
-      } · ${
-        diagnostic.weakScore ?? '—'
-      }%`,
-      `Метрики: ${
-        prettyDiagnostic(diagnostic)
-      }`,
-      `Время: ${now}`
-    ]
+    auth.user
   );
+
+  const product =
+    String(
+      body.product || ""
+    ).trim();
+
+  const goal =
+    String(
+      body.goal || ""
+    ).trim();
+
+  await saveEvent(
+    env,
+    auth.user,
+    "consultation_request",
+    {
+      product,
+      goal,
+    }
+  );
+
+  if (
+    env.BOT_TOKEN &&
+    env.OWNER_CHAT_ID
+  ) {
+    const name =
+      [
+        auth.user?.first_name,
+        auth.user?.last_name,
+      ]
+        .filter(Boolean)
+        .join(" ") ||
+      auth.user?.username ||
+      `ID ${auth.user?.id}`;
+
+    const text =
+      `🟣 Новая мини-консультация TORIYA NOVA\n\n` +
+      `👤 ${name}\n` +
+      `🆔 ${auth.user?.id || ""}\n` +
+      `📦 Продукт / услуга: ${
+        product || "—"
+      }\n` +
+      `🎯 Что хочет от консультации: ${
+        goal || "—"
+      }`;
+
+    try {
+      await telegram(
+        env,
+        "sendMessage",
+        {
+          chat_id:
+            env.OWNER_CHAT_ID,
+          text,
+        }
+      );
+    } catch {
+      // Request remains saved.
+    }
+  }
 
   return json({
     ok: true,
     consultationUrl:
       env.CONSULTATION_URL ||
-      'https://t.me/toriya_nova'
+      "https://t.me/toriya_nova",
   });
 }
 
-async function handleHealth(env) {
-  return json({
-    ok: true,
-    app:
-      env.MINI_APP_URL ||
-      'toriya-nova-mini-app'
-  });
-}
+async function refreshTelegramApp(
+  env
+) {
+  if (
+    !env.BOT_TOKEN ||
+    !env.OWNER_CHAT_ID
+  ) {
+    return json(
+      {
+        ok: false,
+        error:
+          "BOT_TOKEN or OWNER_CHAT_ID is missing",
+      },
+      500
+    );
+  }
 
-/* =========================================================
-   ОБНОВЛЕНИЕ КНОПКИ TELEGRAM
-   ========================================================= */
-
-async function refreshTelegramApp(env) {
-  const appUrl =
-    'https://lid.toriya-sudba.workers.dev/v2/';
+  const keyboard = {
+    keyboard: [
+      [
+        {
+          text: "TORIYA NOVA",
+          web_app: {
+            url:
+              env.MINI_APP_URL ||
+              "https://lid.toriya-sudba.workers.dev/v2/",
+          },
+        },
+      ],
+    ],
+    resize_keyboard: true,
+    is_persistent: true,
+  };
 
   await telegram(
     env,
-    'sendMessage',
+    "sendMessage",
     {
-      chat_id: env.OWNER_CHAT_ID,
+      chat_id:
+        env.OWNER_CHAT_ID,
       text:
-        'TORIYA NOVA обновлена. Открывай Mini App через новую кнопку 👇',
-      reply_markup: {
-        keyboard: [
-          [
-            {
-              text: 'TORIYA NOVA',
-              web_app: {
-                url: appUrl
-              }
-            }
-          ]
-        ],
-        resize_keyboard: true,
-        is_persistent: true
-      }
+        "TORIYA NOVA — актуальная версия Mini App:",
+      reply_markup:
+        keyboard,
     }
   );
 
   return json({
     ok: true,
-    url: appUrl
   });
 }
 
+/**
+ * CRITICAL ROUTE:
+ * /v2 and /v2/ always fetch the CURRENT
+ * public/index.html from the deployed Assets.
+ */
+async function currentApp(
+  request,
+  env
+) {
+  const assetUrl =
+    new URL(request.url);
+
+  assetUrl.pathname =
+    "/index.html";
+
+  assetUrl.search = "";
+
+  const assetRequest =
+    new Request(
+      assetUrl.toString(),
+      {
+        method: "GET",
+        headers:
+          request.headers,
+      }
+    );
+
+  const response =
+    await env.ASSETS.fetch(
+      assetRequest
+    );
+
+  if (!response.ok) {
+    return new Response(
+      "Mini App index.html not found in deployed assets",
+      {
+        status: 502,
+        headers: HTML_HEADERS,
+      }
+    );
+  }
+
+  const headers =
+    new Headers(
+      response.headers
+    );
+
+  Object.entries(
+    HTML_HEADERS
+  ).forEach(([k, v]) => {
+    headers.set(k, v);
+  });
+
+  headers.set(
+    "X-TORIYA-ROUTE",
+    "current-v2"
+  );
+
+  return new Response(
+    response.body,
+    {
+      status: 200,
+      headers,
+    }
+  );
+}
+
+async function handle(
+  request,
+  env
+) {
+  if (
+    request.method ===
+    "OPTIONS"
+  ) {
+    return withCors(
+      new Response(null, {
+        status: 204,
+      })
+    );
+  }
+
+  const url =
+    new URL(request.url);
+
+  const path =
+    url.pathname.replace(
+      /\/+$/,
+      ""
+    ) || "/";
+
+  // CRITICAL:
+  // /v2 and /v2/ serve the current index.html.
+  if (path === "/v2") {
+    return currentApp(
+      request,
+      env
+    );
+  }
+
+  if (path === "/health") {
+    return json({
+      ok: true,
+      worker: "lid",
+      route: "current-v2",
+      timestamp:
+        new Date().toISOString(),
+    });
+  }
+
+  if (
+    path ===
+    "/api/access"
+  ) {
+    return withCors(
+      await access(
+        request,
+        env
+      )
+    );
+  }
+
+  if (
+    path ===
+    "/api/event"
+  ) {
+    return withCors(
+      await eventEndpoint(
+        request,
+        env
+      )
+    );
+  }
+
+  if (
+    path ===
+    "/api/consultation"
+  ) {
+    return withCors(
+      await consultation(
+        request,
+        env
+      )
+    );
+  }
+
+  if (
+    path === "/refresh"
+  ) {
+    return withCors(
+      await refreshTelegramApp(
+        env
+      )
+    );
+  }
+
+  // Root also serves the current index.
+  if (
+    path === "/" ||
+    path === "/index.html"
+  ) {
+    return currentApp(
+      request,
+      env
+    );
+  }
+
+  // Videos and other public files.
+  const assetResponse =
+    await env.ASSETS.fetch(
+      request
+    );
+
+  return assetResponse;
+}
+
 export default {
-  async fetch(request, env) {
-    const url =
-      new URL(request.url);
-
+  async fetch(
+    request,
+    env,
+    ctx
+  ) {
     try {
-
-      if (
-        url.pathname === '/api/access' &&
-        request.method === 'POST'
-      ) {
-        return handleAccess(
-          request,
-          env
-        );
-      }
-
-      if (
-        url.pathname === '/api/event' &&
-        request.method === 'POST'
-      ) {
-        return handleEvent(
-          request,
-          env
-        );
-      }
-
-      if (
-        url.pathname === '/api/consultation' &&
-        request.method === 'POST'
-      ) {
-        return handleConsultation(
-          request,
-          env
-        );
-      }
-
-      if (
-        url.pathname === '/health'
-      ) {
-        return handleHealth(env);
-      }
-
-      /*
-       * ОДНОРАЗОВОЕ ОБНОВЛЕНИЕ
-       *
-       * После деплоя открываем:
-       *
-       * https://lid.toriya-sudba.workers.dev/refresh
-       *
-       * Бот отправит новую кнопку TORIYA NOVA
-       * с адресом /v2/
-       */
-
-      if (
-        url.pathname === '/refresh'
-      ) {
-        return refreshTelegramApp(env);
-      }
-
-      /*
-       * Свежий URL для Telegram Mini App.
-       * Отдаёт актуальный index.html
-       * без кеширования.
-       */
-
-      if (
-        url.pathname === '/v2' ||
-        url.pathname === '/v2/'
-      ) {
-        const freshUrl =
-          new URL(request.url);
-
-        freshUrl.pathname =
-          '/index.html';
-
-        freshUrl.search = '';
-
-        const freshRequest =
-          new Request(
-            freshUrl.toString(),
-            request
-          );
-
-        const response =
-          await env.ASSETS.fetch(
-            freshRequest
-          );
-
-        const headers =
-          new Headers(
-            response.headers
-          );
-
-        headers.set(
-          'Cache-Control',
-          'no-store, no-cache, must-revalidate, max-age=0'
-        );
-
-        headers.set(
-          'Pragma',
-          'no-cache'
-        );
-
-        return new Response(
-          response.body,
-          {
-            status: response.status,
-            statusText:
-              response.statusText,
-            headers
-          }
-        );
-      }
-
-      /*
-       * Обычный адрес приложения.
-       */
-
-      if (
-        url.pathname === '/' ||
-        url.pathname === '/index.html'
-      ) {
-        const assetUrl =
-          new URL(request.url);
-
-        assetUrl.pathname =
-          '/index.html';
-
-        const assetRequest =
-          new Request(
-            assetUrl.toString(),
-            request
-          );
-
-        const response =
-          await env.ASSETS.fetch(
-            assetRequest
-          );
-
-        const headers =
-          new Headers(
-            response.headers
-          );
-
-        headers.set(
-          'Cache-Control',
-          'no-store, no-cache, must-revalidate, max-age=0'
-        );
-
-        headers.set(
-          'Pragma',
-          'no-cache'
-        );
-
-        return new Response(
-          response.body,
-          {
-            status: response.status,
-            statusText:
-              response.statusText,
-            headers
-          }
-        );
-      }
-
-      return env.ASSETS.fetch(
-        request
+      return await handle(
+        request,
+        env,
+        ctx
       );
+    } catch (error) {
+      console.error(error);
 
-    } catch (e) {
       return json(
         {
           ok: false,
-          error: 'server_error',
-          detail: String(
-            e?.message ||
-            e ||
-            'unknown_error'
-          )
+          error: String(
+            error?.message ||
+            error
+          ),
         },
         500
       );
     }
-  }
+  },
+
+  async scheduled(
+    event,
+    env,
+    ctx
+  ) {
+    // Cron is kept in wrangler.lid.jsonc.
+  },
 };
