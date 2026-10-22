@@ -3,9 +3,9 @@ const CONFIG={consultationUrl:'https://t.me/toriya_nova'},CONSENT_V='2026-10-22'
 const tg=window.Telegram&&window.Telegram.WebApp||null;
 const web=!(tg&&tg.initData);
 const isLocal=location.protocol==='file:'||['localhost','127.0.0.1'].includes(location.hostname);
-const screens=['boot','s0','s0video','consent','formats','demo1','demo2','demo3','control','mech','v5','order'];
+const screens=['boot','s0','s0video','consent','formats','demo1','demo2','demo3','control','mech','v5','price','order'];
 const NOSTACK=['boot'];
-const state={consent:false,formats:new Set(),sending:false};
+const state={consent:false,formats:new Set(),tier:'35 000 ₽ · Под ключ с разбором (2–3 дня)',otherNets:false,sending:false};
 try{state.consent=localStorage.getItem('tn_consent')===CONSENT_V}catch{}
 const qs=new URLSearchParams(location.search);
 const src=qs.get('src')||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||'';
@@ -15,7 +15,7 @@ let consentP=null;
 function track(event,meta={}){if(isLocal||(!state.consent&&event!=='consent'))return;const send=()=>apiPost('/api/event',{event,meta}).catch(()=>{});consentP&&event!=='consent'?consentP.then(send):send()}
 function haptic(k,v){try{tg.HapticFeedback[k](v)}catch{}}
 function openTg(u){if(!web&&tg.openTelegramLink&&u.startsWith('https://t.me/'))tg.openTelegramLink(u);else location.href=u}
-const ROUTE=[['Проблема',['s0']],['Решение',['s0video','consent']],['Продукт',['formats','demo1','demo2','demo3']],['Выгоды',['control','mech']],['Заказ',['v5','order']]];let routeK=-1;
+cconst ROUTE=[['Проблема',['s0']],['Решение',['s0video','consent']],['Продукт',['formats','demo1','demo2','demo3']],['Выгоды',['control','mech']],['Условия и заказ',['v5','price','order']]];let routeK=-1;
 function setRoute(id){const bar=$('routebar'),cap=$('routecap');const k=ROUTE.findIndex(r=>r[1].includes(id));if(k<0){bar.classList.remove('on');return}
 if(!bar.dataset.built){bar.innerHTML=ROUTE.map((r,i)=>(i?'<b class="l"></b>':'')+'<i class="n"></i>').join('');bar.dataset.built='1'}
 bar.classList.add('on');bar.querySelectorAll('.n').forEach((n,i)=>{n.className='n'+(i<k?' done':i===k?' cur':'')});bar.querySelectorAll('.l').forEach((l,i)=>l.classList.toggle('done',i<k));
