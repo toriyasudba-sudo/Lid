@@ -25,7 +25,10 @@ function syncBack(){const hide=NOSTACK.includes(cur)||!navStack.length;try{hide?
 function goBack(){const prev=navStack.pop();if(!prev)return;backing=true;show(prev);backing=false}
 function show(id){if(!screens.includes(id))return;screens.forEach(x=>{const el=$(x);if(el)el.classList.toggle('active',x===id)});window.scrollTo(0,0);
 if(cur!==id){if(!backing&&cur&&!NOSTACK.includes(cur))navStack.push(cur);cur=id;if(id!=='boot')track('screen_view',{screen:id});if(id==='order')renderChips()}syncBack();setRoute(id)}
-function renderChips(){const f=[...state.formats];$('fmtChips').innerHTML=f.map(x=>'<span class="chip">'+x+'</span>').join('')}
+function renderChips(){
+  const items=[state.tier,...(state.otherNets?['+10 000 ₽ · Другие сети']:[]),...state.formats];
+  $('fmtChips').innerHTML=items.filter(Boolean).map(x=>'<span class="chip">'+x+'</span>').join('');
+}
 document.addEventListener('click',e=>{
 const a=e.target.closest('a[href^="#"]');if(a){e.preventDefault();show(a.getAttribute('href').slice(1));return}
 const l=e.target.closest('a[data-doc]');if(l){e.preventDefault();const u=location.origin+l.getAttribute('href');try{web?window.open(u,'_blank'):tg.openLink(u)}catch{window.open(u,'_blank')}return}
