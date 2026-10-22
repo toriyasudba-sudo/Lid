@@ -220,7 +220,7 @@ const METRIC_NAMES = {
 const SCREEN_LABELS = {
   s0: "старт («Клиент устал читать PDF»)", s0video: "первое видео", consent: "согласия", formats: "выбор форматов",
   demo1: "демо: диагностика и результат", demo2: "демо: запись онлайн", demo3: "демо: кабинет / CRM",
-  control: "админка в Telegram", mech: "вся механика", v5: "финальное видео", order: "форма заявки",
+  control: "админка в Telegram", mech: "вся механика", v5: "финальное видео", price: "тарифы и стоимость", order: "форма заявки",
 };
 
 const errs = (globalThis.__errs = globalThis.__errs || []);
