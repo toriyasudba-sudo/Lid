@@ -218,14 +218,9 @@ const METRIC_NAMES = {
 };
 
 const SCREEN_LABELS = {
-  boot: "загрузка", locked: "экран «доступ только из канала»", s0: "старт («Клиент устал читать PDF»)",
-  s0video: "первое видео", s1: "обычный лид-магнит", s3material: "ветка «читать канал»",
-  s3break: "ветка «зову в личку»", s3product: "маршрут «человек увидел продукт»", s3return: "ветка «ничего не делаю»",
-  s4: "«живой пользователь»", s5: "данные воронки", s6: "возврат в диалог", s6reminder: "пример напоминания",
-  s8: "«твоя воронка»", intro: "вступление к диагностике", intro2: "«что будет в конце»",
-  quiz: "вопросы диагностики", processing: "расчёт результата", result: "результат: общий балл",
-  resultmap: "карта ясности", resultfocus: "главная точка роста", resultvideo: "финальное видео",
-  consult: "форма заявки", obs: "три наблюдения", niches: "Mini App для разных ниш", warm: "прогрев", v2: "видео 2", bot: "бот и воронка", v3: "видео 3 и взгляд эксперта", mech: "вся механика", v4: "видео 4", embed: "что можно встроить", voice: "оффер голосового разбора", v5: "финальное видео", final: "финальный экран",
+  s0: "старт («Клиент устал читать PDF»)", s0video: "первое видео", consent: "согласия", formats: "выбор форматов",
+  demo1: "демо: диагностика и результат", demo2: "демо: запись онлайн", demo3: "демо: кабинет / CRM",
+  control: "админка в Telegram", mech: "вся механика", v5: "финальное видео", order: "форма заявки",
 };
 
 const errs = (globalThis.__errs = globalThis.__errs || []);
@@ -314,7 +309,7 @@ async function eventEndpoint(request, env) {
     const first = !(await hasEvent(env, auth.user.id, "consent"));
     await ensureUser(env, auth.user);
     await saveEvent(env, auth.user, "consent", { processing: !!meta.processing, privacy: !!meta.privacy, messages: !!meta.messages, v: meta.v || null });
-    if (first && !auth.user.web) await notifyOwner(env, `🆕 ${who(auth.user)} зашёл и дал согласие на обработку данных${meta.messages ? " (и на напоминания)" : ""}`, auth.user);
+    if (first && !auth.user.web) await notifyOwner(env, `🆕 ${who(auth.user)} зашёл и дал согласие на обработку данных${meta.messages ? " (и на напоминания)" : ""}${meta.src ? "\n🔗 Источник: " + esc(String(meta.src).slice(0, 40)) : ""}`, auth.user);
     return json({ ok: true });
   }
   if (!(await hasEvent(env, auth.user.id, "consent"))) return json({ ok: true, skipped: "no_consent" });
@@ -342,6 +337,8 @@ async function consultation(request, env) {
   const goal = String(body.request || body.goal || "").trim();
   const diagnostic = body.diagnostic || {};
   const voice = body.intent === "voice";
+  const formats = Array.isArray(body.formats) ? body.formats.slice(0, 6).map((x) => String(x).slice(0, 40)) : [];
+  const srcTag = String(body.src || "").slice(0, 40);
   const url = env.CONSULTATION_URL || "https://t.me/toriya_nova";
 
   // Double-tap protection: one owner notification per user per 2 minutes.
@@ -352,11 +349,11 @@ async function consultation(request, env) {
     if (dup) return json({ ok: true, consultationUrl: url, duplicate: true });
   } catch {}
 
-  await saveEvent(env, auth.user, "consultation_request", { product, goal, diagnostic, intent: body.intent || "miniapp" });
+  await saveEvent(env, auth.user, "consultation_request", { product, goal, formats, src: srcTag, intent: body.intent || "miniapp" });
 
   await notifyOwner(
     env,
-    `${voice ? "🎙️ <b>Заявка на голосовой разбор</b>" : "🟣 <b>Заявка на Mini App</b>"}\n\n👤 ${who(auth.user)}\n📦 ${voice ? "Продукт" : "Ниша и продукт"}: ${esc(product) || "—"}\n🎯 ${voice ? "Хочет понять" : "Какой Mini App хочет"}: ${esc(goal) || "—"}\n${auth.user.web ? "🌐 Пришёл из браузера (не Telegram): он откроет чат с тобой и отправит сообщение сам.\n" : ""}\n${diagnosticText(diagnostic)}`,
+    `${voice ? "🎙️ <b>Заявка на голосовой разбор</b>" : "🟣 <b>Заявка на Mini App</b>"}\n\n👤 ${who(auth.user)}\n📦 ${voice ? "Продукт" : "Ниша и продукт"}: ${esc(product) || "—"}\n🎯 ${voice ? "Хочет понять" : "Какой Mini App хочет"}: ${esc(goal) || "—"}\n${formats.length ? "🧩 Интересуют форматы: " + esc(formats.join(", ")) + "\n" : ""}${srcTag ? "🔗 Источник: " + esc(srcTag) + "\n" : ""}${auth.user.web ? "🌐 Пришёл из браузера (не Telegram): он откроет чат с тобой и отправит сообщение сам.\n" : ""}\n${diagnosticText(diagnostic)}`,
     auth.user
   );
 
@@ -369,27 +366,24 @@ const dbTime = (s) => new Date(String(s).replace(" ", "T") + "Z").getTime();
 const isQuietHours = (now, tzMin = 180) => { const h = new Date(now + tzMin * 60000).getUTCHours(); return h >= 22 || h < 9; }; // user local time (default Moscow)
 
 function stageLabel(u) {
-  if (u.result) return `получил результат (${u.result.overall ?? "?"}%), заявку не оставил`;
-  if (u.started) return `диагностика, вопрос ${u.q || 1} из 5`;
   return SCREEN_LABELS[u.screen] || u.screen;
 }
 
 function reminderMessage(u, n, firstName) {
   const hi = firstName ? `${esc(firstName)}, ` : "";
-  if (u.result) {
-    const weak = METRIC_NAMES[u.result.weak] || "главная точка роста";
+  if (u.screen === "order") {
     return n === 1
-      ? { text: `${hi}результат демо уже у тебя, а как такой Mini App выглядел бы для твоей ниши — ещё нет.\n\nПокажу варианты под твою экспертность?`, button: "Посмотреть варианты", go: "niches" }
-      : { text: `Кажется, самое интересное осталось за кадром: ты прошёл демо, но ещё не увидел, что из этого можно собрать под свой продукт. Это пара минут.`, button: "Посмотреть", go: "niches" };
+      ? { text: `${hi}осталось оставить заявку: два поля — и я предложу идеи под твой продукт.`, button: "Оставить заявку", go: "order" }
+      : { text: `Кажется, самое интересное осталось за кадром: ты уже всё посмотрел, а заявку не оставил. Это две минуты.`, button: "Оставить заявку", go: "order" };
   }
-  if (u.started) {
+  if (["demo1", "demo2", "demo3", "control", "mech", "v5"].includes(u.screen)) {
     return n === 1
-      ? { text: `${hi}диагностика остановилась на вопросе ${u.q || 1} из 5. До карты ясности совсем немного. Продолжим?`, button: "Продолжить диагностику", go: "intro" }
-      : { text: `Стоп. Карта ясности по твоему продукту всё ещё ждёт — она собирается за пару минут. Вернёмся?`, button: "Пройти диагностику", go: "intro" };
+      ? { text: `${hi}ты остановился на демо «${esc(stageLabel(u))}». Досмотрим, как это выглядит у эксперта?`, button: "Продолжить", go: "" }
+      : { text: `Стоп. Самое интересное — как Mini App работает у эксперта: запись, уведомления, кабинет. Загляни ещё раз.`, button: "Посмотреть", go: "" };
   }
   return n === 1
     ? { text: `${hi}мы остановились на самом интересном — на примере, как выглядит лид-магнит нового времени. Досмотрим?`, button: "Продолжить", go: "" }
-    : { text: `А что, если лид-магнит — это не PDF, а действие? Загляни, покажу на примере за пару минут.`, button: "Посмотреть", go: "" };
+    : { text: `А что, если твой лид-магнит можно не читать, а проходить? Загляни на демо — это пара минут.`, button: "Посмотреть", go: "" };
 }
 
 async function runFunnelCron(env, opts = {}) {
@@ -454,7 +448,7 @@ async function runFunnelCron(env, opts = {}) {
     // 2) Reminder to the person (max 2, never at night Moscow time)
     if (!u.msgOk) { log.push("  · напоминания не разрешены"); continue; }
     if (u.blocked || quiet(now, u.tzMin)) continue;
-    const firstAfter = opts.fast ? 2 : (u.started && !u.result ? 30 : 120);
+    const firstAfter = opts.fast ? 2 : (u.screen === "order" ? 30 : 120);
     const n = u.reminders === 0 && idleMin >= firstAfter && idleMin <= 1440 ? 1
             : u.reminders === 1 && idleMin >= 1440 && idleMin <= 2880 && now - u.lastReminderAt >= 20 * 3600 * 1000 ? 2 : 0;
     if (!n) continue;
@@ -607,13 +601,15 @@ async function currentApp(request, env) {
   });
 }
 
-async function noStoreAsset(request, env) {
+async function noStoreAsset(request, env, cacheable = false) {
   const response = await env.ASSETS.fetch(request);
   const headers = new Headers(response.headers);
-  headers.set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
-  headers.set("Pragma", "no-cache");
-  headers.set("Expires", "0");
-  headers.delete("ETag");
+  if (cacheable) {
+    headers.set("Cache-Control", "public, max-age=31536000, immutable");
+  } else {
+    headers.set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+    headers.delete("ETag");
+  }
   return new Response(response.body, { status: response.status, headers });
 }
 
@@ -663,7 +659,7 @@ async function handle(request, env) {
   }
 
   if (path === "/app.js") {
-    return noStoreAsset(request, env);
+    return noStoreAsset(request, env, url.searchParams.has("v"));
   }
 
   // Root also serves the current index so direct Worker URL and /v2 stay aligned.
