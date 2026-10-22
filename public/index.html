@@ -166,7 +166,142 @@ body .screen .btn{max-width:100%}
   #s0video h2{font-size:27px}
   #s0video .video-big{height:145px!important;margin:9px 0 10px!important}
   #s0video .small{font-size:11px;line-height:1.35;margin:6px 0 9px}
+/* v12: Volume, Checkmarks & Pricing Cards */
+.card, .message {
+  box-shadow: 0 12px 32px -18px rgba(29, 26, 21, 0.22);
 }
+.sq {
+  position: relative;
+}
+.sq::after {
+  content: "+";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(29, 26, 21, 0.2);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  color: var(--muted);
+  transition: .2s;
+}
+.sq.on::after {
+  content: "✓";
+  background: var(--clay);
+  border-color: var(--clay);
+  color: #fff;
+}
+
+/* Тарифы */
+.tiers { display: grid; gap: 12px; margin: 14px 0; }
+.tier {
+  position: relative;
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  padding: 18px;
+  cursor: pointer;
+  transition: .22s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.tier.hit {
+  background: linear-gradient(160deg, #FBF7EE 0%, #F4E8D6 100%);
+  border-color: rgba(180, 85, 45, 0.45);
+}
+.tier.on {
+  border-color: var(--clay);
+  box-shadow: 0 0 0 3px rgba(180, 85, 45, 0.16), 0 14px 30px -14px rgba(180, 85, 45, 0.45);
+  transform: translateY(-2px);
+}
+.tier-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.tier-badge {
+  display: inline-block;
+  font: 600 10px/1 var(--sans);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(29, 26, 21, 0.07);
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.tier.hit .tier-badge {
+  background: var(--clay);
+  color: #fff;
+}
+.tier-title {
+  font: 400 21px/1.15 var(--display);
+  color: var(--ink);
+}
+.tier-price {
+  font: 500 22px/1 var(--display);
+  color: var(--clay);
+  white-space: nowrap;
+}
+.tier-time {
+  display: block;
+  font: 500 11px/1.3 var(--sans);
+  color: var(--muted);
+  text-align: right;
+  margin-top: 4px;
+}
+.tier-list {
+  margin: 10px 0 0;
+  padding-left: 17px;
+  font-size: 13.5px;
+  line-height: 1.48;
+  color: var(--text);
+}
+.tier-list li { margin-bottom: 4px; }
+.tier-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font: 500 12px var(--sans);
+  color: var(--clay);
+}
+.tier.on .tier-check::before { content: "✓ Выбран этот формат"; font-weight: 700; }
+.tier:not(.on) .tier-check::before { content: "Тапни, чтобы выбрать →"; color: var(--muted); }
+
+.addon-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--paper);
+  border: 1.5px dashed var(--clay);
+  border-radius: 16px;
+  padding: 15px 16px;
+  margin: 12px 0 18px;
+  cursor: pointer;
+  transition: .2s;
+}
+.addon-card.on {
+  background: #F6E6DA;
+  border-style: solid;
+  box-shadow: 0 0 18px rgba(180, 85, 45, 0.25);
+}
+.addon-card b { display: block; font: 400 17px var(--display); color: var(--ink); }
+.addon-card span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.addon-pill {
+  flex: none;
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font: 600 12px var(--sans);
+}
+.addon-card.on .addon-pill { background: var(--clay); }
 
 /* EDITORIAL THEME v5 */
 :root{--bg:#F3EDE2;--paper:#FBF7EE;--ink:#1D1A15;--text:#3B352B;--muted:#7A7062;--gold:#B4552D;--clay:#B4552D;--line:#DAD1C0;--ok:#4F6B4A;--danger:#9A4F2C;--display:'Fraunces',Georgia,'Times New Roman',serif;--sans:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
@@ -277,7 +412,96 @@ h1{font-size:clamp(36px,10.4vw,46px);line-height:1.04}h2{font-size:clamp(27px,7.
 <div class="plate" style="--c:#3B5B7A"><b>🤖 БОТ ВОЗВРАЩАЕТ</b><span>Если человек ушёл на полпути, бот напомнит сам (с его согласия).</span></div>
 <div class="message"><p>Работает в Telegram и по обычной ссылке из Threads или Instagram. MAX и ВК можно подключить следующим шагом.</p></div><a class="btn block" href="#mech">КАК ЭТО РАБОТАЕТ ВМЕСТЕ →</a></section>
 <section id="mech" class="screen merged-screen"><div class="kicker">А вот теперь самое интересное</div><h2>🧩 Вся механика вместе</h2><div class="chain sm"><div class="node" style="--k:0"><i>📄</i><b>Контент</b></div><u style="--k:1"></u><div class="node" style="--k:1"><i>📱</i><b>Mini App</b></div><u style="--k:2"></u><div class="node" style="--k:2"><i>👆</i><b>Действие</b></div><u style="--k:3"></u><div class="node" style="--k:3"><i>🎯</i><b>Персональный результат</b></div><u style="--k:4"></u><div class="node" style="--k:4"><i>🎥</i><b>Прогрев</b></div><u style="--k:5"></u><div class="node" style="--k:5"><i>🤖</i><b>Бот</b></div><u style="--k:6"></u><div class="node" style="--k:6"><i>🔔</i><b>Напоминание</b></div><u style="--k:7"></u><div class="node" style="--k:7"><i>💬</i><b>Диалог</b></div><u style="--k:8"></u><div class="node" style="--k:8"><i>💰</i><b>Заявка / покупка</b></div></div><div class="message"><p><b>Mini App — не конечный продукт.</b> Это новая точка клиентского пути.</p></div><a class="btn block" href="#v5">ДАЛЬШЕ →</a></section>
-<section id="v5" class="screen merged-screen"><div class="kicker">Финал</div><div class="video video-big"><div class="label">ВИДЕО 5</div><video controls playsinline preload="none" style="width:100%;height:100%;object-fit:cover"><source src="/Toriya_5.mp4" type="video/mp4"><source src="/03_FINAL_TORIYA.mp4" type="video/mp4"></video></div><a class="btn block" href="#order">ДАЛЬШЕ →</a></section>
+<section id="v5" class="screen merged-screen">
+  <div class="kicker">Финал · живой контакт</div>
+  <h2>Увидели, как это работает изнутри?</h2>
+  <p class="small">Короткое видео о том, как мы запустим такую систему под ваш продукт без долгих ТЗ и месяцев разработки.</p>
+  <div class="video video-big">
+    <div class="label">ВИДЕО 5</div>
+    <video controls playsinline preload="none" style="width:100%;height:100%;object-fit:cover">
+      <source src="/Toriya_5.mp4" type="video/mp4">
+      <source src="/03_FINAL_TORIYA.mp4" type="video/mp4">
+    </video>
+  </div>
+  <a class="btn block" href="#price">СМОТРЕТЬ УСЛОВИЯ И СРОКИ →</a>
+</section>
+
+<section id="price" class="screen merged-screen">
+  <span class="spark" style="top:24px;right:22px">✦</span>
+  <div class="kicker">Прозрачные условия</div>
+  <h2>Форматы, сроки и стоимость</h2>
+  <p class="small">Тапни подходящий вариант — он автоматически прикрепится к твоей заявке.</p>
+
+  <div class="tiers">
+    <div class="tier" data-tier="30 000 ₽ · На ваших материалах (2 дня)">
+      <div class="tier-top">
+        <div>
+          <span class="tier-badge">Быстрый старт</span>
+          <div class="tier-title">На ваших данных</div>
+        </div>
+        <div>
+          <div class="tier-price">30 000 ₽</div>
+          <span class="tier-time">⏱ Срок: 2 дня</span>
+        </div>
+      </div>
+      <ul class="tier-list">
+        <li>Вы даёте готовые вопросы, структуру и тексты</li>
+        <li>Дизайн и сборка Mini App в вашем стиле</li>
+        <li>Подключение бота, лидов и аналитики шагов</li>
+      </ul>
+      <div class="tier-check"></div>
+    </div>
+
+    <div class="tier hit on" data-tier="35 000 ₽ · Под ключ с разбором (2–3 дня)">
+      <div class="tier-top">
+        <div>
+          <span class="tier-badge">★ Выбирают 80% · Под ключ</span>
+          <div class="tier-title">Mini App + Разбор и смыслы</div>
+        </div>
+        <div>
+          <div class="tier-price">35 000 ₽</div>
+          <span class="tier-time">⏱ Срок: 2–3 дня</span>
+        </div>
+      </div>
+      <ul class="tier-list">
+        <li><b>Личный созвон и разбор</b> вашей воронки и продукта</li>
+        <li><b>Составление вопросов</b>, вариантов и сценария прогрева</li>
+        <li><b>Расшифровки результатов</b> с мягким переводом в продажу</li>
+        <li>Тексты авто-дожима для бота + полная тех. сборка</li>
+      </ul>
+      <div class="tier-check"></div>
+    </div>
+
+    <div class="tier" data-tier="от 40 000 ₽ · Сложная система / CRM">
+      <div class="tier-top">
+        <div>
+          <span class="tier-badge">Масштаб</span>
+          <div class="tier-title">Сложная система</div>
+        </div>
+        <div>
+          <div class="tier-price">от 40 000 ₽</div>
+          <span class="tier-time">зависит от набора</span>
+        </div>
+      </div>
+      <ul class="tier-list">
+        <li>Онлайн-запись со слотами и календарём</li>
+        <li>Личный кабинет / CRM, роли для команды и ассистента</li>
+        <li>Нестандартная логика, базы данных и интеграции</li>
+      </ul>
+      <div class="tier-check"></div>
+    </div>
+  </div>
+
+  <div id="addonNet" class="addon-card" data-addon="+10 000 ₽ · Другие сети (VK / MAX)">
+    <div>
+      <b>🌐 Дублировать Mini App в другие сети</b>
+      <span>Запуск этой же системы во ВКонтакте, MAX или отдельной веб-ссылкой для Reels/Threads</span>
+    </div>
+    <div class="addon-pill">+10 000 ₽</div>
+  </div>
+
+  <a class="btn block" href="#order">ОСТАВИТЬ ЗАЯВКУ С ЭТИМ ПАКЕТОМ →</a>
+</section>
 <section id="order" class="screen merged-screen"><span class="spark" style="top:20px;right:20px">✦</span><h1>🚀 Хотите такой Mini App для своего продукта?</h1><p class="lead">Не ещё один PDF. Не ещё один чек-лист.<br><span class="hand">Интерактивный путь: польза, знакомство, прогрев, результат, следующий шаг.</span></p>
 <div class="card consult-box"><div class="eyebrow">Напишите нишу и продукт</div><div id="fmtChips" class="chips"></div>
 <label class="form-label" for="productInput">ВАША НИША И ПРОДУКТ</label><textarea id="productInput" class="field" placeholder="Например: психолог, нутрициолог, курс по финансам, клуб…"></textarea>
