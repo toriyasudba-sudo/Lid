@@ -15,7 +15,7 @@ let consentP=null;
 function track(event,meta={}){if(isLocal||(!state.consent&&event!=='consent'))return;const send=()=>apiPost('/api/event',{event,meta}).catch(()=>{});consentP&&event!=='consent'?consentP.then(send):send()}
 function haptic(k,v){try{tg.HapticFeedback[k](v)}catch{}}
 function openTg(u){if(!web&&tg.openTelegramLink&&u.startsWith('https://t.me/'))tg.openTelegramLink(u);else location.href=u}
-cconst ROUTE=[['Проблема',['s0']],['Решение',['s0video','consent']],['Продукт',['formats','demo1','demo2','demo3']],['Выгоды',['control','mech']],['Условия и заказ',['v5','price','order']]];let routeK=-1;
+const ROUTE=[['Проблема',['s0']],['Решение',['s0video','consent']],['Продукт',['formats','demo1','demo2','demo3']],['Выгоды',['control','mech']],['Условия и заказ',['v5','price','order']]];let routeK=-1;
 function setRoute(id){const bar=$('routebar'),cap=$('routecap');const k=ROUTE.findIndex(r=>r[1].includes(id));if(k<0){bar.classList.remove('on');return}
 if(!bar.dataset.built){bar.innerHTML=ROUTE.map((r,i)=>(i?'<b class="l"></b>':'')+'<i class="n"></i>').join('');bar.dataset.built='1'}
 bar.classList.add('on');bar.querySelectorAll('.n').forEach((n,i)=>{n.className='n'+(i<k?' done':i===k?' cur':'')});bar.querySelectorAll('.l').forEach((l,i)=>l.classList.toggle('done',i<k));
@@ -25,14 +25,14 @@ function syncBack(){const hide=NOSTACK.includes(cur)||!navStack.length;try{hide?
 function goBack(){const prev=navStack.pop();if(!prev)return;backing=true;show(prev);backing=false}
 function show(id){if(!screens.includes(id))return;screens.forEach(x=>{const el=$(x);if(el)el.classList.toggle('active',x===id)});window.scrollTo(0,0);
 if(cur!==id){if(!backing&&cur&&!NOSTACK.includes(cur))navStack.push(cur);cur=id;if(id!=='boot')track('screen_view',{screen:id});if(id==='order')renderChips()}syncBack();setRoute(id)}
-function renderChips(){
-  const items=[state.tier,...(state.otherNets?['+10 000 ₽ · Другие сети']:[]),...state.formats];
-  $('fmtChips').innerHTML=items.filter(Boolean).map(x=>'<span class="chip">'+x+'</span>').join('');
-}
+function renderChips(){const items=[state.tier,...(state.otherNets?['+10 000 ₽ · Другие сети']:[]),...state.formats];$('fmtChips').innerHTML=items.filter(Boolean).map(x=>'<span class="chip">'+x+'</span>').join('')}
 document.addEventListener('click',e=>{
 const a=e.target.closest('a[href^="#"]');if(a){e.preventDefault();show(a.getAttribute('href').slice(1));return}
 const l=e.target.closest('a[data-doc]');if(l){e.preventDefault();const u=location.origin+l.getAttribute('href');try{web?window.open(u,'_blank'):tg.openLink(u)}catch{window.open(u,'_blank')}return}
-const s=e.target.closest('.sq[data-f]');if(s){const f=s.dataset.f;state.formats.has(f)?state.formats.delete(f):state.formats.add(f);s.classList.toggle('on');haptic('selectionChanged')}});
+const s=e.target.closest('.sq[data-f]');if(s){const f=s.dataset.f;state.formats.has(f)?state.formats.delete(f):state.formats.add(f);s.classList.toggle('on');haptic('selectionChanged');return}
+const t=e.target.closest('.tier[data-tier]');if(t){document.querySelectorAll('.tier').forEach(el=>el.classList.remove('on'));t.classList.add('on');state.tier=t.dataset.tier;haptic('selectionChanged');return}
+const ad=e.target.closest('#addonNet');if(ad){state.otherNets=!state.otherNets;ad.classList.toggle('on',state.otherNets);haptic('selectionChanged');return}
+});
 $('webBack').onclick=goBack;
 $('goDemo').onclick=()=>show(state.consent?'formats':'consent');
 const syncC=()=>{$('consentBtn').disabled=!($('cb1').checked&&$('cb2').checked)};['cb1','cb2','cb3'].forEach(i=>$(i).addEventListener('change',syncC));syncC();
@@ -45,7 +45,8 @@ show('formats')};
 $('consultBtn').onclick=async()=>{if(state.sending)return;const product=$('productInput').value.trim(),request=$('consultInput').value.trim(),status=$('consultStatus');
 if(!product||!request){status.className='error';status.textContent='Напиши, пожалуйста, чем ты занимаешься и какой Mini App хочется.';return}
 state.sending=true;const b=$('consultBtn');b.disabled=true;b.textContent='Готовлю сообщение…';
-const formats=[...state.formats];const draft='MINI\n\nПривет, Тория! Хочу такой Mini App для своего продукта.\n\nМоя ниша и продукт:\n'+product+'\n\nКакой Mini App хочется:\n'+request+(formats.length?'\n\nИнтересуют форматы: '+formats.join(', '):'');
+const formats=[state.tier,...(state.otherNets?['+10 000 ₽ · Другие сети']:[]),...state.formats].filter(Boolean);
+const draft='MINI\n\nПривет, Тория! Хочу такой Mini App для своего продукта.\n\nМоя ниша и продукт:\n'+product+'\n\nКакой Mini App хочется:\n'+request+(formats.length?'\n\nВыбранный пакет и форматы:\n• '+formats.join('\n• '):'');
 track('consultation_click',{formats});
 const go=()=>setTimeout(()=>openTg(CONFIG.consultationUrl+'?text='+encodeURIComponent(draft)),350);
 try{if(!isLocal)await apiPost('/api/consultation',{product,request,formats,intent:'miniapp',src});status.className='success';status.textContent='Готово. Открываю Telegram с уже заполненным сообщением.';track('consultation_sent',{formats});haptic('notificationOccurred','success');go()}
@@ -54,5 +55,5 @@ finally{setTimeout(()=>{state.sending=false;b.disabled=false;b.textContent='✨ 
 /* start */
 if(!web){try{tg.ready();tg.expand();tg.setHeaderColor('#F3EDE2');tg.setBackgroundColor('#F3EDE2');tg.BackButton.onClick(goBack)}catch{}}
 document.documentElement.style.setProperty('--tg-vh',(tg&&tg.viewportStableHeight||innerHeight)+'px');
-const go0=qs.get('go');show(go0==='order'?'order':go0==='formats'&&state.consent?'formats':'s0');
+const go0=qs.get('go');show(go0==='order'?'order':go0==='price'?'price':go0==='formats'&&state.consent?'formats':'s0');
 track('app_open',{tz:new Date().getTimezoneOffset(),web,src});
