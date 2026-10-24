@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Интерактивный Mini App за 5 минут: лид-магнит и онлайн-запись нового поколения.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Toriya Nova — Архитектура Mini App">
+<meta property="og:description" content="Элегантный Mini App вместо рутины в личке. Посмотри демо за 3 минуты.">
+<title>TORIYA NOVA — MINI APP ARCHITECTURE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* === EDITORIAL LUXURY DESIGN SYSTEM (25+) === */
+:root{
+  --bg: #F3EDE2;
+  --paper: #FBF7EE;
+  --ink: #1D1A15;
+  --text: #3B352B;
+  --muted: #7A7062;
+  --clay: #B4552D;
+  --line: #DAD1C0;
+  --ok: #4F6B4A;
+  --danger: #9A4F2C;
+  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+*{box-sizing:border-box}
+html,body{
+  margin:0;padding:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  -webkit-overflow-scrolling:touch;
+  overflow-x:hidden;
+}
+
+.app{
+  width:100%;max-width:480px;
+  min-height:100dvh;margin:auto;
+  background:var(--bg);
+  padding:0 18px calc(36px + env(safe-area-inset-bottom));
+  position:relative;
+}
+
+/* Header */
+.top{
+  height:60px;padding:0 4px;
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.logo{font:italic 400 17px var(--display);color:var(--ink);letter-spacing:0}
+.counter{font:400 11px var(--sans);color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+
+/* Screens */
+.screen{display:none;flex-direction:column;animation:fadeIn .35s ease}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* Typography & Elements */
+.kicker{
+  font:italic 400 15px/1.3 var(--display);
+  color:var(--clay);
+  margin-bottom:10px;
+}
+.kicker::before{content:"✦ ";font-style:normal}
+
+h1{
+  font-family:var(--display);
+  font-size:clamp(32px, 8.5vw, 42px);
+  line-height:1.06;
+  font-weight:400;
+  color:var(--ink);
+  margin:0 0 14px;
+  letter-spacing:-.025em;
+}
+h2{
+  font-family:var(--display);
+  font-size:clamp(24px, 6.5vw, 30px);
+  line-height:1.12;
+  font-weight:400;
+  color:var(--ink);
+  margin:0 0 12px;
+  letter-spacing:-.02em;
+}
+.lead{font-size:16px;line-height:1.52;color:var(--text);margin:0 0 16px}
+.small,.muted{font-size:12.5px;color:var(--muted);line-height:1.45}
+.hand{font:italic 400 1.05em var(--display);color:var(--clay)}
+
+/* Cards & Containers */
+.card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+  margin:14px 0;
+  box-shadow:0 10px 28px -16px rgba(29,26,21,0.18);
+}
+
+/* Buttons */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;min-height:54px;
+  padding:14px 22px;
+  background:var(--ink);color:var(--paper);
+  border:1px solid var(--ink);border-radius:999px;
+  font-family:var(--sans);font-weight:500;font-size:15px;
+  text-decoration:none;cursor:pointer;
+  box-shadow:0 10px 24px -10px rgba(180,85,45,0.4);
+  transition:.18s ease;
+  margin-top:14px;
+}
+.btn:active{transform:scale(0.97)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none;border-color:var(--line)}
+
+/* Carousels */
+.car{
+  display:flex;gap:14px;
+  overflow-x:auto;scroll-snap-type:x mandatory;
+  margin:10px -18px 4px;padding:6px 18px 14px;
+  scrollbar-width:none;
+}
+.car::-webkit-scrollbar{display:none}
+.slide{flex:0 0 78%;scroll-snap-align:center;margin:0}
+.slide img{
+  display:block;width:100%;height:auto;
+  border-radius:16px;border:1px solid var(--line);
+  background:var(--paper);
+  box-shadow:0 10px 24px -14px rgba(29,26,21,0.3);
+}
+.slide figcaption{
+  font:italic 400 13.5px/1.35 var(--display);
+  color:var(--muted);margin-top:10px;
+}
+.slide figcaption b{
+  display:block;font:500 11px var(--sans);
+  letter-spacing:.07em;text-transform:uppercase;
+  color:var(--clay);margin-bottom:3px;
+}
+.swipe{font-size:11.5px;color:var(--muted);text-align:center;margin:4px 0 12px}
+
+/* Standup / Editorial Cards */
+.standup-card{
+  background:var(--paper);
+  border:1.5px solid var(--line);
+  border-radius:16px;padding:18px;
+  margin:16px 0;
+  box-shadow:0 12px 28px -16px rgba(29,26,21,0.22);
+}
+.standup-card__header{
+  font:400 17px/1.25 var(--display);
+  color:var(--ink);margin-bottom:10px;
+}
+.standup-roi{
+  background:#F6E6DA;
+  border-left:3px solid var(--clay);
+  padding:11px 14px;border-radius:0 10px 10px 0;
+  font-size:13.5px;line-height:1.45;color:var(--ink);
+  margin-top:10px;
+}
+.standup-roi b{color:var(--clay)}
+
+/* Pricing Tiers & Ladder */
+.ladder-label{
+  font:700 10.5px/1.3 var(--sans);
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin:22px 0 10px;
+}
+.tiers{display:grid;gap:12px;margin:10px 0}
+.tier{
+  background:var(--paper);
+  border:1.5px solid var(--line);
+  border-radius:16px;padding:18px;
+  cursor:pointer;transition:.2s ease;
+}
+.tier.free-card{
+  background:linear-gradient(155deg, #FBF7EE 0%, #E9F2EC 100%);
+  border-color:rgba(79, 107, 74, 0.4);
+}
+.tier.proto-card{
+  background:linear-gradient(155deg, #FBF7EE 0%, #EFE6D5 100%);
+  border-color:rgba(180, 85, 45, 0.35);
+}
+.tier.hit{
+  background:linear-gradient(160deg, #FBF7EE 0%, #F4E8D6 100%);
+  border-color:rgba(180, 85, 45, 0.45);
+}
+.tier.on{
+  border-color:var(--clay);
+  box-shadow:0 0 0 3px rgba(180,85,45,0.16), 0 14px 30px -14px rgba(180,85,45,0.45);
+  transform:translateY(-2px);
+}
+.tier.free-card.on{
+  border-color:var(--ok);
+  box-shadow:0 0 0 3px rgba(79, 107, 74, 0.2), 0 14px 30px -14px rgba(79, 107, 74, 0.45);
+}
+.tier-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
+.tier-badge{
+  display:inline-block;font:600 10px/1 var(--sans);
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:5px 9px;border-radius:999px;
+  background:rgba(29,26,21,0.08);color:var(--ink);
+  margin-bottom:6px;
+}
+.tier.free-card .tier-badge { background: var(--ok); color: #fff; }
+.tier.proto-card .tier-badge { background: #1D1A15; color: #FBF7EE; }
+.tier.hit .tier-badge { background: var(--clay); color: #fff; }
+
+.tier-title{font:400 19px/1.18 var(--display);color:var(--ink)}
+.tier-price{font:500 21px/1 var(--display);color:var(--clay);text-align:right;white-space:nowrap}
+.tier.free-card .tier-price { color: var(--ok); }
+.tier-time{display:block;font:500 11px var(--sans);color:var(--muted);text-align:right;margin-top:4px}
+.tier-desc{font-size:13.5px;line-height:1.45;color:var(--text);margin:6px 0 8px}
+.tier-list{margin:8px 0 0;padding-left:16px;font-size:13.5px;line-height:1.45;color:var(--text)}
+.tier-list li{margin-bottom:5px}
+.tier-deposit{
+  margin-top:10px;padding:9px 12px;border-radius:10px;
+  background:rgba(180,85,45,0.11);font-size:12.5px;line-height:1.4;color:var(--ink);
+}
+
+.addon-card{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:var(--paper);border:1.5px dashed var(--clay);
+  border-radius:16px;padding:15px 16px;margin:14px 0;
+  cursor:pointer;transition:.2s;
+}
+.addon-card.on{
+  background:#F6E6DA;border-style:solid;
+  box-shadow:0 0 18px rgba(180,85,45,0.25);
+}
+.addon-card b{display:block;font:400 17px var(--display);color:var(--ink)}
+.addon-card span{display:block;font-size:12.5px;color:var(--muted);margin-top:3px}
+.addon-pill{
+  flex:none;padding:7px 11px;border-radius:999px;
+  background:var(--ink);color:var(--paper);font:600 12px var(--sans);
+}
+.addon-card.on .addon-pill{background:var(--clay)}
+
+/* Form Fields */
+.form-label{
+  display:block;font:700 10px/1.3 var(--sans);
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--clay);margin:16px 0 6px;
+}
+.field{
+  width:100%;border:1px solid var(--line);
+  background:var(--paper);border-radius:12px;
+  padding:14px;color:var(--text);font-family:var(--sans);font-size:15px;
+  outline:none;transition:.15s;
+}
+.field:focus{border-color:var(--clay)}
+textarea.field{min-height:88px;resize:vertical}
+
+.footer{
+  text-align:center;font:400 10px/1.8 var(--sans);
+  letter-spacing:.06em;color:var(--muted);
+  padding:24px 0 10px;
+  border-top:1px solid var(--line);
+  margin-top:30px;
+}
+.footer a{color:var(--clay);text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="top">
+    <div class="logo">Toriya Nova</div>
+    <div class="counter">эстетика цифровых систем</div>
+  </header>
+
+  <!-- ЭКРАН 1: ГЛАВНЫЙ (Мягкое зеркало боли вместо наезда на PDF) -->
+  <section id="s0" class="screen active">
+    <div class="kicker">Диалог без барьеров</div>
+    <h1>Вы тратите часы на созвоны, а клиенты всё равно теряются в личке.</h1>
+    <p class="lead">Можно продолжать объяснять условия вручную и собирать заявки в блокноте. А можно дать им пройти ваш продукт за 3 минуты в один тап.</p>
+
+    <div class="standup-card">
+      <div class="standup-card__header">☕️ Знакомая ситуация?</div>
+      <p class="muted" style="margin:0 0 10px; font-size:13.5px;">Клиент пишет в личку, задает сто вопросов об услугах, вы долго расписываете детали — и на фразе «я подумаю» человек исчезает навсегда.</p>
+      <div class="standup-roi">
+        💡 <b>Решение:</b> Интерактивный Mini App в Telegram. Вместо бесконечного пинг-понга в чате человек сам нажимает на кнопки, проходит диагностику, видит свои результаты и бронирует время. <b>Без вашего участия в три часа ночи.</b>
+      </div>
+    </div>
+
+    <p class="lead" style="margin-top:12px;">Сейчас вы не будете читать скучную презентацию.<br><span class="hand">Вы пройдёте её сами.</span></p>
+    <a class="btn" href="#demo1">✨ ПОСМОТРЕТЬ ПРИМЕРЫ В ДЕЙСТВИИ →</a>
+  </section>
+
+  <!-- ЭКРАН 2: ДЕМО 1 (Диагностика и результаты) -->
+  <section id="demo1" class="screen">
+    <div class="kicker">Демонстрация · Шаг 1 из 2</div>
+    <h2>Интерактив и личная карта ясности</h2>
+    <p class="small">Посмотрите, как это выглядит у вашего клиента:</p>
+    
+    <div class="car">
+      <figure class="slide">
+        <img src="/img/consent.webp" alt="Согласия" loading="lazy">
+        <figcaption><b>01. Мягкий вход</b>Человек даёт согласие в один тап — юридически чисто и без лишней бюрократии.</figcaption>
+      </figure>
+      <figure class="slide">
+        <img src="/img/quiz.webp" alt="Вопросы" loading="lazy">
+        <figcaption><b>02. Вопросы</b>Динамичные карточки с понятным выбором и плавной шкалой прогресса.</figcaption>
+      </figure>
+      <figure class="slide">
+        <img src="/img/result.webp" alt="Карта ясности" loading="lazy">
+        <figcaption><b>03. Результат</b>Итоговый рентген в процентах и баллах по ключевым направлениям.</figcaption>
+      </figure>
+      <figure class="slide">
+        <img src="/img/growth.webp" alt="Точка роста" loading="lazy">
+        <figcaption><b>04. Точка роста</b>Персональный фокус внимания — с чего начать изменения прямо сейчас.</figcaption>
+      </figure>
+    </div>
+    <p class="swipe">← листайте экраны →</p>
+
+    <div class="standup-card">
+      <div class="standup-card__header">🎯 Что видит эксперт в личке?</div>
+      <p class="muted" style="margin:0; font-size:13.5px;">Бот присылает вам готовый портрет лида: с какими болями он пришел и какой балл набрал. Вы пишете только тем, кто уже осознал ценность.</p>
+    </div>
+
+    <a class="btn" href="#demo2">ДАЛЬШЕ: ОНЛАЙН-ЗАПИСЬ →</a>
+    <a class="btn ghost" href="#s0">← Назад</a>
+  </section>
+
+  <!-- ЭКРАН 3: ДЕМО 2 (Онлайн-запись и слоты) -->
+  <section id="demo2" class="screen">
+    <div class="kicker">Демонстрация · Шаг 2 из 2</div>
+    <h2>Запись без пинг-понга в личных сообщениях</h2>
+    <p class="small">Забудьте бесконечные согласования окон в чате:</p>
+
+    <div class="car">
+      <figure class="slide">
+        <img src="/img/book1.webp" alt="Выбор направления" loading="lazy">
+        <figcaption><b>Шаг 1</b>Клиент выбирает нужный класс, предмет или формат консультации.</figcaption>
+      </figure>
+      <figure class="slide">
+        <img src="/img/book2.webp" alt="Выбор тем" loading="lazy">
+        <figcaption><b>Шаг 2</b>Отмечает темы или запросы, которые вызывают основные трудности.</figcaption>
+      </figure>
+      <figure class="slide">
+        <img src="/img/book3.webp" alt="Свободные окна" loading="lazy">
+        <figcaption><b>Шаг 3</b>Видит свободные дни и бронирует окно. Слот мгновенно закрывается за ним.</figcaption>
+      </figure>
+    </div>
+    <p class="swipe">← листайте экраны →</p>
+
+    <div class="standup-card">
+      <div class="standup-roi">
+        ⚡️ <b>Свобода лички:</b> Клиент выбирает время самостоятельно. Система бронирует слот и присылает уведомление вам. Никаких сорванных записей.
+      </div>
+    </div>
+
+    <a class="btn" href="#price">ВЫБРАТЬ ФОРМАТ ПОД СВОЙ ПРОДУКТ →</a>
+    <a class="btn ghost" href="#demo1">← Назад</a>
+  </section>
+
+  <!-- ЭКРАН 4: ПОЛНАЯ ПРОДУКТОВАЯ ЛЕСТНИЦА И ТАРИФЫ -->
+  <section id="price" class="screen">
+    <div class="kicker">Ступени работы</div>
+    <h2>С чего можно начать</h2>
+    <p class="small">Выберите комфортный шаг — от экспресс-аудита воронки до запуска системы под ключ.</p>
+
+    <div class="ladder-label">1. Экспертный аудит и тест-драйв</div>
+    <div class="tiers">
+      <!-- Карточка 1: Экспресс-аудит (Защита экспертности) -->
+      <div class="tier free-card" data-tier="0">
+        <div class="tier-top">
+          <div>
+            <span class="tier-badge">🟢 По заявке</span>
+            <div class="tier-title">Экспресс-аудит воронки в Telegram</div>
+          </div>
+          <div>
+            <div class="tier-price">0 ₽</div>
+            <span class="tier-time">по отбору</span>
+          </div>
+        </div>
+        <p class="tier-desc"><b>Хотите понять, принесет ли Mini App результат именно вам?</b><br>Пришлите ссылку на канал — я лично изучу вашу упаковку и запишу разбор:</p>
+        <ul class="tier-list">
+          <li>Где прямо сейчас теряются теплые заявки</li>
+          <li>Есть ли смысл внедрять интерактив в вашу нишу</li>
+        </ul>
+      </div>
+
+      <!-- Карточка 2: Депозит -->
+      <div class="tier proto-card" data-tier="2500">
+        <div class="tier-top">
+          <div>
+            <span class="tier-badge">🟡 С депозитом</span>
+            <div class="tier-title">Архитектурный разбор + Прототип</div>
+          </div>
+          <div>
+            <div class="tier-price">2 500 ₽</div>
+            <span class="tier-time">депозит</span>
+          </div>
+        </div>
+        <p class="tier-desc">Для тех, кто хочет увидеть структуру своего приложения до разработки:</p>
+        <ul class="tier-list">
+          <li>Детальный разбор воронки и сценария прогрева</li>
+          <li>Готовая карта экранов и логики под ваш продукт</li>
+        </ul>
+        <div class="tier-deposit">🔥 <b>Несгораемый депозит:</b> эти 2 500 ₽ полностью вычитаются из стоимости разработки любого основного тарифа!</div>
+      </div>
+    </div>
+
+    <!-- Математика окупаемости -->
+    <div class="standup-card">
+      <div class="standup-card__header">🧮 Математика окупаемости:</div>
+      <div class="standup-roi">
+        Если ваш средний чек или абонемент составляет <b>12 000 – 15 000 ₽</b>, система «Под ключ» окупается в ноль всего с <b>двух-трех клиентов</b>. Все последующие заявки идут в чистый плюс без абонплаты.
+      </div>
+    </div>
+
+    <div class="ladder-label">2. Основной продукт · Разработка под ключ за 2–3 дня</div>
+    <div class="tiers">
+      <!-- Тариф 1 -->
+      <div class="tier" data-tier="30000">
+        <div class="tier-top">
+          <div>
+            <span class="tier-badge">Быстрый старт</span>
+            <div class="tier-title">На ваших материалах</div>
+          </div>
+          <div>
+            <div class="tier-price">30 000 ₽</div>
+            <span class="tier-time">⏱ 2 дня</span>
+          </div>
+        </div>
+        <ul class="tier-list">
+          <li>Вы предоставляете готовые вопросы, структуру и тексты</li>
+          <li>Дизайн и сборка Mini App в вашем фирменном стиле</li>
+          <li>Подключение бота, лидов и аналитики шагов</li>
+        </ul>
+      </div>
+
+      <!-- Тариф 2 (Хит) -->
+      <div class="tier hit on" data-tier="35000">
+        <div class="tier-top">
+          <div>
+            <span class="tier-badge">★ Выбор 80% · Под ключ</span>
+            <div class="tier-title">Mini App + Смыслы и разбор</div>
+          </div>
+          <div>
+            <div class="tier-price">35 000 ₽</div>
+            <span class="tier-time">⏱ 2–3 дня</span>
+          </div>
+        </div>
+        <ul class="tier-list">
+          <li><b>Личный созвон и разбор</b> вашей продуктовой воронки</li>
+          <li><b>Составление вопросов</b>, вариантов и сценария прогрева</li>
+          <li><b>Расшифровки результатов</b> с мягким переводом в продажу</li>
+          <li>Тексты авто-дожима для бота + полная тех. сборка</li>
+        </ul>
+      </div>
+
+      <!-- Тариф 3 -->
+      <div class="tier" data-tier="40000">
+        <div class="tier-top">
+          <div>
+            <span class="tier-badge">Масштаб</span>
+            <div class="tier-title">Сложная система / CRM</div>
+          </div>
+          <div>
+            <div class="tier-price">от 40 000 ₽</div>
+            <span class="tier-time">индивидуально</span>
+          </div>
+        </div>
+        <ul class="tier-list">
+          <li>Онлайн-запись со слотами и календарём</li>
+          <li>Личный кабинет / CRM, распределение ролей для команды</li>
+          <li>Нестандартная логика, базы данных и интеграции</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Доп опция -->
+    <div id="addonCard" class="addon-card">
+      <div>
+        <b>🌐 Дублировать Mini App в другие сети</b>
+        <span>Запуск этой же системы во ВКонтакте, MAX и по веб-ссылке</span>
+      </div>
+      <div class="addon-pill">+10 000 ₽</div>
+    </div>
+
+    <a class="btn" href="#order">ПЕРЕЙТИ К ОФОРМЛЕНИЮ →</a>
+    <a class="btn ghost" href="#demo2">← Назад</a>
+  </section>
+
+  <!-- ЭКРАН 5: ФИНАЛЬНАЯ ЗАЯВКА -->
+  <section id="order" class="screen">
+    <div class="kicker">Финальный шаг</div>
+    <h1>Обсудим ваш будущий Mini App?</h1>
+    <p class="lead">Заполните пару полей — и мы перейдем в Telegram для точечного диалога.</p>
+
+    <div class="card">
+      <label class="form-label" for="channelInput">Ссылка на ваш канал или блог</label>
+      <input id="channelInput" type="text" class="field" placeholder="@username или ссылка">
+
+      <label class="form-label" for="productInput">Ваша ниша и с каким чеком работаете</label>
+      <textarea id="productInput" class="field" placeholder="Например: психолог / наставничество, чек 30 000 ₽…"></textarea>
+
+      <button id="sendBtn" class="btn">💬 ОБСУДИТЬ В TELEGRAM →</button>
+    </div>
+
+    <a class="btn ghost" href="#price">← Назад к тарифам</a>
+  </section>
+
+  <div class="footer">
+    TORIYA NOVA STUDIO · ARCHITECTURE & DIGITAL PRODUCTS<br>
+    <a href="#">Политика конфиденциальности</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  const screens = document.querySelectorAll('.screen');
+  function handleHash() {
+    let hash = location.hash.replace('#', '') || 's0';
+    let target = document.getElementById(hash);
+    if (!target) { hash = 's0'; target = document.getElementById('s0'); }
+    
+    screens.forEach(s => s.classList.remove('active'));
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  window.addEventListener('hashchange', handleHash);
+  if (!location.hash) { location.hash = '#s0'; } else { handleHash(); }
+
+  // Выбор тарифов
+  document.querySelectorAll('.tier').forEach(tier => {
+    tier.addEventListener('click', () => {
+      document.querySelectorAll('.tier').forEach(t => t.classList.remove('on'));
+      tier.classList.add('on');
+    });
+  });
+
+  // Клик по допу
+  const addon = document.getElementById('addonCard');
+  if (addon) {
+    addon.addEventListener('click', () => {
+      addon.classList.toggle('on');
+    });
+  }
+
+  // Кнопка отправки в Telegram
+  const sendBtn = document.getElementById('sendBtn');
+  if (sendBtn) {
+    sendBtn.addEventListener('click', () => {
+      const channel = document.getElementById('channelInput').value.trim();
+      const product = document.getElementById('productInput').value.trim();
+      
+      let selectedTier = document.querySelector('.tier.on');
+      let tierName = selectedTier ? selectedTier.querySelector('.tier-title').textContent : 'Не выбран';
+      let tierPrice = selectedTier ? selectedTier.querySelector('.tier-price').textContent : '';
+      let hasAddon = addon && addon.classList.contains('on');
+
+      let msg = `Привет! Хочу обсудить разработку Mini App.\n\n🎯 Выбранный шаг: ${tierName} (${tierPrice})`;
+      if (hasAddon) msg += `\n➕ Доп: Дублирование в другие сети (+10 000 ₽)`;
+      msg += `\nКанал: ${channel || 'не указан'}\nНиша/Продукт: ${product || 'не указано'}`;
+
+      window.open(`https://t.me/toriya_nova?text=${encodeURIComponent(msg)}`, '_blank');
+    });
+  }
+})();
+</script>
+</body>
+</html>
