@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<!-- TORIYA NOVA BUILD 2026-11-01-V14-ALL-IN-ONE -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Собираю бизнес в работающую цифровую систему: витрина решений, магазин, запись и разбор клиентского пути.">
+<meta property="og:type" content="website"><meta property="og:title" content="Toriya Nova — Цифровая система для бизнеса"><meta property="og:description" content="Клиенту легко купить. Владельцу легко управлять. Витрина решений и запись на разбор.">
+<title>TORIYA NOVA — MINI APP ВИТРИНА И ЗАПИСЬ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap" onload="this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap"></noscript>
+<style>
+:root{
+  --bg:#F3EDE2;--paper:#FBF7EE;--ink:#1D1A15;--text:#3B352B;--muted:#7A7062;
+  --gold:#B4552D;--clay:#B4552D;--line:#DAD1C0;--ok:#4F6B4A;--danger:#9A4F2C;
+  --display:'Fraunces',Georgia,'Times New Roman',serif;
+  --sans:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;min-height:100%;height:auto;overflow-x:hidden;overflow-y:auto;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.48;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+button,input,textarea,a{font:inherit}
+.app{width:min(100%,640px);margin:0 auto;min-height:100dvh;height:auto;padding:0 16px calc(28px + env(safe-area-inset-bottom))}
+.top{height:58px;padding:0 6px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.logo{font:italic 400 18px var(--display);color:var(--ink);cursor:pointer;user-select:none}
+.top-right{display:flex;align-items:center;gap:8px}
+.counter{font:400 12px var(--sans);color:var(--muted)}
+.admin-entry-btn{display:none;padding:5px 10px;border-radius:999px;border:1px solid var(--clay);background:var(--paper);color:var(--clay);font:600 11px var(--sans);cursor:pointer}
+.admin-entry-btn.show{display:inline-flex;align-items:center;gap:4px}
+
+.screen{display:none!important;height:auto!important;min-height:calc(100dvh - 66px);padding:22px 14px 28px;position:relative;animation:rise .32s cubic-bezier(.2,.7,.2,1)}
+.screen.active{display:block!important}
+.screen#s0.active,.screen#boot.active{display:flex!important;flex-direction:column}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+h1,h2,h3{font-family:var(--display);font-weight:400;color:var(--ink);letter-spacing:-.025em;margin:0}
+h1{font-size:clamp(32px,9.2vw,44px);line-height:1.05;margin-bottom:14px}
+h2{font-size:clamp(26px,7.4vw,32px);line-height:1.1;margin-bottom:12px}
+h3{font-size:20px;line-height:1.2}
+.lead{font-size:16px;line-height:1.52;color:var(--text);margin:10px 0}
+.small,.muted,.note{font-size:12.5px;line-height:1.45;color:var(--muted)}
+.kicker,.eyebrow,.tag{font:italic 400 15.5px/1.3 var(--display);color:var(--clay);margin-bottom:10px}
+.kicker::before{content:"✦ ";font-style:normal}
+
+.card,.message{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px;margin:12px 0;box-shadow:0 12px 32px -18px rgba(29,26,21,.22)}
+.card.dark{background:var(--ink);border-color:var(--ink);color:#F3EDE2}
+.card.dark h1,.card.dark h2,.card.dark h3{color:#F3EDE2}
+.btn{background:var(--ink);border:1px solid var(--ink);color:var(--paper);border-radius:999px;font-weight:600;font-size:14.5px;min-height:54px;padding:14px 22px;width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;cursor:pointer;box-shadow:0 10px 26px -10px rgba(180,85,45,.6);transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none}
+.btn.clay{background:var(--clay);border-color:var(--clay);color:#fff}
+.btn:disabled{opacity:.45;pointer-events:none;box-shadow:none}
+
+.x{position:relative;display:inline-block;white-space:nowrap}
+.x::after{content:"";position:absolute;left:-3%;width:106%;top:52%;height:.22em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8C30 2 60 11 98 4' stroke='%23B4552D' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+.hand{font:italic 400 1.05em var(--display);color:var(--clay)}
+.topnote{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.sticker{transform:rotate(-7deg);border:1px solid var(--ink);border-radius:50%;width:52px;height:52px;display:grid;place-items:center;text-align:center;font:600 10.5px/1.1 var(--sans);color:var(--ink);background:var(--paper)}
+.spark{position:absolute;color:var(--clay);font-size:18px;pointer-events:none}
+
+.routebar{display:none;align-items:center;padding:12px 14px 0;max-width:640px;margin:0 auto}.routebar.on{display:flex}
+.routebar .n{flex:none;width:11px;height:11px;border-radius:50%;border:1.5px solid var(--ink);background:var(--bg);transition:.3s}
+.routebar .n.done{background:var(--ink)}.routebar .n.cur{background:var(--clay);border-color:var(--clay);box-shadow:0 0 0 4px rgba(180,85,45,.2)}
+.routebar .l{flex:1;height:0;margin:0 4px;border-top:2px dashed #CDBFA6;position:relative}
+.routebar .l.done{border-color:var(--clay)}
+.routecap{display:none;max-width:640px;margin:0 auto;padding:6px 14px 0;font:italic 400 13px var(--display);color:var(--muted)}.routebar.on+.routecap{display:block}
+.webback{margin:8px 14px 0;background:none;border:0;padding:0;font:italic 400 15px var(--display);color:var(--clay);cursor:pointer}
+
+.pain-list{display:grid;gap:8px;margin:12px 0}
+.pain-item{display:flex;gap:10px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:11px 13px;font-size:13.5px;line-height:1.4}
+.pain-item i{font-style:normal;font-size:16px;flex:none;margin-top:1px}
+.pain-item b{color:var(--ink)}
+.consent-inline{font-size:11px;line-height:1.4;color:var(--muted);text-align:center;margin-top:10px}
+.consent-inline a{color:var(--clay);text-decoration:underline}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 14px}
+.sq{position:relative;aspect-ratio:1.05;border-radius:16px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;transition:.2s;border:1px solid rgba(29,26,21,.1);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sq::after{content:"+";position:absolute;top:11px;right:11px;width:22px;height:22px;border-radius:50%;border:1px solid rgba(29,26,21,.22);display:grid;place-items:center;font-size:13px;color:var(--muted)}
+.sq.on{outline:2px solid var(--clay);box-shadow:0 0 20px rgba(180,85,45,.35);transform:scale(1.015)}
+.sq.on::after{content:"✓";background:var(--clay);border-color:var(--clay);color:#fff}
+.sq i{font-style:normal;font-size:26px}
+.sq b{font:400 18px/1.15 var(--display);color:var(--ink);display:block;margin-top:6px}
+.sq span{font-size:11.5px;line-height:1.32;color:var(--text)}
+
+.shop-showcase{background:#F6F3EC;border:1.5px solid #D5CBB8;border-radius:20px;overflow:hidden;margin:12px 0;box-shadow:0 16px 36px -18px rgba(29,26,21,.3)}
+.shop-head{background:#161514;color:#fff;padding:11px 15px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.shop-head b{font-weight:600;letter-spacing:.02em}
+.shop-head span{font-size:11px;color:#A39E93}
+.shop-tabs{display:flex;gap:6px;padding:10px 12px;border-bottom:1px dotted #C8BFA8;overflow-x:auto}
+.shop-tab{padding:5px 11px;border-radius:999px;font-size:11.5px;border:1px dotted #8C8270;color:#3B352B;white-space:nowrap}
+.shop-tab.active{background:#3A3835;color:#fff;border-style:solid;border-color:#3A3835}
+.shop-body{padding:14px}
+.shop-card{background:#FBF9F5;border:1px dotted #BEB4A2;border-radius:14px;padding:13px;position:relative}
+.sale-badge{display:inline-block;background:#9E2A2B;color:#fff;font-weight:700;font-size:11px;padding:4px 8px;border-radius:4px;margin-bottom:8px}
+.shop-item-row{display:flex;gap:12px;align-items:center}
+.shop-thumb{width:68px;height:88px;border-radius:10px;background:linear-gradient(145deg,#E8E2D5,#F7F4EE);border:1px solid #DED6C6;display:grid;place-items:center;font-size:28px;flex:none}
+.shop-info h4{font:500 16px/1.2 var(--display);color:var(--ink);margin:0 0 5px}
+.shop-info p{font-size:11.5px;color:var(--muted);margin:2px 0}
+.shop-price{margin-top:6px;font-size:15px;font-weight:700;color:#9E2A2B}
+.shop-price s{color:#8E877C;font-weight:400;font-size:12.5px;margin-right:6px}
+.size-pills{display:flex;gap:5px;margin:10px 0}
+.size-pill{padding:4px 8px;border:1px solid #C8BFA8;border-radius:6px;font-size:11px;cursor:pointer;background:#fff}
+.size-pill.on{background:#161514;color:#fff;border-color:#161514}
+.shop-order-preview{margin-top:10px;padding-top:10px;border-top:1px dotted #C8BFA8;font-size:12px;color:var(--text)}
+.shop-cta{margin-top:10px;background:#9E2A2B;color:#fff;border:0;width:100%;padding:11px;border-radius:8px;font-weight:600;font-size:12.5px;cursor:pointer;text-decoration:none;display:block;text-align:center}
+
+.tg-review{background:#232028;color:#EFEAF2;border-radius:18px;padding:15px;margin:14px 0;box-shadow:0 14px 30px -16px rgba(0,0,0,.45)}
+.tg-review-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.tg-review-author{display:flex;align-items:center;gap:9px}
+.tg-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#E07A5F,#B4552D);display:grid;place-items:center;font-weight:700;color:#fff;font-size:14px}
+.tg-review-author b{display:block;color:#fff;font-size:13.5px}
+.tg-review-author span{font-size:11px;color:#A79FB1}
+.tg-voice-bar{display:flex;align-items:center;gap:10px;background:#322C3B;padding:9px 12px;border-radius:12px;margin-bottom:10px}
+.tg-play{width:32px;height:32px;border-radius:50%;background:#5E96FF;color:#fff;display:grid;place-items:center;font-size:13px;flex:none}
+.tg-wave{flex:1;height:16px;background:repeating-linear-gradient(90deg,#7FA8FF 0 2px,transparent 2px 5px);opacity:.75;border-radius:2px}
+.tg-voice-time{font-size:11px;color:#A79FB1}
+.tg-review-text{font-size:13px;line-height:1.48;color:#E2DCE8;border-left:2px solid #5E96FF;padding-left:10px;margin:0}
+
+.car{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;margin:10px -14px 4px;padding:6px 14px 14px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.car::-webkit-scrollbar{display:none}
+.slide{flex:0 0 76%;scroll-snap-align:center;margin:0}.slide img{display:block;width:100%;height:auto;border-radius:18px;border:1px solid var(--line);background:var(--paper)}
+.slide figcaption{font:italic 400 13.5px/1.35 var(--display);color:var(--muted);margin-top:8px}.slide figcaption b{display:block;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--clay);margin-bottom:2px}
+.swipe{font-size:12px;color:var(--muted);text-align:center;margin:0 0 8px}
+.tgb{background:#2B2530;color:#EFEAF2;border-radius:18px;padding:14px 15px;font-size:13.5px;line-height:1.5}.tgb b{color:#fff}.tgb span{display:block;margin-top:10px;padding:8px;border-radius:10px;background:#3A3342;text-align:center;font-size:12.5px}
+.plate{display:block;padding:14px 16px;border-radius:14px;margin:0 0 10px;background:var(--paper);border:1px solid var(--c);box-shadow:0 0 18px -8px var(--c)}.plate b{display:block;font:600 12px var(--sans);letter-spacing:.06em;color:var(--c);margin-bottom:3px}.plate span{font:400 16px/1.3 var(--display);color:var(--ink)}
+.video{height:195px;border-radius:14px;background:var(--ink);position:relative;overflow:hidden;margin:12px 0;display:grid;place-items:center;color:#fff}
+.video .label{position:absolute;top:10px;left:12px;font-size:9px;letter-spacing:.14em;color:#D8C1A0;z-index:2}
+
+.ladder-label{font:700 10.5px/1.3 var(--sans);letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin:16px 0 8px}
+.tiers{display:grid;gap:11px;margin:8px 0 14px}
+.tier{position:relative;background:var(--paper);border:1.5px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;transition:.2s;-webkit-tap-highlight-color:transparent}
+.tier.proto-card{background:linear-gradient(155deg,#FBF7EE 0%,#EFE6D5 100%);border-color:rgba(180,85,45,.4)}
+.tier.free-card{background:linear-gradient(155deg,#FBF7EE 0%,#E9F2EC 100%);border-color:rgba(79,107,74,.38)}
+.tier.hit{background:linear-gradient(160deg,#FBF7EE 0%,#F4E8D6 100%);border-color:rgba(180,85,45,.45)}
+.tier.on{border-color:var(--clay);box-shadow:0 0 0 3px rgba(180,85,45,.16),0 12px 26px -14px rgba(180,85,45,.45);transform:translateY(-1px)}
+.tier-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.tier-badge{display:inline-block;font:600 10px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;padding:5px 8px;border-radius:999px;background:rgba(29,26,21,.08);color:var(--ink);margin-bottom:5px}
+.tier.proto-card .tier-badge{background:var(--ink);color:#FBF7EE}
+.tier.free-card .tier-badge{background:var(--ok);color:#fff}
+.tier.hit .tier-badge{background:var(--clay);color:#fff}
+.tier-title{font:400 19px/1.18 var(--display);color:var(--ink)}
+.tier-price{font:500 21px/1 var(--display);color:var(--clay);white-space:nowrap;text-align:right}
+.tier.free-card .tier-price{color:var(--ok)}
+.tier-time{display:block;font:500 10.5px/1.3 var(--sans);color:var(--muted);text-align:right;margin-top:3px}
+.tier-desc{font-size:13px;line-height:1.42;color:var(--text);margin:5px 0 7px}
+.tier-list{margin:6px 0 0;padding-left:16px;font-size:13px;line-height:1.45;color:var(--text)}
+.tier-list li{margin-bottom:4px}
+.tier-check{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font:600 11.5px var(--sans);color:var(--clay)}
+.tier.on .tier-check::before{content:"✓ Выбран этот вариант"}
+.tier:not(.on) .tier-check::before{content:"Тапни, чтобы выбрать →";color:var(--muted);font-weight:500}
+
+.addon-card{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--paper);border:1.5px dashed var(--clay);border-radius:15px;padding:14px 15px;margin:10px 0 16px;cursor:pointer}
+.addon-card.on{background:#F6E6DA;border-style:solid}
+.addon-card b{display:block;font:400 16px var(--display);color:var(--ink)}
+.addon-card span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.addon-pill{flex:none;padding:6px 10px;border-radius:999px;background:var(--ink);color:var(--paper);font:600 11.5px var(--sans)}
+.addon-card.on .addon-pill{background:var(--clay)}
+
+.value-box{background:linear-gradient(155deg,#FBF7EE 0%,#F2E5D2 100%);border:1.5px solid rgba(180,85,45,.35);border-radius:18px;padding:18px;margin:10px 0 14px}
+.value-grid{display:grid;gap:8px;margin:10px 0}
+.value-row{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.4}
+.value-row b{color:var(--ink)}
+.cal-wrap{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:15px;margin:12px 0}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:8px 0 12px}
+.cal-day{border:1px solid var(--line);background:#fff;border-radius:11px;padding:7px 2px;text-align:center;cursor:pointer;transition:.15s}
+.cal-day small{display:block;font-size:10px;color:var(--muted);text-transform:uppercase}
+.cal-day b{display:block;font-size:14px;color:var(--ink);margin-top:2px}
+.cal-day.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.cal-day.on small,.cal-day.on b{color:#fff}
+.cal-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:8px}
+.cal-slot{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 6px;text-align:center;font:600 13px var(--sans);color:var(--ink);cursor:pointer;transition:.15s}
+.cal-slot.on{background:var(--clay);border-color:var(--clay);color:#fff;box-shadow:0 6px 16px -6px rgba(180,85,45,.6)}
+.cal-slot.busy{opacity:.38;text-decoration:line-through;pointer-events:none;background:#EAE3D5}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}
+.chip{padding:5px 11px;border-radius:999px;border:1px solid var(--clay);color:var(--clay);font-size:12px;background:var(--paper)}
+.form-label{display:block;font:700 10px/1.3 var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--clay);margin:13px 0 6px}
+.field{width:100%;border:1px solid rgba(29,26,21,.18);background:#fff;border-radius:13px;padding:12px 13px;color:var(--text);font-size:14px;outline:none}
+.field:focus{border-color:var(--clay)}
+textarea.field{min-height:76px;resize:vertical}
+.success{color:var(--ok);font-size:13px;margin-top:10px;font-weight:500}
+.error{color:var(--danger);font-size:13px;margin-top:10px;font-weight:500}
+
+.admin-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.admin-stat{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:11px;text-align:center}
+.admin-stat b{display:block;font:500 22px var(--display);color:var(--ink)}
+.admin-stat span{font-size:10.5px;color:var(--muted)}
+.visitor-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:9px;font-size:12.5px}
+.visitor-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px}
+.visitor-top b{font-size:14px;color:var(--ink)}
+.visitor-badge{padding:3px 8px;border-radius:999px;font-size:10.5px;font-weight:600;background:#EFE4D4;color:var(--clay)}
+.visitor-badge.ok{background:#E3EEE6;color:var(--ok)}
+.visitor-why{margin:5px 0;padding:7px 9px;border-radius:9px;background:rgba(29,26,21,.04);color:var(--text);font-size:12px}
+.visitor-actions{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.visitor-actions a{color:var(--clay);font-weight:600;text-decoration:none;font-size:12px}
+.footer{text-align:center;font:600 9.5px/1.7 var(--mono);letter-spacing:.07em;color:var(--muted);padding:18px 8px}
+.loader{min-height:70dvh;display:grid;place-items:center;text-align:center}
+.scan{width:68px;height:68px;border-radius:20px;background:var(--ink);color:#F3EDE2;display:grid;place-items:center;font:400 20px var(--display);margin:0 auto 16px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="logo" id="brandLogo">Toriya Nova</div>
+    <div class="top-right">
+      <button id="adminEntryBtn" class="admin-entry-btn">🔐 Дашборд</button>
+      <div class="counter">система · v14</div>
+    </div>
+  </header>
+  <div id="routebar" class="routebar"></div>
+  <div id="routecap" class="routecap"></div>
+  <button id="webBack" class="webback" style="display:none">← Назад</button>
+
+  <section id="boot" class="screen active">
+    <div class="loader"><div><div class="scan">TN</div><h2>Загружаю витрину…</h2></div></div>
+    <p id="bootErr" class="small" style="color:#9A4F2C;text-align:center"></p>
+  </section>
+
+  <!-- ШАГ 1: Вход через боли бизнеса + согласие по кнопке Далее -->
+  <section class="screen" id="s0">
+    <span class="spark" style="top:64px;right:18px">✦</span>
+    <div class="topnote">
+      <div class="kicker">Вы занимаетесь бизнесом, а не обслуживанием хаоса</div>
+      <div class="sticker">за 3<br>мин</div>
+    </div>
+    <h1>Устали работать <span class="x">диспетчером</span> своего бизнеса?</h1>
+    <p class="lead">Перепробовали кучу таблиц, ботов и сервисов, но клиенту всё ещё нужно пройти квест из переписок, чтобы просто записаться или купить?</p>
+
+    <div class="pain-list">
+      <div class="pain-item"><i>⏳</i><div><b>Часы на одно и то же:</b> каждый раз вручную объяснять цены, условия и свободные окошки в личке.</div></div>
+      <div class="pain-item"><i>🕳️</i><div><b>Заявки теряются в чатах:</b> клиенты спрашивают, откладывают и уходят, пока вы заняты работой.</div></div>
+      <div class="pain-item"><i>🧩</i><div><b>Сложный путь к покупке:</b> 10 ссылок, PDF-ки и таблицы вместо выбора и оплаты в одном окне за 15 секунд.</div></div>
+    </div>
+
+    <div class="message">
+      <div class="tag">Цифровая система внутри Telegram</div>
+      <p style="margin:0;font-size:14px"><b>Клиенту легко купить. Владельцу легко управлять.</b><br>Сейчас вы внутри живой Mini App-витрины: посмотрите реальные решения (от магазина с корзиной до самозаписи) и примерьте их на свой бизнес.</p>
+    </div>
+
+    <button id="startFunnelBtn" class="btn">✨ СМОТРЕТЬ ПРИМЕРЫ РЕШЕНИЙ · ДАЛЕЕ →</button>
+    <p class="consent-inline">
+      Нажимая «Далее», вы соглашаетесь с <a data-doc href="/privacy.html">политикой конфиденциальности</a>, <a data-doc href="/consent.html">обработкой данных</a> и разрешаете боту прислать напоминание, если вы прервётесь.
+    </p>
+  </section>
+
+  <!-- Видео-знакомство -->
+  <section class="screen" id="s0video">
+    <div class="kicker">Живое знакомство</div>
+    <h2>Как устроена система без лишних звеньев</h2>
+    <div class="video">
+      <div class="label">ВИДЕО 1</div>
+      <video controls playsinline preload="none" style="width:100%;height:100%;object-fit:cover">
+        <source src="/Toriya_1.mp4" type="video/mp4">
+        <source src="/01_START_TORIYA.mp4" type="video/mp4">
+      </video>
+    </div>
+    <p class="small">Дальше — интерактивная витрина: покажу магазин с реальным ростом заявок, онлайн-запись, диагностику и кабинет управления.</p>
+    <a class="btn" href="#formats">ОТКРЫТЬ ВИТРИНУ РЕШЕНИЙ →</a>
+  </section>
+
+  <!-- ШАГ 2: Выбор задач бизнеса (Витрина) -->
+  <section id="formats" class="screen">
+    <div class="kicker">Шаг 1 · Витрина решений</div>
+    <h2>Какую задачу сейчас важнее всего закрыть?</h2>
+    <p class="small">Тапни то, что откликается, — эти задачи автоматически подставятся в твой разбор.</p>
+    <div class="grid2">
+      <div class="sq" data-f="Витрина / Магазин" style="background:#F3E6D8">
+        <i>🛍️</i>
+        <div><b>Витрина и магазин</b><span>каталог, размеры, корзина и заказ в 2 клика без сайта</span></div>
+      </div>
+      <div class="sq" data-f="Онлайн-запись" style="background:#E3EEE6">
+        <i>📅</i>
+        <div><b>Запись и слоты</b><span>клиент сам видит свободные окна и записывается без переписки</span></div>
+      </div>
+      <div class="sq" data-f="Диагностика / Квалификация" style="background:#EFE2D6">
+        <i>🎯</i>
+        <div><b>Отбор и прогрев</b><span>интерактивный маршрут вместо PDF: клиент приходит уже тёплым</span></div>
+      </div>
+      <div class="sq" data-f="Кабинет / CRM" style="background:#E6E9F2">
+        <i>🗂️</i>
+        <div><b>Кабинет и база</b><span>все заявки, статусы, расписание и роли команды в одном месте</span></div>
+      </div>
+    </div>
+    <a class="btn" href="#demoShop">СМОТРЕТЬ КЕЙС: МАГАЗИН LEMOON 8/9 →</a>
+  </section>
+
+  <!-- Витрина магазина Lemoon 8/9 + Реальный отзыв Софьи -->
+  <section id="demoShop" class="screen">
+    <div class="kicker">Реальный кейс · E-commerce и каталог</div>
+    <h2>Магазин внутри Telegram: кейс Lemoon 8/9</h2>
+    <p class="small">Вместо долгих переписок «какой размер в наличии?» — полноценный лукбук-магазин прямо в мессенджере. Попробуй понажимать размеры:</p>
+
+    <div class="shop-showcase">
+      <div class="shop-head">
+        <b>Lemoon 8/9 · мини-приложение</b>
+        <span>лукбук + корзина</span>
+      </div>
+      <div class="shop-tabs">
+        <span class="shop-tab active">Все модели</span>
+        <span class="shop-tab">Платья</span>
+        <span class="shop-tab">Костюмы и гарнитуры</span>
+      </div>
+      <div class="shop-body">
+        <div class="shop-card">
+          <span class="sale-badge">−70% SALE</span>
+          <div class="shop-item-row">
+            <div class="shop-thumb">👗</div>
+            <div class="shop-info">
+              <h4>Платье Zodiac</h4>
+              <p><b>Состав:</b> 95% премиум армани шелк, 5% эластан</p>
+              <p><b>Цвет:</b> белый · Размеры: XS–XXL</p>
+              <div class="shop-price"><s>9 900 ₽</s> 2 970 ₽</div>
+            </div>
+          </div>
+          <div class="size-pills" id="demoSizePills">
+            <span class="size-pill">XS</span>
+            <span class="size-pill">S</span>
+            <span class="size-pill">M</span>
+            <span class="size-pill">L</span>
+            <span class="size-pill on">XL</span>
+            <span class="size-pill">XXL</span>
+          </div>
+          <div class="shop-order-preview">
+            ✓ <b>ВАШ ЗАКАЗ:</b> Платье Zodiac (разм. <span id="pickedSize">XL</span>) — <b>2 970 ₽</b><br>
+            <span class="small">Автоподстановка имени и @username из Telegram + адрес СДЭК → готовый заказ летит менеджеру в 1 тап.</span>
+          </div>
+          <a class="shop-cta" href="https://t.me/lemoon89_bot/magazine" target="_blank" rel="noopener">ОТКРЫТЬ ЖИВОЙ МАГАЗИН LEMOON 8/9 ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tg-review">
+      <div class="tg-review-head">
+        <div class="tg-review-author">
+          <div class="tg-avatar">С</div>
+          <div>
+            <b>Софья · бренд Lemoon 8/9</b>
+            <span>голосовое сообщение в Telegram · 0:50</span>
+          </div>
+        </div>
+        <span style="font-size:18px">🔥</span>
+      </div>
+      <div class="tg-voice-bar">
+        <div class="tg-play">▶</div>
+        <div class="tg-wave"></div>
+        <div class="tg-voice-time">0:50 · →A</div>
+      </div>
+      <p class="tg-review-text">
+        «Слушай, всё прекрасно! Мы как раз сейчас сделали сейл минус 70%, и <b>всем очень удобно пользоваться — протестировали на широкой аудитории, в основном пользуются в телеге</b>. Заявки присылают, Диана у меня консультирует всех, и мы сразу ведём людей до заказа. Очень классно, спасибо тебе большое! Выбирай, что тебе нравится из ассортимента, отложу и передам во Вьетнам!»
+      </p>
+    </div>
+
+    <a class="btn" href="#demo1">ДАЛЬШЕ: КВАЛИФИКАЦИЯ И ЗАПИСЬ →</a>
+  </section>
+
+  <!-- Демо 1: Диагностика и квалификация -->
+  <section id="demo1" class="screen">
+    <div class="kicker">Пример 2 · Предварительный отбор</div>
+    <h2>Диагностика вместо пустых созвонов</h2>
+    <div class="car">
+      <figure class="slide"><img src="/img/quiz.webp" alt="Вопросы" loading="lazy"><figcaption><b>Вопросы в 1 тап</b>Клиент сам отвечает на ключевые вопросы до встречи с вами.</figcaption></figure>
+      <figure class="slide"><img src="/img/result.webp" alt="Карта ясности" loading="lazy"><figcaption><b>Персональный итог</b>Система считает баллы и наглядно подсвечивает клиенту его узкое место.</figcaption></figure>
+      <figure class="slide"><div class="tgb"><b>✅ Мария (@maria)</b> · прошла маршрут<br><br>📊 Готовность: <b>67%</b><br>🎯 Запрос: <b>Систематизация заявок</b><br>• Ниша: коучинг, чек 45 000 ₽<span>✉️ Написать клиенту</span></div><figcaption><b>У вас в Telegram</b>Вы получаете уже квалифицированную заявку с понятным запросом.</figcaption></figure>
+    </div>
+    <p class="swipe">← листай →</p>
+    <div class="message"><p style="margin:0">Клиент приходит на встречу уже подготовленным, а вы не тратите часы на предварительную переписку.</p></div>
+    <a class="btn" href="#demo2">ДАЛЬШЕ: САМОЗАПИСЬ И КАБИНЕТ →</a>
+  </section>
+
+  <!-- Демо 2: Онлайн-запись и CRM -->
+  <section id="demo2" class="screen">
+    <div class="kicker">Пример 3 · Запись без участия администратора</div>
+    <h2>Самозапись по слотам и личный кабинет</h2>
+    <div class="car">
+      <figure class="slide"><img src="/img/book1.webp" alt="Выбор услуги" loading="lazy"><figcaption><b>Шаг 1 · Выбор услуги</b>Понятная витрина программ и пакетов без десятка ссылок.</figcaption></figure>
+      <figure class="slide"><img src="/img/book3.webp" alt="Свободные слоты" loading="lazy"><figcaption><b>Шаг 2 · Календарь слотов</b>Клиент видит свободные окна и бронирует время за 15 секунд.</figcaption></figure>
+      <figure class="slide"><img src="/img/admin.webp" alt="Управление слотами" loading="lazy"><figcaption><b>Шаг 3 · Ваша админка</b>Открывайте и закрывайте слоты в один тап прямо в Telegram.</figcaption></figure>
+      <figure class="slide"><img src="/img/crm.webp" alt="Кабинет с ролями" loading="lazy"><figcaption><b>Шаг 4 · Кабинет / CRM</b>Дашборд, расписание, база клиентов и разделение прав для ассистента.</figcaption></figure>
+    </div>
+    <p class="swipe">← листай →</p>
+    <a class="btn" href="#control">ЧТО ЭТО ДАЁТ ВЛАДЕЛЬЦУ →</a>
+  </section>
+
+  <!-- Выгоды владельца -->
+  <section id="control" class="screen">
+    <div class="kicker">Порядок вместо хаоса</div>
+    <h2>Управляете бизнесом прямо из Telegram</h2>
+    <div class="plate" style="--c:#B4552D"><b>📲 БЕЗ СЛОЖНЫХ CRM И САЙТОВ</b><span>Слоты, каталог, заявки и аналитика — внутри вашего Mini App без лишних паролей.</span></div>
+    <div class="plate" style="--c:#1F8F6B"><b>🔔 КОНТРОЛЬ КАЖДОГО ШАГА</b><span>Видно всех, кто зашёл, на каком экране остановился и почему не дошёл до оплаты.</span></div>
+    <div class="plate" style="--c:#C9962B"><b>🤖 АВТО-ВОЗВРАТ КЛИЕНТОВ</b><span>Если человек отвлёкся, бот мягко напомнит и вернёт его к записи без спама.</span></div>
+    <div class="plate" style="--c:#3B5B7A"><b>💬 ЖИВОЕ ОБЩЕНИЕ ТАМ, ГДЕ НУЖНО</b><span>Система забирает на себя рутину, а вы подключаетесь только к ключевым клиентам.</span></div>
+    <a class="btn" href="#booking">ХОЧУ ПОНЯТЬ, КАКОЕ РЕШЕНИЕ ПОДОЙДЁТ МНЕ →</a>
+  </section>
+
+  <!-- ШАГ 3 и 4: Запись на Разбор (Ценность + Календарь слотов + Анкета + Тарифы) -->
+  <section id="booking" class="screen">
+    <span class="spark" style="top:20px;right:18px">✦</span>
+    <div class="kicker">Персональное проектирование</div>
+    <h2>Разберём ваш клиентский путь и подберём решение</h2>
+    <p class="small">Сначала находим, где ваш бизнес теряет время и деньги, — и только потом выбираем инструмент.</p>
+
+    <div class="value-box">
+      <span class="tier-badge" style="background:var(--clay);color:#fff">📐 ПЕРСОНАЛЬНЫЙ АРХИТЕКТУРНЫЙ РАЗБОР · 2 500 ₽</span>
+      <h3 style="margin:6px 0 8px">Что вы получите по итогам встречи:</h3>
+      <div class="value-grid">
+        <div class="value-row"><i>🎯</i><div><b>Для кого:</b> для экспертов, школ, магазинов и бизнеса услуг, где заявки и клиенты ведутся вручную через переписки.</div></div>
+        <div class="value-row"><i>🔍</i><div><b>Аудит узких мест:</b> разберём вашу текущую воронку и покажем, на каком шаге отваливаются тёплые люди.</div></div>
+        <div class="value-row"><i>🗺️</i><div><b>Готовая схема и прототип Mini App:</b> карта экранов и логики именно под ваш продукт (витрина, запись, квалификация или кабинет).</div></div>
+        <div class="value-row"><i>🔥</i><div><b>Несгораемый депозит:</b> эти <b>2 500 ₽ полностью входят в стоимость</b> разработки, если идём в реализацию!</div></div>
+      </div>
+    </div>
+
+    <div class="ladder-label">Сколько стоит разработка системы под ключ (срок 2–3 дня):</div>
+    <div class="tiers">
+      <div class="tier proto-card on" data-step="proto" data-label="2 500 ₽ · Персональный разбор + Прототип (депозит)">
+        <div class="tier-top">
+          <div>
+            <span class="tier-badge">Рекомендуемый старт</span>
+            <div class="tier-title">Персональный разбор + Прототип</div>
+          </div>
+          <div>
+            <div class="tier-price">2 500 ₽</div>
+            <span class="tier-time">входит в разработку</span>
+          </div>
+        </div>
+        <p class="tier-desc">Разбор вашей ситуации, выявление проблемных процессов и готовая архитектура будущего приложения.</p>
+        <div class="tier-check"></div>
+      </div>
+
+      <div class="tier" data-step="dev30" data-label="30 000 ₽ · Mini App на ваших материалах (2 дня)">
+        <div class="tier-top">
+          <div>
+            <span class="tier-badge">Быстрый запуск</span>
+            <div class="tier-title">Mini App на ваших данных</div>
+          </div>
+          <div>
+            <div class="tier-price">30 000 ₽</div>
+            <span class="tier-time">⏱ Срок: 2 дня</span>
+          </div>
+        </div>
+        <ul class="tier-list">
+          <li>Сборка приложения по вашим готовым текстам/товарам</li>
+          <li>Подключение бота, уведомлений о заявках и аналитики</li>
+        </ul>
+        <div class="tier-check"></div>
+      </div>
+
+      <div class="tier hit" data-step="dev35" data-label="35 000 ₽ · Mini App под ключ со смыслами (2–3 дня)">
+        <div class="tier-top">
+          <div>
+            <span class="tier-badge">★ Флагман · Под ключ</span>
+            <div class="tier-title">Mini App + Разбор и сценарий</div>
+          </div>
+          <div>
+            <div class="tier-price">35 000 ₽</div>
+            <span class="tier-time">⏱ Срок: 2–3 дня</span>
+          </div>
+        </div>
+        <ul class="tier-list">
+          <li><b>Личный созвон-разбор</b>, составление вопросов или структуры витрины</li>
+          <li>Упаковка смыслов, результатов и сценария авто-возврата в боте</li>
+        </ul>
+        <div class="tier-check"></div>
+      </div>
+
+      <div class="tier" data-step="dev40" data-label="от 40 000 ₽ · Сложная система / Магазин / CRM">
+        <div class="tier-top">
+          <div>
+            <span class="tier-badge">Масштаб</span>
+            <div class="tier-title">Магазин / Запись / CRM с ролями</div>
+          </div>
+          <div>
+            <div class="tier-price">от 40 000 ₽</div>
+            <span class="tier-time">по набору функций</span>
+          </div>
+        </div>
+        <ul class="tier-list">
+          <li>Каталог с корзиной, расписание со слотами, личный кабинет и роли</li>
+        </ul>
+        <div class="tier-check"></div>
+      </div>
+
+      <div class="tier free-card" data-step="voice" data-label="0 ₽ · Экспресс голосовой краш-тест канала">
+        <div class="tier-top">
+          <div>
+            <span class="tier-badge">🎙 Без созвона</span>
+            <div class="tier-title">Голосовой краш-тест вашего канала</div>
+          </div>
+          <div>
+            <div class="tier-price">0 ₽</div>
+            <span class="tier-time">3–5 мин в личку</span>
+          </div>
+        </div>
+        <p class="tier-desc">Пришлите ссылку на ваш канал/блог и продукт — посмотрю воронку и наговорю голосовое, где теряются заявки.</p>
+        <div class="tier-check"></div>
+      </div>
+    </div>
+
+    <div id="addonNet" class="addon-card">
+      <div>
+        <b>🌐 Адаптация в другие сети (VK, MAX, Web)</b>
+        <span>Подключение этой же системы во ВКонтакте, MAX и веб-ссылкой для Reels/Threads</span>
+      </div>
+      <div class="addon-pill">+10 000 ₽</div>
+    </div>
+
+    <!-- КАЛЕНДАРЬ СВОБОДНЫХ ОКОШЕК -->
+    <div class="cal-wrap" id="calendarBlock">
+      <div class="eyebrow" style="margin-bottom:4px">Календарь записи</div>
+      <h3 style="font-size:19px">Выберите удобный день и время (МСК)</h3>
+      <p class="small" style="margin:4px 0 8px">Свободные окошки обновляются автоматически. Выберите слот:</p>
+      <div class="cal-days" id="calDays"></div>
+      <div class="cal-slots" id="calSlots"></div>
+      <p id="pickedSlotInfo" class="small" style="margin:10px 0 0;color:var(--clay);font-weight:600"></p>
+    </div>
+
+    <!-- АНКЕТА О БИЗНЕСЕ И ПОДТВЕРЖДЕНИЕ -->
+    <div class="card" style="background:#EFE6D8">
+      <div class="eyebrow">Короткая анкета перед разбором</div>
+      <div id="fmtChips" class="chips"></div>
+
+      <label class="form-label" for="channelInput">ВАША НИША + ССЫЛКА НА ТГ-КАНАЛ / САЙТ</label>
+      <input id="channelInput" type="text" class="field" placeholder="Например: бренд одежды / коуч, @moy_kanal">
+
+      <label class="form-label" for="productInput">ЧТО СЕЙЧАС НЕ РАБОТАЕТ (ГДЕ ТЕРЯЮТСЯ КЛИЕНТЫ И ВРЕМЯ?)</label>
+      <textarea id="productInput" class="field" placeholder="Например: долго отвечаем в личке, клиенты спрашивают цену и пропадают, неудобная запись…"></textarea>
+
+      <label class="form-label" for="consultInput">ЧТО ХОЧЕТСЯ УЛУШИТЬ В ПЕРВУЮ ОЧЕРЕДЬ?</label>
+      <textarea id="consultInput" class="field" placeholder="Например: сделать витрину с корзиной, автоматизировать запись или собрать заявки в систему…"></textarea>
+
+      <button id="consultBtn" class="btn clay" style="margin-top:14px">✨ ПОДТВЕРДИТЬ ЗАПИСЬ И ПЕРЕЙТИ К ОПЛАТЕ / ДИАЛОГУ →</button>
+      <div id="consultStatus"></div>
+
+      <div class="message" style="margin:12px 0 0;padding:12px;background:rgba(255,255,255,.65)">
+        <b style="font-size:12.5px;color:var(--ink)">Как проходит подтверждение и оплата:</b>
+        <p class="small" style="margin:4px 0 0">После нажатия выбранный слот бронируется за вами, и открывается личный чат с Торией в Telegram с уже заполненной анкетой. В чате вы получите реквизиты/ссылку на оплату разбора (2 500 ₽) и подтверждение встречи.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ЗАЩИЩЁННЫЙ ДАШБОРД ВЛАДЕЛЬЦА (#admin) -->
+  <section id="admin" class="screen">
+    <div class="kicker">Закрытый контур · Только для Тории</div>
+    <h2>🔐 Дашборд воронки и слотов</h2>
+    <p class="small">Здесь видно каждого, кто зашёл в Mini App, на каком шаге остановился и почему не дошёл до заявки.</p>
+
+    <div id="adminAuthBox" class="card">
+      <label class="form-label" for="adminPassInput" style="margin-top:0">ВВЕДИТЕ ПАРОЛЬ ВЛАДЕЛЬЦА</label>
+      <input id="adminPassInput" type="password" class="field" placeholder="Пароль дашборда…">
+      <button id="adminLoginBtn" class="btn" style="margin-top:10px">ВОЙТИ В ДАШБОРД →</button>
+      <div id="adminAuthErr" class="error"></div>
+    </div>
+
+    <div id="adminContent" style="display:none">
+      <div class="admin-stat-grid" id="adminStats"></div>
+
+      <div class="card">
+        <div class="eyebrow">Управление слотами календаря</div>
+        <p class="small" style="margin:0 0 8px">Тапни на слот выбранного дня, чтобы закрыть/освободить окошко:</p>
+        <div class="cal-days" id="adminCalDays"></div>
+        <div class="cal-slots" id="adminCalSlots"></div>
+      </div>
+
+      <div class="ladder-label">Кто зашёл и почему не ответил (последние 50 визитов):</div>
+      <div id="adminVisitorsList"></div>
+      <button id="adminRefreshBtn" class="btn ghost" style="margin-top:10px">🔄 Обновить данные</button>
+    </div>
+  </section>
+
+  <div class="footer">
+    TORIYA NOVA STUDIO · ЦИФРОВАЯ АРХИТЕКТУРА БИЗНЕСА<br>
+    <a data-doc href="/privacy.html">Политика</a> · <a data-doc href="/consent.html">Согласие</a>
+  </div>
+</div>
+
+<script>
+window.__errs=[];addEventListener('error',function(e){var t=(e.message||'ошибка')+' @'+String(e.filename||'').split('/').pop()+':'+e.lineno;window.__errs.push(t);var b=document.getElementById('bootErr');if(b)b.textContent=window.__errs.slice(-2).join(' | ')});
+(function(){var N=function(){};if(/tgWebApp/.test(location.hash+location.search)||window.TelegramWebviewProxy){document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>')}else{window.Telegram={WebApp:{initData:'',initDataUnsafe:{},ready:N,expand:N,setHeaderColor:N,setBackgroundColor:N,onEvent:N,requestWriteAccess:N,BackButton:{show:N,hide:N,onClick:N},HapticFeedback:{impactOccurred:N,selectionChanged:N,notificationOccurred:N},openLink:function(u){window.open(u,'_blank')},openTelegramLink:function(u){window.open(u,'_blank')},viewportHeight:innerHeight,viewportStableHeight:innerHeight}}}})();
+</script>
+<script>
+const $=id=>document.getElementById(id);
+const CONFIG={consultationUrl:'https://t.me/toriya_nova',ownerId:'6894849502'},CONSENT_V='2026-11-01';
+const tg=window.Telegram&&window.Telegram.WebApp||null;
+const web=!(tg&&tg.initData);
+const isLocal=location.protocol==='file:'||['localhost','127.0.0.1'].includes(location.hostname);
+const screens=['boot','s0','s0video','formats','demoShop','demo1','demo2','control','booking','admin'];
+const NOSTACK=['boot'];
+const DEFAULT_SLOTS=['11:00','13:00','15:00','17:00','19:00'];
+
+const state={
+  consent:false,
+  formats:new Set(),
+  step:'proto',
+  stepLabel:'2 500 ₽ · Персональный разбор + Прототип (депозит)',
+  otherNets:false,
+  days:[],
+  selectedDate:'',
+  selectedTime:'',
+  busyMap:{},
+  adminKey:sessionStorage.getItem('tn_adm_key')||'',
+  sending:false
+};
+
+try{state.consent=localStorage.getItem('tn_consent')===CONSENT_V}catch{}
+const qs=new URLSearchParams(location.search);
+const src=qs.get('src')||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||'';
+
+function webId(){
+  let id='';try{id=localStorage.getItem('tn_webid')||''}catch{}
+  if(!/^[a-f0-9-]{36}$/.test(id)){
+    id=crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16)});
+    try{localStorage.setItem('tn_webid',id)}catch{}
+  }
+  return id;
+}
+
+async function apiPost(url,payload){
+  const initData=tg&&tg.initData||'';
+  const r=await fetch(url,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Telegram-Init-Data':initData,'X-Web-Id':initData?'':webId()},
+    body:JSON.stringify({...payload,initData})
+  });
+  return r.json();
+}
+
+let consentP=null;
+function track(event,meta={}){
+  if(isLocal)return;
+  const send=()=>apiPost('/api/event',{event,meta}).catch(()=>{});
+  consentP&&event!=='consent'?consentP.then(send):send();
+}
+function haptic(k,v){try{tg.HapticFeedback[k](v)}catch{}}
+function openTg(u){if(!web&&tg.openTelegramLink&&u.startsWith('https://t.me/'))tg.openTelegramLink(u);else location.href=u}
+
+function initDays(){
+  const dNames=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+  const mNames=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+  const out=[];
+  const now=new Date();
+  for(let i=0;i<7;i++){
+    const d=new Date(now.getTime()+i*86400000);
+    const iso=d.toISOString().slice(0,10);
+    out.push({
+      iso,
+      dow:i===0?'Сег':dNames[d.getDay()],
+      num:d.getDate()+' '+mNames[d.getMonth()]
+    });
+  }
+  state.days=out;
+  state.selectedDate=out[0].iso;
+  state.selectedTime='13:00';
+}
+initDays();
+
+async function loadSlots(){
+  if(isLocal)return;
+  try{
+    const res=await apiPost('/api/slots',{action:'get'});
+    if(res&&res.busy)state.busyMap=res.busy;
+  }catch{}
+  renderCalendar();
+}
+
+function renderCalendar(){
+  const dBox=$('calDays'),sBox=$('calSlots'),info=$('pickedSlotInfo');
+  if(!dBox||!sBox)return;
+  dBox.innerHTML=state.days.map(d=>`<div class="cal-day${d.iso===state.selectedDate?' on':''}" data-date="${d.iso}"><small>${d.dow}</small><b>${d.num.split(' ')[0]}</b></div>`).join('');
+  const busyForDay=state.busyMap[state.selectedDate]||[];
+  if(busyForDay.includes(state.selectedTime)){
+    const free=DEFAULT_SLOTS.find(t=>!busyForDay.includes(t))||'';
+    state.selectedTime=free;
+  }
+  sBox.innerHTML=DEFAULT_SLOTS.map(t=>{
+    const isBusy=busyForDay.includes(t);
+    const isOn=!isBusy&&t===state.selectedTime;
+    return `<div class="cal-slot${isBusy?' busy':''}${isOn?' on':''}" data-time="${t}">${t}</div>`;
+  }).join('');
+  const dayObj=state.days.find(d=>d.iso===state.selectedDate);
+  info.textContent=state.selectedTime
+    ? `📅 Выбрано окно: ${dayObj?dayObj.num:state.selectedDate} в ${state.selectedTime} МСК`
+    : 'На выбранный день нет свободных окон, выберите соседнюю дату.';
+}
+
+const ROUTE=[
+  ['Диагностика болей',['s0','s0video']],
+  ['Витрина решений',['formats','demoShop','demo1','demo2']],
+  ['Система управления',['control']],
+  ['Запись на разбор',['booking']]
+];
+let routeK=-1;
+function setRoute(id){
+  const bar=$('routebar'),cap=$('routecap');
+  const k=ROUTE.findIndex(r=>r[1].includes(id));
+  if(k<0){bar.classList.remove('on');return}
+  if(!bar.dataset.built){
+    bar.innerHTML=ROUTE.map((r,i)=>(i?'<b class="l"></b>':'')+'<i class="n"></i>').join('');
+    bar.dataset.built='1';
+  }
+  bar.classList.add('on');
+  bar.querySelectorAll('.n').forEach((n,i)=>{n.className='n'+(i<k?' done':i===k?' cur':'')});
+  bar.querySelectorAll('.l').forEach((l,i)=>l.classList.toggle('done',i<k));
+  cap.textContent='Шаг '+(k+1)+' из '+ROUTE.length+' · '+ROUTE[k][0];
+  if(k>routeK&&routeK>=0)haptic('impactOccurred','light');
+  routeK=k;
+}
+
+let cur=null,backing=false;const navStack=[];
+function syncBack(){
+  const hide=NOSTACK.includes(cur)||!navStack.length;
+  try{hide?tg.BackButton.hide():tg.BackButton.show()}catch{}
+  const b=$('webBack');if(b)b.style.display=(web&&!hide)?'block':'none';
+}
+function goBack(){const prev=navStack.pop();if(!prev)return;backing=true;show(prev);backing=false}
+
+function renderChips(){
+  const dayObj=state.days.find(d=>d.iso===state.selectedDate);
+  const slotChip=state.selectedTime?`📅 ${dayObj?dayObj.num:state.selectedDate} · ${state.selectedTime} МСК`:'';
+  const items=[state.stepLabel,slotChip,...(state.otherNets?['+10 000 ₽ · Другие сети']:[]),...state.formats];
+  if($('fmtChips'))$('fmtChips').innerHTML=items.filter(Boolean).map(x=>'<span class="chip">'+x+'</span>').join('');
+  document.querySelectorAll('.tier[data-step]').forEach(el=>{
+    el.classList.toggle('on',el.dataset.step===state.step);
+  });
+}
+
+function show(id){
+  if(!screens.includes(id))return;
+  screens.forEach(x=>{const el=$(x);if(el)el.classList.toggle('active',x===id)});
+  window.scrollTo(0,0);
+  if(cur!==id){
+    if(!backing&&cur&&!NOSTACK.includes(cur))navStack.push(cur);
+    cur=id;
+    if(id!=='boot'&&id!=='admin')track('screen_view',{screen:id});
+    if(id==='booking'){loadSlots();renderChips();}
+    if(id==='admin'&&state.adminKey)loadAdminDashboard();
+  }
+  syncBack();
+  setRoute(id);
+}
+
+$('startFunnelBtn').onclick=()=>{
+  state.consent=true;
+  try{localStorage.setItem('tn_consent',CONSENT_V)}catch{}
+  consentP=apiPost('/api/event',{
+    event:'consent',
+    meta:{processing:true,privacy:true,messages:true,v:CONSENT_V,src,trigger:'next_button'}
+  }).catch(()=>{});
+  if(!web){
+    try{
+      if(!tg.initDataUnsafe?.user?.allows_write_to_pm)tg.requestWriteAccess(()=>{});
+    }catch{}
+  }
+  haptic('impactOccurred','light');
+  show('s0video');
+};
+
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href^="#"]');
+  if(a){e.preventDefault();show(a.getAttribute('href').slice(1));return}
+
+  const l=e.target.closest('a[data-doc]');
+  if(l){
+    e.preventDefault();
+    const u=location.origin+l.getAttribute('href');
+    try{web?window.open(u,'_blank'):tg.openLink(u)}catch{window.open(u,'_blank')}
+    return;
+  }
+
+  const s=e.target.closest('.sq[data-f]');
+  if(s){
+    const f=s.dataset.f;
+    state.formats.has(f)?state.formats.delete(f):state.formats.add(f);
+    s.classList.toggle('on');
+    track('format_pick',{format:f,selected:state.formats.has(f)});
+    haptic('selectionChanged');
+    return;
+  }
+
+  const sp=e.target.closest('.size-pill');
+  if(sp){
+    document.querySelectorAll('.size-pill').forEach(x=>x.classList.remove('on'));
+    sp.classList.add('on');
+    if($('pickedSize'))$('pickedSize').textContent=sp.textContent;
+    haptic('selectionChanged');
+    return;
+  }
+
+  const t=e.target.closest('.tier[data-step]');
+  if(t){
+    state.step=t.dataset.step;
+    state.stepLabel=t.dataset.label;
+    renderChips();
+    haptic('selectionChanged');
+    return;
+  }
+
+  const ad=e.target.closest('#addonNet');
+  if(ad){
+    state.otherNets=!state.otherNets;
+    ad.classList.toggle('on',state.otherNets);
+    renderChips();
+    haptic('selectionChanged');
+    return;
+  }
+
+  const cd=e.target.closest('#calDays .cal-day');
+  if(cd){
+    state.selectedDate=cd.dataset.date;
+    renderCalendar();
+    renderChips();
+    haptic('selectionChanged');
+    return;
+  }
+  const cs=e.target.closest('#calSlots .cal-slot');
+  if(cs&&!cs.classList.contains('busy')){
+    state.selectedTime=cs.dataset.time;
+    renderCalendar();
+    renderChips();
+    track('slot_pick',{date:state.selectedDate,time:state.selectedTime});
+    haptic('selectionChanged');
+    return;
+  }
+
+  const acd=e.target.closest('#adminCalDays .cal-day');
+  if(acd){
+    state.selectedDate=acd.dataset.date;
+    renderAdminSlots();
+    return;
+  }
+  const acs=e.target.closest('#adminCalSlots .cal-slot');
+  if(acs){
+    toggleAdminSlot(state.selectedDate,acs.dataset.time);
+    return;
+  }
+});
+
+$('webBack').onclick=goBack;
+
+$('consultBtn').onclick=async()=>{
+  if(state.sending)return;
+  const channel=($('channelInput')&&$('channelInput').value||'').trim();
+  const product=$('productInput').value.trim();
+  const request=$('consultInput').value.trim();
+  const status=$('consultStatus');
+
+  if(!channel||!product){
+    status.className='error';
+    status.textContent='Укажите, пожалуйста, вашу нишу/ссылку на канал и что сейчас болит в процессах.';
+    return;
+  }
+
+  state.sending=true;
+  const b=$('consultBtn');
+  b.disabled=true;
+  b.textContent='Бронирую слот и готовлю анкету…';
+
+  const dayObj=state.days.find(d=>d.iso===state.selectedDate);
+  const slotStr=state.selectedTime?`${dayObj?dayObj.num:state.selectedDate} в ${state.selectedTime} МСК`:'По согласованию';
+  const formats=[state.stepLabel,`Слот: ${slotStr}`,...(state.otherNets?['+10 000 ₽ · Другие сети']:[]),...state.formats].filter(Boolean);
+
+  const draft='РАЗБОР И СИСТЕМА\n\nПривет, Тория!\n🎯 Выбранный шаг: '+state.stepLabel+
+    '\n📅 Удобное окно в календаре: '+slotStr+
+    '\n🔗 Ниша и канал/сайт: '+channel+
+    '\n\n🛑 Что сейчас не работает:\n'+product+
+    (request?'\n\n🚀 Что хочется улучшить:\n'+request:'')+
+    (state.formats.size||state.otherNets?'\n\n🧩 Выбранные решения в витрине: '+[...state.formats,...(state.otherNets?['+10 000 ₽ (другие сети)']:[])].join(', '):'');
+
+  track('consultation_click',{step:state.step,slot:slotStr,formats});
+  const go=()=>setTimeout(()=>openTg(CONFIG.consultationUrl+'?text='+encodeURIComponent(draft)),350);
+
+  try{
+    if(!isLocal){
+      await apiPost('/api/consultation',{
+        product:`${channel} | Болит: ${product}`,
+        request:request||state.stepLabel,
+        formats,
+        slotDate:state.selectedDate,
+        slotTime:state.selectedTime,
+        intent:state.step==='voice'?'voice':'miniapp',
+        src
+      });
+    }
+    status.className='success';
+    status.textContent='Слот забронирован! Открываю диалог с Торией в Telegram…';
+    track('consultation_sent',{step:state.step,slot:slotStr});
+    haptic('notificationOccurred','success');
+    go();
+  }catch(e){
+    status.className='error';
+    status.textContent='Открываю диалог с Торией в Telegram с вашей анкетой…';
+    go();
+  }finally{
+    setTimeout(()=>{
+      state.sending=false;
+      b.disabled=false;
+      b.textContent='✨ ПОДТВЕРДИТЬ ЗАПИСЬ И ПЕРЕЙТИ К ОПЛАТЕ / ДИАЛОГУ →';
+    },900);
+  }
+};
+
+const currentTgUserId=String(tg?.initDataUnsafe?.user?.id||'');
+if(currentTgUserId===CONFIG.ownerId){
+  $('adminEntryBtn').classList.add('show');
+}
+let logoTaps=0,logoTimer=null;
+$('brandLogo').onclick=()=>{
+  logoTaps++;
+  clearTimeout(logoTimer);
+  logoTimer=setTimeout(()=>{logoTaps=0},1200);
+  if(logoTaps>=4){
+    logoTaps=0;
+    $('adminEntryBtn').classList.add('show');
+    show('admin');
+  }
+};
+$('adminEntryBtn').onclick=()=>show('admin');
+
+function renderAdminSlots(){
+  const dBox=$('adminCalDays'),sBox=$('adminCalSlots');
+  if(!dBox||!sBox)return;
+  dBox.innerHTML=state.days.map(d=>`<div class="cal-day${d.iso===state.selectedDate?' on':''}" data-date="${d.iso}"><small>${d.dow}</small><b>${d.num.split(' ')[0]}</b></div>`).join('');
+  const busyForDay=state.busyMap[state.selectedDate]||[];
+  sBox.innerHTML=DEFAULT_SLOTS.map(t=>{
+    const isBusy=busyForDay.includes(t);
+    return `<div class="cal-slot${isBusy?' on':''}" style="${isBusy?'background:#9A4F2C;border-color:#9A4F2C;color:#fff':''}" data-time="${t}">${t} ${isBusy?'🔒':'🔓'}</div>`;
+  }).join('');
+}
+
+async function toggleAdminSlot(date,time){
+  try{
+    const res=await apiPost('/api/admin',{password:state.adminKey,action:'toggle_slot',date,time});
+    if(res&&res.ok){
+      state.busyMap=res.busy||{};
+      renderAdminSlots();
+      haptic('impactOccurred','light');
+    }
+  }catch{}
+}
+
+async function loadAdminDashboard(){
+  const err=$('adminAuthErr');
+  err.textContent='';
+  try{
+    const res=await apiPost('/api/admin',{password:state.adminKey,action:'dashboard'});
+    if(!res||!res.ok){
+      $('adminAuthBox').style.display='block';
+      $('adminContent').style.display='none';
+      err.textContent=res?.error==='forbidden_account'?'Доступ разрешён только с аккаунта владельца (Тории).':'Неверный пароль дашборда.';
+      return;
+    }
+    sessionStorage.setItem('tn_adm_key',state.adminKey);
+    $('adminAuthBox').style.display='none';
+    $('adminContent').style.display='block';
+    state.busyMap=res.busy||{};
+    renderAdminSlots();
+
+    $('adminStats').innerHTML=`
+      <div class="admin-stat"><b>${res.stats.totalUsers}</b><span>Зашли в приложение</span></div>
+      <div class="admin-stat"><b>${res.stats.silentUsers}</b><span>Не оставили заявку</span></div>
+      <div class="admin-stat"><b>${res.stats.leads}</b><span>Записались / Лиды</span></div>
+    `;
+
+    const list=$('adminVisitorsList');
+    if(!res.visitors||!res.visitors.length){
+      list.innerHTML='<div class="card"><p class="small" style="margin:0">Пока нет посетителей.</p></div>';
+      return;
+    }
+    list.innerHTML=res.visitors.map(v=>`
+      <div class="visitor-card">
+        <div class="visitor-top">
+          <b>${v.name} ${v.username?`(@${v.username})`:''}</b>
+          <span class="visitor-badge${v.consulted?' ok':''}">${v.consulted?'✅ Оставил заявку':'⏸ Молчит · '+v.idleMin+' мин'}</span>
+        </div>
+        <div class="small">📍 Последний экран: <b>${v.stage}</b> · Зашёл: ${v.lastSeen}</div>
+        <div class="visitor-why">💡 <b>Почему не ответил / диагноз:</b> ${v.reason}</div>
+        ${v.formats?.length?`<div class="small">🧩 Нажимал форматы: <b>${v.formats.join(', ')}</b></div>`:''}
+        ${v.slot?`<div class="small">📅 Смотрел слот: <b>${v.slot}</b></div>`:''}
+        <div class="visitor-actions">
+          <span class="small">Напоминаний ботом: ${v.reminders}/2</span>
+          ${v.contactUrl?`<a href="${v.contactUrl}" target="_blank">✉️ Написать лично →</a>`:'<span class="small">Гость из браузера</span>'}
+        </div>
+      </div>
+    `).join('');
+  }catch(e){
+    err.textContent='Ошибка соединения с сервером.';
+  }
+}
+
+$('adminLoginBtn').onclick=()=>{
+  state.adminKey=$('adminPassInput').value.trim();
+  loadAdminDashboard();
+};
+$('adminRefreshBtn').onclick=()=>loadAdminDashboard();
+
+if(!web){
+  try{
+    tg.ready();tg.expand();
+    tg.setHeaderColor('#F3EDE2');tg.setBackgroundColor('#F3EDE2');
+    tg.BackButton.onClick(goBack);
+  }catch{}
+}
+document.documentElement.style.setProperty('--tg-vh',(tg&&tg.viewportStableHeight||innerHeight)+'px');
+const go0=qs.get('go');
+show(go0==='booking'||go0==='order'?'booking':go0==='admin'?'admin':go0==='formats'?'formats':'s0');
+track('app_open',{tz:new Date().getTimezoneOffset(),web,src});
+</script>
+</body>
+</html>
