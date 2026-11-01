@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<!-- TORIYA NOVA BUILD 2026-11-01-V18-ARCHITECTURAL-UI -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="description" content="TORIYA NOVA — Мы проектируем порядок. Цифровая архитектура клиентского пути.">
+<title>TORIYA NOVA — DIGITAL ARCHITECTURE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600&display=swap" onload="this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600&display=swap"></noscript>
+<style>
+:root{
+  --bg:#FAF8F4;
+  --paper:#FAF8F4;
+  --surface:#F3EFE8;
+  --ink:#1A242B;
+  --text:#2C363D;
+  --muted:#6E767B;
+  --gold:#C59B63;
+  --emerald:#1E5B49;
+  --line:#DED8CE;
+  --danger:#8E3B33;
+  --display:'Fraunces',Georgia,'Times New Roman',serif;
+  --sans:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,textarea,a{font:inherit;color:inherit}
+
+/* Скрытый спрайт архитектурных SVG-иконок */
+.svg-sprite{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+.tn-icon{width:24px;height:24px;flex:none;display:inline-block;vertical-align:middle}
+.tn-icon.sm{width:18px;height:18px}
+.tn-icon.lg{width:32px;height:32px}
+
+.app{width:100%;max-width:520px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;padding:0 18px calc(12px + env(safe-area-inset-bottom));overflow:hidden}
+.top{height:54px;flex:none;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.logo{font:400 16px var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--ink);cursor:pointer;user-select:none}
+.top-right{display:flex;align-items:center;gap:12px}
+.counter{font:400 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.admin-entry-btn{display:none;padding:5px 11px;border:1px solid var(--gold);background:transparent;color:var(--ink);font:500 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.admin-entry-btn.show{display:inline-flex;align-items:center;gap:6px}
+
+.screen{display:none!important;flex:1;overflow-y:auto;overflow-x:hidden;padding:18px 0 24px;position:relative;-webkit-overflow-scrolling:touch}
+.screen.active{display:flex!important;flex-direction:column}
+
+h1,h2,h3{font-family:var(--display);font-weight:400;color:var(--ink);letter-spacing:-.02em;margin:0}
+h1{font-size:clamp(28px,7.8vw,36px);line-height:1.08;margin-bottom:10px}
+h2{font-size:clamp(23px,6.4vw,29px);line-height:1.12;margin-bottom:8px}
+h3{font-size:18px;line-height:1.22}
+.lead{font-size:15px;line-height:1.52;color:var(--text);margin:6px 0 12px}
+.small,.muted{font-size:12.5px;line-height:1.45;color:var(--muted);margin:0 0 12px}
+.kicker,.eyebrow{font:italic 400 14px/1.2 var(--display);color:var(--gold);margin-bottom:8px;letter-spacing:.01em}
+
+/* Строгие архитектурные модули без теней и визуального шума */
+.module{background:var(--bg);border:1px solid var(--line);padding:18px;margin:8px 0;flex:none}
+.module.accent{border-color:var(--gold)}
+.module.dark{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.module.dark h3,.module.dark b{color:var(--bg)}
+
+.btn{background:var(--ink);border:1px solid var(--ink);color:var(--bg);border-radius:2px;font-weight:500;font-size:13px;letter-spacing:.06em;text-transform:uppercase;min-height:52px;padding:14px 20px;width:100%;display:inline-flex;align-items:center;justify-content:space-between;text-decoration:none;cursor:pointer;transition:background .18s ease,border-color .18s ease,transform .12s ease;flex:none}
+.btn:active{transform:scale(.99)}
+.btn.emerald{background:var(--emerald);border-color:var(--emerald);color:var(--bg)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+
+.hand{font:italic 400 1.04em var(--display);color:var(--gold)}
+
+/* Линия маршрута */
+.routebar{display:none;align-items:center;padding:10px 0 0;flex:none}.routebar.on{display:flex}
+.routebar .n{flex:none;width:7px;height:7px;border-radius:50%;border:1px solid var(--ink);background:var(--bg);transition:.25s}
+.routebar .n.done{background:var(--ink)}
+.routebar .n.cur{background:var(--gold);border-color:var(--gold);transform:scale(1.25)}
+.routebar .l{flex:1;height:1px;margin:0 6px;background:var(--line)}
+.routebar .l.done{background:var(--gold)}
+.routecap{display:none;padding:6px 0 0;font:400 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);flex:none}.routebar.on+.routecap{display:block}
+.webback{margin:6px 0 0;background:none;border:0;padding:0;font:italic 400 14px var(--display);color:var(--ink);cursor:pointer;flex:none;text-align:left}
+
+/* Архитектурный список на 1-м экране */
+.arch-list{border-top:1px solid var(--line);margin:10px 0 14px;flex:none}
+.arch-row{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line);font-size:13.5px;line-height:1.42}
+.arch-row b{display:block;color:var(--ink);font-weight:600;margin-bottom:2px}
+.arch-row span{color:var(--muted);font-size:12.5px}
+
+.consent-inline{font-size:10.5px;line-height:1.4;color:var(--muted);text-align:left;margin-top:8px;flex:none}
+.consent-inline a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+
+.video{height:165px;border:1px solid var(--ink);background:var(--ink);position:relative;overflow:hidden;margin:8px 0 14px;display:grid;place-items:center;color:var(--bg);flex:none}
+.video .label{position:absolute;top:10px;left:12px;font:400 9px var(--mono);letter-spacing:.14em;color:var(--gold);z-index:2;text-transform:uppercase}
+
+/* Строгие вкладки кейсов (#cases) */
+.case-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:6px 0 14px;flex:none}
+.case-tab{padding:11px 10px;background:var(--bg);font:500 12px var(--sans);color:var(--muted);display:flex;align-items:center;gap:8px;cursor:pointer;transition:.15s}
+.case-tab.on{background:var(--ink);color:var(--bg)}
+.case-tab.on svg .stroke-ink{stroke:var(--bg)}
+.case-pane{display:none;flex:none}
+.case-pane.on{display:block}
+
+/* Карусели */
+.lemoon-car,.car{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:6px -18px 8px;padding:4px 18px 10px;scrollbar-width:none}
+.lemoon-car::-webkit-scrollbar,.car::-webkit-scrollbar{display:none}
+.lemoon-slide,.slide{flex:0 0 78%;scroll-snap-align:center;margin:0}
+.lemoon-slide img,.slide img{display:block;width:100%;height:auto;border:1px solid var(--line);background:var(--surface)}
+.slide figcaption{font:italic 400 13px/1.35 var(--display);color:var(--muted);margin-top:8px}
+.slide figcaption b{display:block;font:600 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink);margin-bottom:2px}
+
+/* Архитектурная цитата-отзыв */
+.quote-box{border:1px solid var(--line);border-left:2px solid var(--gold);padding:14px 16px;margin:10px 0;background:var(--bg)}
+.quote-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.quote-head span{color:var(--gold)}
+.quote-text{font:italic 400 14px/1.45 var(--display);color:var(--text);margin:0}
+
+/* Модули тарифов (#price) */
+.tiers{display:grid;gap:10px;margin:8px 0 14px;flex:none}
+.tier{position:relative;background:var(--bg);border:1px solid var(--line);padding:16px;cursor:pointer;transition:border-color .18s ease}
+.tier.featured{border-color:var(--gold)}
+.tier:active{background:var(--surface)}
+.tier-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.tier-kicker{display:inline-flex;align-items:center;gap:6px;font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.tier.emerald-tag .tier-kicker{color:var(--emerald)}
+.tier-title{font:400 18px/1.15 var(--display);color:var(--ink)}
+.tier-price{font:400 19px/1 var(--display);color:var(--ink);white-space:nowrap;text-align:right}
+.tier-time{display:block;font:400 10px/1.3 var(--mono);color:var(--muted);text-align:right;margin-top:4px;text-transform:uppercase}
+.tier-desc{font-size:12.5px;line-height:1.42;color:var(--muted);margin:6px 0 0}
+.tier-go{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:9px;border-top:1px solid var(--line);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+
+/* Опциональный фильтр фокуса на экране анкеты */
+.focus-pills{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.focus-pill{padding:7px 11px;border:1px solid var(--line);background:var(--bg);font:500 11.5px var(--sans);color:var(--text);cursor:pointer;transition:.15s}
+.focus-pill.on{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+
+/* Календарь слотов (#calendar) */
+.cal-wrap{background:var(--bg);border:1px solid var(--line);padding:16px;margin:8px 0;flex:none}
+.cal-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin:8px 0 12px}
+.cal-day{border:1px solid var(--line);background:var(--bg);padding:8px 2px;text-align:center;cursor:pointer}
+.cal-day small{display:block;font:400 9px var(--mono);color:var(--muted);text-transform:uppercase}
+.cal-day b{display:block;font:500 13px var(--sans);color:var(--ink);margin-top:2px}
+.cal-day.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.cal-day.on small,.cal-day.on b{color:var(--bg)}
+.cal-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:8px}
+.cal-slot{border:1px solid var(--line);background:var(--bg);padding:10px 4px;text-align:center;font:500 12.5px var(--mono);color:var(--ink);cursor:pointer}
+.cal-slot.on{background:var(--emerald);border-color:var(--emerald);color:var(--bg)}
+.cal-slot.busy{opacity:.3;text-decoration:line-through;pointer-events:none;background:var(--surface)}
+
+.addon-card{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg);border:1px solid var(--line);padding:14px;margin:10px 0 14px;cursor:pointer;flex:none}
+.addon-card.on{border-color:var(--gold);background:var(--surface)}
+.addon-card b{display:block;font:400 15px var(--display);color:var(--ink)}
+.addon-card span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.addon-pill{flex:none;padding:5px 10px;border:1px solid var(--ink);font:500 11px var(--mono);color:var(--ink)}
+.addon-card.on .addon-pill{background:var(--ink);color:var(--bg)}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px;flex:none}
+.chip{padding:5px 10px;border:1px solid var(--gold);color:var(--ink);font:400 11px var(--mono);background:var(--bg)}
+.form-label{display:block;font:500 10px/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin:12px 0 5px}
+.field{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:0;padding:12px;color:var(--ink);font-size:13.5px;outline:none}
+.field:focus{border-color:var(--ink)}
+textarea.field{min-height:72px;resize:vertical}
+.success{color:var(--emerald);font-size:12.5px;margin-top:8px;font-weight:500}
+.error{color:var(--danger);font-size:12.5px;margin-top:8px;font-weight:500}
+
+/* Дашборд владельца (#admin) */
+.admin-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
+.admin-stat{background:var(--bg);border:1px solid var(--line);padding:12px;text-align:center}
+.admin-stat b{display:block;font:400 22px var(--display);color:var(--ink)}
+.admin-stat span{font:400 9.5px var(--mono);text-transform:uppercase;color:var(--muted)}
+.visitor-card{background:var(--bg);border:1px solid var(--line);padding:13px;margin-bottom:8px;font-size:12px}
+.visitor-top{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:4px}
+.visitor-badge{padding:2px 8px;border:1px solid var(--line);font:500 9.5px var(--mono);text-transform:uppercase;color:var(--ink)}
+.visitor-badge.ok{border-color:var(--emerald);color:var(--emerald)}
+.visitor-why{margin:6px 0;padding:7px 10px;border-left:2px solid var(--gold);background:var(--surface);color:var(--text)}
+.visitor-actions{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.visitor-actions a{color:var(--ink);font:500 11px var(--mono);text-transform:uppercase;text-decoration:underline}
+.footer{text-align:center;font:400 9px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:12px 6px;flex:none;border-top:1px solid var(--line)}
+.loader{min-height:60dvh;display:grid;place-items:center;text-align:center}
+</style>
+</head>
+<body>
+
+<!-- ПАК АРХИТЕКТУРНЫХ SVG-ИКОНОК TORIYA NOVA (ЗАМЕНА ЭМОДЗИ) -->
+<svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg">
+  <!-- 1. Магазин / Витрина (Арка бутика с 3 вертикальными линиями) -->
+  <symbol id="ic-shop" viewBox="0 0 24 24" fill="none">
+    <path class="stroke-ink" d="M4 20V11C4 6.58172 7.58172 3 12 3C16.4183 3 20 6.58172 20 11V20" stroke="#1A242B" stroke-width="1.25"/>
+    <line class="stroke-ink" x1="2" y1="20" x2="22" y2="20" stroke="#1A242B" stroke-width="1.25"/>
+    <line x1="9" y1="9" x2="9" y2="20" stroke="#C59B63" stroke-width="1.25"/>
+    <line x1="12" y1="7" x2="12" y2="20" stroke="#C59B63" stroke-width="1.25"/>
+    <line x1="15" y1="9" x2="15" y2="20" stroke="#C59B63" stroke-width="1.25"/>
+  </symbol>
+
+  <!-- 2. Календарь / Слоты (Сетка 3x3 с золотым центром) -->
+  <symbol id="ic-calendar" viewBox="0 0 24 24" fill="none">
+    <rect class="stroke-ink" x="3" y="3" width="18" height="18" stroke="#1A242B" stroke-width="1.25"/>
+    <line class="stroke-ink" x1="9" y1="3" x2="9" y2="21" stroke="#1A242B" stroke-width="1.25"/>
+    <line class="stroke-ink" x1="15" y1="3" x2="15" y2="21" stroke="#1A242B" stroke-width="1.25"/>
+    <line class="stroke-ink" x1="3" y1="9" x2="21" y2="9" stroke="#1A242B" stroke-width="1.25"/>
+    <line class="stroke-ink" x1="3" y1="15" x2="21" y2="15" stroke="#1A242B" stroke-width="1.25"/>
+    <rect x="4.5" y="10.2" width="15" height="3.6" stroke="#C59B63" stroke-width="1.35"/>
+  </symbol>
+
+  <!-- 3. Цель / Прогресс (Концентрические окружности с золотым центром) -->
+  <symbol id="ic-target" viewBox="0 0 24 24" fill="none">
+    <circle class="stroke-ink" cx="12" cy="12" r="9" stroke="#1A242B" stroke-width="1.25"/>
+    <circle class="stroke-ink" cx="12" cy="12" r="5.5" stroke="#1A242B" stroke-width="1.25"/>
+    <circle cx="12" cy="12" r="2.2" fill="#C59B63"/>
+  </symbol>
+
+  <!-- 4. База / Процессы (Изометрический куб-чертеж) -->
+  <symbol id="ic-cube" viewBox="0 0 24 24" fill="none">
+    <polygon class="stroke-ink" points="12,2.5 20.5,7.2 20.5,16.8 12,21.5 3.5,16.8 3.5,7.2" stroke="#1A242B" stroke-width="1.25" stroke-linejoin="round"/>
+    <polyline points="3.5,7.2 12,12 20.5,7.2" stroke="#C59B63" stroke-width="1.25" stroke-linejoin="round"/>
+    <line x1="12" y1="12" x2="12" y2="21.5" stroke="#C59B63" stroke-width="1.25"/>
+  </symbol>
+
+  <!-- 5. Аналитика / Дашборд (3 восходящие линии) -->
+  <symbol id="ic-chart" viewBox="0 0 24 24" fill="none">
+    <line class="stroke-ink" x1="3" y1="20" x2="21" y2="20" stroke="#1A242B" stroke-width="1.25"/>
+    <rect class="stroke-ink" x="5.5" y="13" width="2.5" height="7" stroke="#1A242B" stroke-width="1.25"/>
+    <rect class="stroke-ink" x="10.75" y="9" width="2.5" height="11" stroke="#1A242B" stroke-width="1.25"/>
+    <rect x="16" y="4.5" width="2.5" height="15.5" stroke="#C59B63" stroke-width="1.35"/>
+  </symbol>
+
+  <!-- 6. Оплата / Депозит (Карта с золотым чипом) -->
+  <symbol id="ic-card" viewBox="0 0 24 24" fill="none">
+    <rect class="stroke-ink" x="2.5" y="5" width="19" height="14" stroke="#1A242B" stroke-width="1.25"/>
+    <line class="stroke-ink" x1="2.5" y1="9.5" x2="21.5" y2="9.5" stroke="#1A242B" stroke-width="1.25"/>
+    <rect x="5.5" y="12.5" width="4" height="3" stroke="#C59B63" stroke-width="1.35"/>
+  </symbol>
+
+  <!-- 7. Уведомления / Бот (Архитектурный колокол с золотым сердцем) -->
+  <symbol id="ic-bell" viewBox="0 0 24 24" fill="none">
+    <path class="stroke-ink" d="M6 16V10.5C6 7.18629 8.68629 4.5 12 4.5C15.3137 4.5 18 7.18629 18 10.5V16L20 18H4L6 16Z" stroke="#1A242B" stroke-width="1.25" stroke-linejoin="round"/>
+    <circle cx="12" cy="19.5" r="1.6" fill="#C59B63"/>
+    <line x1="12" y1="2" x2="12" y2="4.5" stroke="#1A242B" stroke-width="1.25"/>
+  </symbol>
+
+  <!-- 8. Загрузка / Статус (Песочные часы с золотым перешейком) -->
+  <symbol id="ic-hourglass" viewBox="0 0 24 24" fill="none">
+    <line class="stroke-ink" x1="5" y1="3" x2="19" y2="3" stroke="#1A242B" stroke-width="1.25"/>
+    <line class="stroke-ink" x1="5" y1="21" x2="19" y2="21" stroke="#1A242B" stroke-width="1.25"/>
+    <polygon class="stroke-ink" points="6.5,3 17.5,3 12,11.5" fill="#1A242B" fill-opacity="0.14" stroke="#1A242B" stroke-width="1.25" stroke-linejoin="round"/>
+    <polygon class="stroke-ink" points="12,12.5 17.5,21 6.5,21" stroke="#1A242B" stroke-width="1.25" stroke-linejoin="round"/>
+    <line x1="8.5" y1="12" x2="15.5" y2="12" stroke="#C59B63" stroke-width="1.5"/>
+  </symbol>
+</svg>
+
+<div class="app">
+  <header class="top">
+    <div class="logo" id="brandLogo">Toriya Nova</div>
+    <div class="top-right">
+      <button id="adminEntryBtn" class="admin-entry-btn">
+        <svg class="tn-icon sm"><use href="#ic-chart"/></svg>
+        <span>Дашборд</span>
+      </button>
+      <div class="counter">Architecture · v18</div>
+    </div>
+  </header>
+  <div id="routebar" class="routebar"></div>
+  <div id="routecap" class="routecap"></div>
+  <button id="webBack" class="webback" style="display:none">← Назад</button>
+
+  <!-- Загрузка -->
+  <section id="boot" class="screen active">
+    <div class="loader">
+      <div>
+        <svg class="tn-icon lg" style="margin-bottom:12px"><use href="#ic-hourglass"/></svg>
+        <h2>Загружаю систему…</h2>
+      </div>
+    </div>
+    <p id="bootErr" class="small" style="color:var(--danger);text-align:center"></p>
+  </section>
+
+  <!-- ШАГ 1: Главный экран (Смыслы и порядок вместо хаоса) -->
+  <section class="screen" id="s0">
+    <div class="kicker">Мы проектируем порядок</div>
+    <h1>Клиенту легко купить.<br>Вам — легко <span class="hand">управлять.</span></h1>
+    <p class="lead">Вы занимаетесь своим бизнесом, а не обслуживанием хаоса из переписок, потерянных заявок и бесконечных ответов на одни и те же вопросы.</p>
+
+    <div class="arch-list">
+      <div class="arch-row">
+        <svg class="tn-icon"><use href="#ic-shop"/></svg>
+        <div>
+          <b>Путь клиента в одном окне</b>
+          <span>Каталог, выбор услуги, расписание и запись за 15 секунд без десятка ссылок.</span>
+        </div>
+      </div>
+      <div class="arch-row">
+        <svg class="tn-icon"><use href="#ic-cube"/></svg>
+        <div>
+          <b>Контроль каждого обращения</b>
+          <span>Все заявки, статусы и аналитика шагов собраны в единую систему внутри Telegram.</span>
+        </div>
+      </div>
+      <div class="arch-row">
+        <svg class="tn-icon"><use href="#ic-bell"/></svg>
+        <div>
+          <b>Автоматический возврат</b>
+          <span>Если человек прервался на полпути, система деликатно напомнит и вернёт его к диалогу.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="video">
+      <div class="label">Видео-разбор архитектуры · 01:00</div>
+      <video controls playsinline preload="none" style="width:100%;height:100%;object-fit:cover">
+        <source src="/Toriya_1.mp4" type="video/mp4">
+        <source src="/01_START_TORIYA.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <button id="startFunnelBtn" class="btn" style="margin-top:auto">
+      <span>Посмотреть живые примеры систем</span>
+      <span>→</span>
+    </button>
+    <p class="consent-inline">Нажимая кнопку, вы соглашаетесь с <a data-doc href="/privacy.html">политикой конфиденциальности</a>, <a data-doc href="/consent.html">обработкой данных</a> и получением уведомлений.</p>
+  </section>
+
+  <!-- ШАГ 2: Сразу живые кейсы и примеры (чтобы человек понял, что ему нужно!) -->
+  <section id="cases" class="screen">
+    <div class="kicker">Примеры цифровых решений</div>
+    <h2>Как выглядит работающая система</h2>
+    <p class="small">Посмотрите 4 сценария — от брендовой витрины с корзиной до самозаписи и кабинета управления:</p>
+
+    <div class="case-tabs" id="caseTabs">
+      <div class="case-tab on" data-pane="shop">
+        <svg class="tn-icon sm"><use href="#ic-shop"/></svg>
+        <span>Витрина / Магазин</span>
+      </div>
+      <div class="case-tab" data-pane="book">
+        <svg class="tn-icon sm"><use href="#ic-calendar"/></svg>
+        <span>Запись и слоты</span>
+      </div>
+      <div class="case-tab" data-pane="quiz">
+        <svg class="tn-icon sm"><use href="#ic-target"/></svg>
+        <span>Отбор и прогрев</span>
+      </div>
+      <div class="case-tab" data-pane="crm">
+        <svg class="tn-icon sm"><use href="#ic-cube"/></svg>
+        <span>Кабинет и база</span>
+      </div>
+    </div>
+
+    <!-- Вкладка 1: Магазин с реальными скринами Lemoon 8/9 -->
+    <div class="case-pane on" id="pane-shop">
+      <div class="module" style="padding:14px;margin:0 0 10px">
+        <div class="eyebrow" style="margin-bottom:4px">Кейс: каталог и корзина для бренда Lemoon 8/9</div>
+        <p class="small" style="margin-bottom:8px">Листайте экраны: клиент выбирает модель, размер и оформляет заказ с автоподстановкой контактов:</p>
+        <div class="lemoon-car">
+          <div class="lemoon-slide"><img src="/lemoon_1.PNG" alt="Lemoon 1" loading="lazy"></div>
+          <div class="lemoon-slide"><img src="/lemoon_2.jpg" alt="Lemoon 2" loading="lazy"></div>
+          <div class="lemoon-slide"><img src="/lemoon_3.jpg" alt="Lemoon 3" loading="lazy"></div>
+        </div>
+      </div>
+
+      <div class="quote-box">
+        <div class="quote-head">
+          <b>Отзыв клиента · Софья (бренд Lemoon 8/9)</b>
+          <span>Аудио 0:50</span>
+        </div>
+        <p class="quote-text">«Мы запустили сейл −70% и протестировали приложение на широкой аудитории — всем очень удобно пользоваться прямо в Telegram. Заявки сразу приходят менеджеру, и мы ведём людей до заказа без потерь».</p>
+      </div>
+    </div>
+
+    <!-- Вкладка 2: Онлайн-запись -->
+    <div class="case-pane" id="pane-book">
+      <div class="car">
+        <figure class="slide"><img src="/img/book1.webp" alt="Услуги" loading="lazy"><figcaption><b>01 · Выбор направления</b>Клиент видит программы и стоимость без предварительной переписки.</figcaption></figure>
+        <figure class="slide"><img src="/img/book3.webp" alt="Слоты" loading="lazy"><figcaption><b>02 · Свободные окна</b>Выбирает удобный день и время — слот мгновенно закрепляется за ним.</figcaption></figure>
+        <figure class="slide"><img src="/img/notify.webp" alt="Уведомление" loading="lazy"><figcaption><b>03 · Карточка у владельца</b>Готовая запись приходит вам в Telegram, а бот напоминает о встрече.</figcaption></figure>
+      </div>
+    </div>
+
+    <!-- Вкладка 3: Отбор и прогрев -->
+    <div class="case-pane" id="pane-quiz">
+      <div class="car">
+        <figure class="slide"><img src="/img/quiz.webp" alt="Диагностика" loading="lazy"><figcaption><b>01 · Интерактивный маршрут</b>Клиент отвечает на вопросы в один тап вместо чтения мёртвых PDF-файлов.</figcaption></figure>
+        <figure class="slide"><img src="/img/result.webp" alt="Карта ясности" loading="lazy"><figcaption><b>02 · Персональный результат</b>Видит свои точки роста и приходит на консультацию уже подготовленным.</figcaption></figure>
+      </div>
+    </div>
+
+    <!-- Вкладка 4: Кабинет -->
+    <div class="case-pane" id="pane-crm">
+      <div class="car">
+        <figure class="slide"><img src="/img/crm.webp" alt="Кабинет" loading="lazy"><figcaption><b>01 · Единое пространство</b>Расписание, история клиентов, статусы и разделение ролей для ассистента.</figcaption></figure>
+        <figure class="slide"><img src="/img/admin.webp" alt="Слоты" loading="lazy"><figcaption><b>02 · Управление без CRM</b>Открывайте и закрывайте рабочие окна одним касанием прямо из Telegram.</figcaption></figure>
+      </div>
+    </div>
+
+    <a class="btn emerald" href="#price" style="margin-top:auto">
+      <span>Подобрать решение под свой бизнес</span>
+      <span>→</span>
+    </a>
+  </section>
+
+  <!-- ШАГ 3: Выбор формата и стоимости (тап по карточке сразу ведёт дальше) -->
+  <section id="price" class="screen">
+    <div class="kicker">Прозрачная архитектура работы</div>
+    <h2>Выберите формат старта</h2>
+    <p class="small">Нажмите на подходящий модуль — система сразу переведёт вас к выбору времени или анкете:</p>
+
+    <div class="tiers">
+      <!-- Модуль 1: Разбор + Прототип 2 500 ₽ -->
+      <div class="tier featured" data-step="proto" data-next="calendar" data-label="2 500 ₽ · Архитектурный разбор + Прототип (депозит)">
+        <div class="tier-top">
+          <div>
+            <div class="tier-kicker"><svg class="tn-icon sm"><use href="#ic-card"/></svg><span>Рекомендуемый вход</span></div>
+            <div class="tier-title">Архитектурный разбор + Прототип</div>
+          </div>
+          <div>
+            <div class="tier-price">2 500 ₽</div>
+            <span class="tier-time">Несгораемый депозит</span>
+          </div>
+        </div>
+        <p class="tier-desc">Анализ ваших процессов, поиск узких мест, где теряются клиенты, и готовая схема экранов вашего Mini App. Сумма полностью вычитается из стоимости разработки.</p>
+        <div class="tier-go"><span>Перейти к выбору времени встречи</span><span>→</span></div>
+      </div>
+
+      <!-- Модуль 2: Флагман под ключ 35 000 ₽ -->
+      <div class="tier featured" data-step="dev35" data-next="calendar" data-label="35 000 ₽ · Mini App под ключ со смыслами (2–3 дня)">
+        <div class="tier-top">
+          <div>
+            <div class="tier-kicker"><svg class="tn-icon sm"><use href="#ic-target"/></svg><span>Флагман · Под ключ</span></div>
+            <div class="tier-title">Mini App + Разбор и сценарий</div>
+          </div>
+          <div>
+            <div class="tier-price">35 000 ₽</div>
+            <span class="tier-time">Срок: 2–3 дня</span>
+          </div>
+        </div>
+        <p class="tier-desc">Личный созвон-разбор, проектирование вопросов и структуры, дизайн в эстетике вашего бренда, сборка, бот с авто-напоминаниями и аналитика.</p>
+        <div class="tier-go"><span>Выбрать этот пакет и время созвона</span><span>→</span></div>
+      </div>
+
+      <!-- Модуль 3: На ваших материалах 30 000 ₽ -->
+      <div class="tier" data-step="dev30" data-next="calendar" data-label="30 000 ₽ · Mini App на ваших материалах (2 дня)">
+        <div class="tier-top">
+          <div>
+            <div class="tier-kicker"><svg class="tn-icon sm"><use href="#ic-hourglass"/></svg><span>Быстрый запуск</span></div>
+            <div class="tier-title">Mini App на ваших данных</div>
+          </div>
+          <div>
+            <div class="tier-price">30 000 ₽</div>
+            <span class="tier-time">Срок: 2 дня</span>
+          </div>
+        </div>
+        <p class="tier-desc">У вас уже готовы тексты и структура — мы собираем приложение, подключаем уведомления о заявках и трекинг шагов.</p>
+        <div class="tier-go"><span>Выбрать пакет</span><span>→</span></div>
+      </div>
+
+      <!-- Модуль 4: Сложная система от 40 000 ₽ -->
+      <div class="tier" data-step="dev40" data-next="calendar" data-label="от 40 000 ₽ · Магазин / Запись / CRM с ролями">
+        <div class="tier-top">
+          <div>
+            <div class="tier-kicker"><svg class="tn-icon sm"><use href="#ic-cube"/></svg><span>Масштаб</span></div>
+            <div class="tier-title">Магазин / Онлайн-запись / CRM</div>
+          </div>
+          <div>
+            <div class="tier-price">от 40 000 ₽</div>
+            <span class="tier-time">По набору функций</span>
+          </div>
+        </div>
+        <p class="tier-desc">Каталог с корзиной, календарь слотов, личный кабинет и разделение прав доступа для команды.</p>
+        <div class="tier-go"><span>Обсудить архитектуру системы</span><span>→</span></div>
+      </div>
+
+      <!-- Модуль 5: Бесплатный голосовой аудит 0 ₽ -->
+      <div class="tier emerald-tag" data-step="voice" data-next="order" data-label="0 ₽ · Голосовой краш-тест канала">
+        <div class="tier-top">
+          <div>
+            <div class="tier-kicker"><svg class="tn-icon sm"><use href="#ic-bell"/></svg><span>Без созвона · В личку</span></div>
+            <div class="tier-title">Голосовой краш-тест вашего канала</div>
+          </div>
+          <div>
+            <div class="tier-price">0 ₽</div>
+            <span class="tier-time">Аудио 3–5 мин</span>
+          </div>
+        </div>
+        <p class="tier-desc">Пришлите ссылку на ваш Telegram-канал и опишите продукт — я посмотрю путь клиента и запишу голосовое с разбором узких мест.</p>
+        <div class="tier-go"><span>Отправить ссылку на канал</span><span>→</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ШАГ 4: Календарь слотов -->
+  <section id="calendar" class="screen">
+    <div class="kicker">Расписание</div>
+    <h2>Выберите день и время встречи</h2>
+    <p class="small" id="calChosenStep"></p>
+
+    <div class="cal-wrap">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <svg class="tn-icon sm"><use href="#ic-calendar"/></svg>
+        <span style="font:500 10.5px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ink)">Свободные слоты (время МСК)</span>
+      </div>
+      <div class="cal-days" id="calDays"></div>
+      <div class="cal-slots" id="calSlots"></div>
+      <p id="pickedSlotInfo" class="small" style="margin:10px 0 0;color:var(--emerald);font-weight:600"></p>
+    </div>
+
+    <div id="addonNet" class="addon-card">
+      <div>
+        <b>Масштабирование в другие сети (VK, MAX, Web)</b>
+        <span>Адаптация этой же системы за пределы Telegram</span>
+      </div>
+      <div class="addon-pill">+10 000 ₽</div>
+    </div>
+
+    <a class="btn" href="#order" style="margin-top:auto">
+      <span>Далее: короткая анкета проекта</span>
+      <span>→</span>
+    </a>
+  </section>
+
+  <!-- ШАГ 5: Финальная анкета -->
+  <section id="order" class="screen">
+    <div class="kicker">Финальный шаг</div>
+    <h2>Контекст вашего проекта</h2>
+    <p class="small">Выбранные параметры сохранены. Укажите детали, чтобы разговор был предметным с первой минуты:</p>
+
+    <div id="fmtChips" class="chips"></div>
+
+    <div class="module" style="margin-bottom:0">
+      <label class="form-label" style="margin-top:0">ЧТО АКТУАЛЬНЕЕ ВСЕГО (ПО ЖЕЛАНИЮ):</label>
+      <div class="focus-pills">
+        <span class="focus-pill" data-f="Витрина / Магазин">Витрина / Магазин</span>
+        <span class="focus-pill" data-f="Онлайн-запись">Запись и слоты</span>
+        <span class="focus-pill" data-f="Отбор клиентов">Отбор и прогрев</span>
+        <span class="focus-pill" data-f="Кабинет / База">Кабинет / CRM</span>
+      </div>
+
+      <label class="form-label" for="channelInput">01 · НИША, ПРОДУКТ И ССЫЛКА НА КАНАЛ / САЙТ</label>
+      <input id="channelInput" type="text" class="field" placeholder="Например: бренд одежды / консалтинг, @moy_kanal">
+
+      <label class="form-label" for="productInput">02 · ГДЕ СЕЙЧАС ТЕРЯЮТСЯ ВРЕМЯ ИЛИ ЗАЯВКИ?</label>
+      <textarea id="productInput" class="field" placeholder="Опишите своими словами, что сейчас неудобно в работе с клиентами…"></textarea>
+
+      <button id="consultBtn" class="btn emerald" style="margin-top:14px">
+        <span>Подтвердить и перейти в Telegram</span>
+        <span>→</span>
+      </button>
+      <div id="consultStatus"></div>
+    </div>
+  </section>
+
+  <!-- ЗАКРЫТЫЙ ДАШБОРД ВЛАДЕЛЬЦА (#admin) -->
+  <section id="admin" class="screen">
+    <div class="kicker">Закрытый контур · Toriya Nova</div>
+    <h2>Дашборд аналитики и слотов</h2>
+
+    <div id="adminAuthBox" class="module">
+      <label class="form-label" for="adminPassInput" style="margin-top:0">КЛЮЧ ДОСТУПА ВЛАДЕЛЬЦА</label>
+      <input id="adminPassInput" type="text" class="field" value="toriya2026" placeholder="Введите пароль (toriya2026)…">
+      <button id="adminLoginBtn" class="btn" style="margin-top:12px">
+        <span>Открыть дашборд</span>
+        <span>→</span>
+      </button>
+      <div id="adminAuthErr" class="error"></div>
+    </div>
+
+    <div id="adminContent" style="display:none">
+      <div class="admin-stat-grid" id="adminStats"></div>
+      <div class="module">
+        <div class="eyebrow">Управление расписанием</div>
+        <p class="small" style="margin-bottom:6px">Нажмите на слот, чтобы закрыть или открыть время для записи:</p>
+        <div class="cal-days" id="adminCalDays"></div>
+        <div class="cal-slots" id="adminCalSlots"></div>
+      </div>
+      <div class="form-label">Посетители и точки остановки:</div>
+      <div id="adminVisitorsList"></div>
+      <button id="adminRefreshBtn" class="btn ghost" style="margin-top:8px">
+        <span>Обновить данные</span>
+        <span>↻</span>
+      </button>
+    </div>
+  </section>
+
+  <div class="footer">TORIYA NOVA STUDIO · ARCHITECTURE OF ORDER · <a data-doc href="/privacy.html">ПОЛИТИКА</a></div>
+</div>
+
+<script>
+window.__errs=[];addEventListener('error',function(e){var t=(e.message||'ошибка')+' @'+String(e.filename||'').split('/').pop()+':'+e.lineno;window.__errs.push(t);var b=document.getElementById('bootErr');if(b)b.textContent=window.__errs.slice(-2).join(' | ')});
+(function(){var N=function(){};if(/tgWebApp/.test(location.hash+location.search)||window.TelegramWebviewProxy){document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>')}else{window.Telegram={WebApp:{initData:'',initDataUnsafe:{},ready:N,expand:N,setHeaderColor:N,setBackgroundColor:N,onEvent:N,requestWriteAccess:N,BackButton:{show:N,hide:N,onClick:N},HapticFeedback:{impactOccurred:N,selectionChanged:N,notificationOccurred:N},openLink:function(u){window.open(u,'_blank')},openTelegramLink:function(u){window.open(u,'_blank')},viewportHeight:innerHeight,viewportStableHeight:innerHeight}}}})();
+</script>
+<script>
+const $=id=>document.getElementById(id);
+const CONFIG={consultationUrl:'https://t.me/toriya_nova',ownerId:'6894849502'},CONSENT_V='2026-11-01';
+const tg=window.Telegram&&window.Telegram.WebApp||null;
+const web=!(tg&&tg.initData);
+const isLocal=location.protocol==='file:'||['localhost','127.0.0.1'].includes(location.hostname);
+const screens=['boot','s0','cases','price','calendar','order','admin'];
+const NOSTACK=['boot'];
+const DEFAULT_SLOTS=['11:00','13:00','15:00','17:00','19:00'];
+
+const state={
+  consent:false,
+  formats:new Set(),
+  activeTab:'shop',
+  step:'proto',
+  stepLabel:'2 500 ₽ · Архитектурный разбор + Прототип (депозит)',
+  otherNets:false,
+  days:[],
+  selectedDate:'',
+  selectedTime:'',
+  busyMap:{},
+  adminKey:sessionStorage.getItem('tn_adm_key')||'toriya2026',
+  sending:false
+};
+
+try{state.consent=localStorage.getItem('tn_consent')===CONSENT_V}catch{}
+const qs=new URLSearchParams(location.search);
+const src=qs.get('src')||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||'';
+
+function webId(){
+  let id='';try{id=localStorage.getItem('tn_webid')||''}catch{}
+  if(!/^[a-f0-9-]{36}$/.test(id)){
+    id=crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16)});
+    try{localStorage.setItem('tn_webid',id)}catch{}
+  }
+  return id;
+}
+
+async function apiPost(url,payload){
+  const initData=tg&&tg.initData||'';
+  const r=await fetch(url,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Telegram-Init-Data':initData,'X-Web-Id':initData?'':webId()},
+    body:JSON.stringify({...payload,initData})
+  });
+  return r.json();
+}
+
+let consentP=null;
+function track(event,meta={}){
+  if(isLocal)return;
+  const send=()=>apiPost('/api/event',{event,meta}).catch(()=>{});
+  consentP&&event!=='consent'?consentP.then(send):send();
+}
+function haptic(k,v){try{tg.HapticFeedback[k](v)}catch{}}
+function openTg(u){if(!web&&tg.openTelegramLink&&u.startsWith('https://t.me/'))tg.openTelegramLink(u);else location.href=u}
+
+function initDays(){
+  const dNames=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+  const mNames=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+  const out=[];
+  const now=new Date();
+  for(let i=0;i<7;i++){
+    const d=new Date(now.getTime()+i*86400000);
+    const iso=d.toISOString().slice(0,10);
+    out.push({iso,dow:i===0?'Сег':dNames[d.getDay()],num:d.getDate()+' '+mNames[d.getMonth()]});
+  }
+  state.days=out;
+  state.selectedDate=out[0].iso;
+  state.selectedTime='13:00';
+}
+initDays();
+
+async function loadSlots(){
+  if(isLocal)return;
+  try{
+    const res=await apiPost('/api/slots',{action:'get'});
+    if(res&&res.busy)state.busyMap=res.busy;
+  }catch{}
+  renderCalendar();
+}
+
+function renderCalendar(){
+  const dBox=$('calDays'),sBox=$('calSlots'),info=$('pickedSlotInfo'),stepTxt=$('calChosenStep');
+  if(stepTxt)stepTxt.textContent='Формат: '+state.stepLabel;
+  if(!dBox||!sBox)return;
+  dBox.innerHTML=state.days.map(d=>`<div class="cal-day${d.iso===state.selectedDate?' on':''}" data-date="${d.iso}"><small>${d.dow}</small><b>${d.num.split(' ')[0]}</b></div>`).join('');
+  const busyForDay=state.busyMap[state.selectedDate]||[];
+  if(busyForDay.includes(state.selectedTime)){
+    state.selectedTime=DEFAULT_SLOTS.find(t=>!busyForDay.includes(t))||'';
+  }
+  sBox.innerHTML=DEFAULT_SLOTS.map(t=>{
+    const isBusy=busyForDay.includes(t);
+    const isOn=!isBusy&&t===state.selectedTime;
+    return `<div class="cal-slot${isBusy?' busy':''}${isOn?' on':''}" data-time="${t}">${t}</div>`;
+  }).join('');
+  const dayObj=state.days.find(d=>d.iso===state.selectedDate);
+  info.textContent=state.selectedTime
+    ? `Выбрано окно: ${dayObj?dayObj.num:state.selectedDate} · ${state.selectedTime} МСК`
+    : 'На выбранный день нет свободных окон — выберите соседнюю дату.';
+}
+
+function switchCaseTab(pane){
+  state.activeTab=pane;
+  document.querySelectorAll('.case-tab').forEach(b=>b.classList.toggle('on',b.dataset.pane===pane));
+  document.querySelectorAll('.case-pane').forEach(p=>p.classList.toggle('on',p.id==='pane-'+pane));
+}
+
+const ROUTE=[
+  ['01 · Система',['s0']],
+  ['02 · Кейсы в деле',['cases']],
+  ['03 · Формат и время',['price','calendar']],
+  ['04 · Подтверждение',['order']]
+];
+let routeK=-1;
+function setRoute(id){
+  const bar=$('routebar'),cap=$('routecap');
+  const k=ROUTE.findIndex(r=>r[1].includes(id));
+  if(k<0){bar.classList.remove('on');return}
+  if(!bar.dataset.built){
+    bar.innerHTML=ROUTE.map((r,i)=>(i?'<b class="l"></b>':'')+'<i class="n"></i>').join('');
+    bar.dataset.built='1';
+  }
+  bar.classList.add('on');
+  bar.querySelectorAll('.n').forEach((n,i)=>{n.className='n'+(i<k?' done':i===k?' cur':'')});
+  bar.querySelectorAll('.l').forEach((l,i)=>l.classList.toggle('done',i<k));
+  cap.textContent=ROUTE[k][0];
+  if(k>routeK&&routeK>=0)haptic('impactOccurred','light');
+  routeK=k;
+}
+
+let cur=null,backing=false;const navStack=[];
+function syncBack(){
+  const hide=NOSTACK.includes(cur)||!navStack.length;
+  try{hide?tg.BackButton.hide():tg.BackButton.show()}catch{}
+  const b=$('webBack');if(b)b.style.display=(web&&!hide)?'block':'none';
+}
+function goBack(){const prev=navStack.pop();if(!prev)return;backing=true;show(prev);backing=false}
+
+function renderChips(){
+  const dayObj=state.days.find(d=>d.iso===state.selectedDate);
+  const slotChip=(state.step!=='voice'&&state.selectedTime)?`${dayObj?dayObj.num:state.selectedDate} · ${state.selectedTime} МСК`:'';
+  const items=[state.stepLabel,slotChip,...(state.otherNets?['+10 000 ₽ · Другие сети']:[]),...state.formats];
+  if($('fmtChips'))$('fmtChips').innerHTML=items.filter(Boolean).map(x=>'<span class="chip">'+x+'</span>').join('');
+}
+
+function show(id){
+  if(!screens.includes(id))return;
+  screens.forEach(x=>{const el=$(x);if(el)el.classList.toggle('active',x===id)});
+  if(cur!==id){
+    if(!backing&&cur&&!NOSTACK.includes(cur))navStack.push(cur);
+    cur=id;
+    if(id!=='boot'&&id!=='admin')track('screen_view',{screen:id});
+    if(id==='cases')switchCaseTab(state.activeTab);
+    if(id==='calendar')loadSlots();
+    if(id==='order')renderChips();
+    if(id==='admin')loadAdminDashboard();
+  }
+  syncBack();
+  setRoute(id);
+}
+
+/* Переход с 1-го экрана сразу на Кейсы (#cases) + согласие */
+$('startFunnelBtn').onclick=()=>{
+  state.consent=true;
+  try{localStorage.setItem('tn_consent',CONSENT_V)}catch{}
+  consentP=apiPost('/api/event',{
+    event:'consent',
+    meta:{processing:true,privacy:true,messages:true,v:CONSENT_V,src,trigger:'next_button'}
+  }).catch(()=>{});
+  if(!web){
+    try{if(!tg.initDataUnsafe?.user?.allows_write_to_pm)tg.requestWriteAccess(()=>{})}catch{}
+  }
+  haptic('impactOccurred','light');
+  show('cases');
+};
+
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href^="#"]');
+  if(a){e.preventDefault();show(a.getAttribute('href').slice(1));return}
+
+  const l=e.target.closest('a[data-doc]');
+  if(l){
+    e.preventDefault();
+    const u=location.origin+l.getAttribute('href');
+    try{web?window.open(u,'_blank'):tg.openLink(u)}catch{window.open(u,'_blank')}
+    return;
+  }
+
+  const fp=e.target.closest('.focus-pill[data-f]');
+  if(fp){
+    const f=fp.dataset.f;
+    state.formats.has(f)?state.formats.delete(f):state.formats.add(f);
+    fp.classList.toggle('on');
+    renderChips();
+    track('format_pick',{format:f,selected:state.formats.has(f)});
+    haptic('selectionChanged');
+    return;
+  }
+
+  const ct=e.target.closest('.case-tab[data-pane]');
+  if(ct){
+    switchCaseTab(ct.dataset.pane);
+    haptic('selectionChanged');
+    return;
+  }
+
+  const t=e.target.closest('.tier[data-step]');
+  if(t){
+    state.step=t.dataset.step;
+    state.stepLabel=t.dataset.label;
+    const nextScreen=t.dataset.next||'calendar';
+    haptic('impactOccurred','light');
+    setTimeout(()=>show(nextScreen),120);
+    return;
+  }
+
+  const ad=e.target.closest('#addonNet');
+  if(ad){
+    state.otherNets=!state.otherNets;
+    ad.classList.toggle('on',state.otherNets);
+    haptic('selectionChanged');
+    return;
+  }
+
+  const cd=e.target.closest('#calDays .cal-day');
+  if(cd){
+    state.selectedDate=cd.dataset.date;
+    renderCalendar();
+    haptic('selectionChanged');
+    return;
+  }
+  const cs=e.target.closest('#calSlots .cal-slot');
+  if(cs&&!cs.classList.contains('busy')){
+    state.selectedTime=cs.dataset.time;
+    renderCalendar();
+    track('slot_pick',{date:state.selectedDate,time:state.selectedTime});
+    haptic('selectionChanged');
+    return;
+  }
+
+  const acd=e.target.closest('#adminCalDays .cal-day');
+  if(acd){
+    state.selectedDate=acd.dataset.date;
+    renderAdminSlots();
+    return;
+  }
+  const acs=e.target.closest('#adminCalSlots .cal-slot');
+  if(acs){
+    toggleAdminSlot(state.selectedDate,acs.dataset.time);
+    return;
+  }
+});
+
+$('webBack').onclick=goBack;
+
+$('consultBtn').onclick=async()=>{
+  if(state.sending)return;
+  const channel=($('channelInput')&&$('channelInput').value||'').trim();
+  const product=$('productInput').value.trim();
+  const status=$('consultStatus');
+
+  if(!channel||!product){
+    status.className='error';
+    status.textContent='Заполните, пожалуйста, оба поля.';
+    return;
+  }
+
+  state.sending=true;
+  const b=$('consultBtn');
+  b.disabled=true;
+  b.innerHTML='<span>Формирую заявку…</span><span>→</span>';
+
+  const dayObj=state.days.find(d=>d.iso===state.selectedDate);
+  const slotStr=(state.step!=='voice'&&state.selectedTime)?`${dayObj?dayObj.num:state.selectedDate} в ${state.selectedTime} МСК`:'Без созвона (аудио-разбор)';
+  const formats=[state.stepLabel,`Время: ${slotStr}`,...(state.otherNets?['+10 000 ₽ · Другие сети']:[]),...state.formats].filter(Boolean);
+
+  const draft='TORIYA NOVA · ЗАЯВКА\n\nПривет, Тория!\nФормат: '+state.stepLabel+
+    (state.step!=='voice'?'\nВыбранное окно: '+slotStr:'')+
+    '\nНиша и канал/сайт: '+channel+
+    '\n\nЗадача:\n'+product+
+    (state.formats.size||state.otherNets?'\n\nФокус: '+[...state.formats,...(state.otherNets?['+10 000 ₽ (другие сети)']:[])].join(', '):'');
+
+  track('consultation_click',{step:state.step,slot:slotStr,formats});
+  const go=()=>setTimeout(()=>openTg(CONFIG.consultationUrl+'?text='+encodeURIComponent(draft)),300);
+
+  try{
+    if(!isLocal){
+      await apiPost('/api/consultation',{
+        product:channel,
+        request:product,
+        formats,
+        slotDate:state.step!=='voice'?state.selectedDate:'',
+        slotTime:state.step!=='voice'?state.selectedTime:'',
+        intent:state.step==='voice'?'voice':'miniapp',
+        src
+      });
+    }
+    status.className='success';
+    status.textContent='Перехожу в диалог с Торией в Telegram…';
+    track('consultation_sent',{step:state.step,slot:slotStr});
+    haptic('notificationOccurred','success');
+    go();
+  }catch(e){
+    go();
+  }finally{
+    setTimeout(()=>{state.sending=false;b.disabled=false;b.innerHTML='<span>Подтвердить и перейти в Telegram</span><span>→</span>'},900);
+  }
+};
+
+const currentTgUserId=String(tg?.initDataUnsafe?.user?.id||'');
+if(currentTgUserId===CONFIG.ownerId){
+  $('adminEntryBtn').classList.add('show');
+}
+let logoTaps=0,logoTimer=null;
+$('brandLogo').onclick=()=>{
+  logoTaps++;
+  clearTimeout(logoTimer);
+  logoTimer=setTimeout(()=>{logoTaps=0},1200);
+  if(logoTaps>=4){logoTaps=0;$('adminEntryBtn').classList.add('show');show('admin')}
+};
+$('adminEntryBtn').onclick=()=>show('admin');
+
+function renderAdminSlots(){
+  const dBox=$('adminCalDays'),sBox=$('adminCalSlots');
+  if(!dBox||!sBox)return;
+  dBox.innerHTML=state.days.map(d=>`<div class="cal-day${d.iso===state.selectedDate?' on':''}" data-date="${d.iso}"><small>${d.dow}</small><b>${d.num.split(' ')[0]}</b></div>`).join('');
+  const busyForDay=state.busyMap[state.selectedDate]||[];
+  sBox.innerHTML=DEFAULT_SLOTS.map(t=>{
+    const isBusy=busyForDay.includes(t);
+    return `<div class="cal-slot${isBusy?' on':''}" style="${isBusy?'background:#8E3B33;border-color:#8E3B33;color:#FAF8F4':''}" data-time="${t}">${t} ${isBusy?'[ЗАНЯТО]':'[СВОБ]'}</div>`;
+  }).join('');
+}
+
+async function toggleAdminSlot(date,time){
+  try{
+    const res=await apiPost('/api/admin',{password:state.adminKey,action:'toggle_slot',date,time});
+    if(res&&res.ok){state.busyMap=res.busy||{};renderAdminSlots();haptic('impactOccurred','light')}
+  }catch{}
+}
+
+async function loadAdminDashboard(){
+  const err=$('adminAuthErr');
+  err.textContent='';
+  try{
+    const res=await apiPost('/api/admin',{password:state.adminKey,action:'dashboard'});
+    if(!res||!res.ok){
+      $('adminAuthBox').style.display='block';
+      $('adminContent').style.display='none';
+      err.textContent='Ответ сервера: '+(res?.error||'неверный пароль (попробуйте toriya2026 или 2026)');
+      return;
+    }
+    sessionStorage.setItem('tn_adm_key',state.adminKey);
+    $('adminAuthBox').style.display='none';
+    $('adminContent').style.display='block';
+    state.busyMap=res.busy||{};
+    renderAdminSlots();
+
+    $('adminStats').innerHTML=`
+      <div class="admin-stat"><b>${res.stats.totalUsers}</b><span>Визиты</span></div>
+      <div class="admin-stat"><b>${res.stats.silentUsers}</b><span>В раздумьях</span></div>
+      <div class="admin-stat"><b>${res.stats.leads}</b><span>Заявки</span></div>
+    `;
+
+    const list=$('adminVisitorsList');
+    if(!res.visitors||!res.visitors.length){list.innerHTML='<div class="module"><p class="small" style="margin:0">Пока нет визитов.</p></div>';return}
+    list.innerHTML=res.visitors.map(v=>`
+      <div class="visitor-card">
+        <div class="visitor-top">
+          <b>${v.name} ${v.username?`(@${v.username})`:''}</b>
+          <span class="visitor-badge${v.consulted?' ok':''}">${v.consulted?'ЗАЯВКА':'ПАУЗА · '+v.idleMin+' МИН'}</span>
+        </div>
+        <div class="small" style="margin:0">Экран: <b>${v.stage}</b></div>
+        <div class="visitor-why">${v.reason}</div>
+        <div class="visitor-actions"><span class="small" style="margin:0">Напоминаний: ${v.reminders}/2</span>${v.contactUrl?`<a href="${v.contactUrl}" target="_blank">Написать в Telegram →</a>`:''}</div>
+      </div>
+    `).join('');
+  }catch(e){err.textContent='Сервер не обновился или недоступен. Убедитесь, что задеплоен новый worker.js.'}
+}
+
+$('adminLoginBtn').onclick=()=>{
+  state.adminKey=$('adminPassInput').value.trim();
+  loadAdminDashboard();
+};
+$('adminRefreshBtn').onclick=()=>loadAdminDashboard();
+
+if(!web){
+  try{
+    tg.ready();tg.expand();
+    tg.setHeaderColor('#FAF8F4');tg.setBackgroundColor('#FAF8F4');
+    tg.BackButton.onClick(goBack);
+  }catch{}
+}
+const go0=qs.get('go');
+show(go0==='booking'||go0==='price'?'price':go0==='order'?'order':go0==='admin'?'admin':go0==='cases'?'cases':'s0');
+track('app_open',{tz:new Date().getTimezoneOffset(),web,src});
+</script>
+</body>
+</html>
