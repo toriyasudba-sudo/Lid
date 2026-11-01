@@ -1,0 +1,1073 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<!-- TORIYA NOVA BUILD 2026-11-01-V20-MEANING-MAP -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="description" content="TORIYA NOVA — Собираю бизнес в работающую цифровую систему. Клиенту легко купить, владельцу легко управлять.">
+<title>TORIYA NOVA — ЦИФРОВАЯ СИСТЕМА БИЗНЕСА</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" onload="this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap"></noscript>
+<style>
+:root{
+  --bg:#F4F1EA;
+  --paper:#FAF8F3;
+  --ink:#1E2A38;
+  --text:#25303B;
+  --muted:#525D68;
+  --gold:#B8894A;
+  --emerald:#1E5B49;
+  --line:#8C969E;
+  --line-soft:#C5C0B7;
+  --danger:#8E3B33;
+  --display:'Oswald','Arial Narrow',sans-serif;
+  --sans:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%;height:100%;overflow-x:hidden;overflow-y:auto;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch}
+button,input,textarea,a{font:inherit;color:inherit}
+
+.svg-sprite{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+.iso-icon{width:50px;height:50px;flex:none;display:block}
+
+/* Чертёжный лист как на плакате */
+.app{
+  width:100%;
+  max-width:520px;
+  min-height:100dvh;
+  margin:0 auto;
+  padding:8px 10px calc(24px + env(safe-area-inset-bottom));
+}
+.sheet{
+  border:1.5px solid var(--line);
+  background:
+    radial-gradient(rgba(30,42,56,.055) 1px, transparent 1px) 0 0 / 16px 16px,
+    var(--bg);
+  padding:14px 14px 20px;
+  position:relative;
+  min-height:calc(100dvh - 20px);
+}
+.sheet::before,.sheet::after{
+  content:"+";
+  position:absolute;
+  font:600 15px/1 var(--mono);
+  color:var(--ink);
+  pointer-events:none;
+}
+.sheet::before{top:4px;left:6px}
+.sheet::after{bottom:4px;right:6px}
+
+/* Шапка */
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding-bottom:12px;
+  border-bottom:2px solid var(--ink);
+}
+.brand-block{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.logo-title{font:600 24px/1 var(--display);letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+.logo-sub{font:600 11.5px/1.25 var(--sans);color:var(--muted);margin-top:3px}
+.top-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.principle-note{font-size:11px;line-height:1.25;text-align:right;color:var(--text);max-width:150px;font-weight:500}
+.principle-note u{text-decoration-color:var(--gold);text-underline-offset:2px}
+.admin-entry-btn{display:none;padding:6px 11px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);font:700 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
+.admin-entry-btn.show{display:inline-flex;align-items:center;gap:5px}
+
+.screen{display:none!important;padding:16px 0 10px;position:relative}
+.screen.active{display:block!important}
+
+/* УВЕЛИЧЕННАЯ И ВЫРАЗИТЕЛЬНАЯ ТИПОГРАФИКА */
+h1,h2,h3{font-family:var(--display);font-weight:600;color:var(--ink);text-transform:uppercase;letter-spacing:.02em;margin:0}
+h1{font-size:clamp(28px,8vw,36px);line-height:1.1;margin-bottom:10px}
+h2{font-size:clamp(24px,6.8vw,30px);line-height:1.12;margin-bottom:8px}
+h3{font-size:17.5px;line-height:1.22}
+.lead{font-size:16px;line-height:1.5;color:var(--text);margin:6px 0 14px;font-weight:500}
+.small,.muted{font-size:13.5px;line-height:1.45;color:var(--muted);margin:0 0 12px}
+.kicker{font:700 12px/1.2 var(--mono);color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+
+/* Чертёжные карточки со скошенными углами */
+.bp-card{
+  position:relative;
+  background:var(--paper);
+  border:1.5px solid var(--ink);
+  padding:15px 14px;
+  margin:11px 0;
+  box-shadow:inset 0 0 0 2px var(--bg), inset 0 0 0 3px var(--line);
+}
+.bp-card::before,.bp-card::after{
+  content:"";
+  position:absolute;
+  width:8px;height:8px;
+  background:var(--bg);
+  pointer-events:none;
+}
+.bp-card::before{top:-1.5px;left:-1.5px;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+.bp-card::after{bottom:-1.5px;right:-1.5px;border-left:1.5px solid var(--ink);border-top:1.5px solid var(--ink)}
+.bp-card.gold{border-color:var(--gold);box-shadow:inset 0 0 0 2px var(--bg), inset 0 0 0 3px var(--gold)}
+
+.bp-row{display:grid;grid-template-columns:28px 50px 1fr auto;gap:11px;align-items:center}
+.bp-row.compact{grid-template-columns:28px 1fr auto}
+.bp-num{
+  width:28px;height:28px;border-radius:50%;
+  border:1.5px solid var(--ink);
+  display:grid;place-items:center;
+  font:700 13px/1 var(--mono);color:var(--ink);
+  background:var(--bg);
+}
+.bp-body h3{font:600 17px/1.2 var(--display);color:var(--ink);margin-bottom:4px;letter-spacing:.02em}
+.bp-body p{font-size:14px;line-height:1.42;color:var(--text);margin:0}
+.bp-meta{
+  border-left:1px solid var(--line-soft);
+  padding-left:11px;
+  font:700 13.5px/1.2 var(--sans);
+  color:var(--ink);
+  text-align:right;
+  white-space:nowrap;
+}
+.bp-meta small{display:block;font-weight:500;font-size:11px;color:var(--muted);margin-top:3px}
+
+/* Схема со стрелками */
+.flow-strip{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:4px;margin-top:12px;padding-top:10px;
+  border-top:1px dashed var(--line-soft);
+}
+.flow-node{text-align:center;flex:1;min-width:0}
+.flow-node b{display:block;font:700 11.5px/1.15 var(--sans);color:var(--ink)}
+.flow-node span{display:block;font-size:10.5px;color:var(--muted);margin-top:2px}
+.flow-arr{font:700 14px/1 var(--mono);color:var(--gold);flex:none}
+
+/* Полное адаптивное видео без обрезки */
+.video-frame{
+  position:relative;
+  background:#141C24;
+  border:1.5px solid var(--ink);
+  box-shadow:inset 0 0 0 2px var(--bg), inset 0 0 0 3px var(--line);
+  margin:12px 0;
+  overflow:hidden;
+}
+.video-frame .label{
+  position:absolute;top:10px;left:10px;z-index:2;
+  background:rgba(20,28,36,.88);
+  border:1px solid var(--gold);
+  padding:4px 9px;
+  font:700 10.5px var(--mono);letter-spacing:.06em;color:#F4F1EA;text-transform:uppercase;
+}
+.video-frame video{
+  display:block;
+  width:100%;
+  max-height:400px;
+  height:auto;
+  object-fit:contain;
+  background:#141C24;
+}
+
+/* Крупные контрастные кнопки */
+.btn{
+  background:var(--ink);border:1.5px solid var(--ink);color:var(--paper);
+  font:600 15.5px/1.1 var(--display);letter-spacing:.05em;text-transform:uppercase;
+  min-height:54px;padding:15px 18px;width:100%;
+  display:inline-flex;align-items:center;justify-content:space-between;
+  text-decoration:none;cursor:pointer;transition:.15s;margin-top:10px;
+}
+.btn:active{transform:translateY(1px)}
+.btn.emerald{background:var(--emerald);border-color:var(--emerald)}
+.btn.ghost{background:var(--paper);color:var(--ink)}
+
+/* Маршрут шагов */
+.routebar{display:none;align-items:center;padding:10px 0 0}.routebar.on{display:flex}
+.routebar .n{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--ink);background:var(--paper);display:grid;place-items:center;font:700 11px var(--mono);color:var(--ink)}
+.routebar .n.done{background:var(--ink);color:var(--paper)}
+.routebar .n.cur{background:var(--gold);border-color:var(--gold);color:#fff}
+.routebar .l{flex:1;height:1.5px;margin:0 6px;background:var(--line)}
+.routebar .l.done{background:var(--ink)}
+.routecap{display:none;padding:6px 0 0;font:700 11.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.routebar.on+.routecap{display:block}
+.webback{margin:8px 0 0;background:none;border:0;padding:0;font:700 12.5px var(--mono);text-transform:uppercase;color:var(--ink);cursor:pointer}
+
+/* Вкладки кейсов (#cases) */
+.case-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:10px 0 12px}
+.case-tab{padding:11px 10px;border:1.5px solid var(--ink);background:var(--paper);font:600 14px var(--display);letter-spacing:.03em;text-transform:uppercase;color:var(--ink);text-align:center;cursor:pointer}
+.case-tab.on{background:var(--ink);color:var(--paper)}
+.case-pane{display:none}
+.case-pane.on{display:block}
+
+/* Карусели с картинками */
+.lemoon-car,.car{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:8px -14px 8px;padding:4px 14px 10px;scrollbar-width:none}
+.lemoon-car::-webkit-scrollbar,.car::-webkit-scrollbar{display:none}
+.lemoon-slide,.slide{flex:0 0 82%;scroll-snap-align:center;margin:0}
+.lemoon-slide img,.slide img{display:block;width:100%;height:auto;border:1.5px solid var(--ink);background:var(--paper)}
+.slide figcaption{font-size:13.5px;line-height:1.4;color:var(--text);margin-top:7px}
+.slide figcaption b{display:block;font:600 13px var(--display);letter-spacing:.03em;text-transform:uppercase;color:var(--ink);margin-bottom:2px}
+
+/* Календарь слотов */
+.cal-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin:8px 0 12px}
+.cal-day{border:1.25px solid var(--ink);background:var(--paper);padding:8px 2px;text-align:center;cursor:pointer}
+.cal-day small{display:block;font:700 10px var(--mono);color:var(--muted);text-transform:uppercase}
+.cal-day b{display:block;font:600 15px var(--display);color:var(--ink);margin-top:2px}
+.cal-day.on{background:var(--ink);color:var(--paper)}
+.cal-day.on small,.cal-day.on b{color:var(--paper)}
+.cal-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:8px}
+.cal-slot{border:1.25px solid var(--ink);background:var(--paper);padding:11px 4px;text-align:center;font:700 14px var(--mono);color:var(--ink);cursor:pointer}
+.cal-slot.on{background:var(--gold);border-color:var(--gold);color:#fff}
+.cal-slot.busy{opacity:.3;text-decoration:line-through;pointer-events:none}
+
+/* Анкета */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.chip{padding:6px 11px;border:1.25px solid var(--ink);font:700 11.5px var(--mono);background:var(--paper);color:var(--ink)}
+.focus-pills{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.focus-pill{padding:8px 12px;border:1.25px solid var(--line);background:var(--paper);font:600 13px var(--sans);cursor:pointer}
+.focus-pill.on{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.form-label{display:block;font:600 13px/1.25 var(--display);letter-spacing:.04em;text-transform:uppercase;color:var(--ink);margin:12px 0 5px}
+.field{width:100%;border:1.5px solid var(--ink);background:#fff;padding:12px;color:var(--ink);font-size:15px;outline:none}
+textarea.field{min-height:80px;resize:vertical}
+.success{color:var(--emerald);font-size:14px;margin-top:8px;font-weight:700}
+.error{color:var(--danger);font-size:14px;margin-top:8px;font-weight:700}
+
+.result-banner{
+  border:1.5px solid var(--ink);
+  background:var(--paper);
+  padding:13px 14px;
+  margin-top:14px;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  text-align:left;
+}
+.result-banner b{font:600 19px/1.1 var(--display);letter-spacing:.04em;color:var(--ink);text-transform:uppercase}
+.result-banner span{display:block;font-size:13px;color:var(--gold);font-weight:700;margin-top:3px}
+
+/* Дашборд */
+.admin-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:10px 0}
+.admin-stat{background:var(--paper);border:1.5px solid var(--ink);padding:11px;text-align:center}
+.admin-stat b{display:block;font:600 24px var(--display);color:var(--ink)}
+.admin-stat span{font:700 10.5px var(--mono);text-transform:uppercase;color:var(--muted)}
+.visitor-card{background:var(--paper);border:1.5px solid var(--ink);padding:13px;margin-bottom:9px;font-size:13.5px}
+.visitor-top{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px}
+.visitor-badge{padding:3px 8px;border:1px solid var(--ink);font:700 10.5px var(--mono);text-transform:uppercase}
+.visitor-badge.ok{border-color:var(--emerald);color:var(--emerald)}
+.visitor-why{margin:6px 0;padding:8px 10px;border-left:3px solid var(--gold);background:var(--bg);color:var(--text);font-size:13px}
+.visitor-actions{display:flex;justify-content:space-between;align-items:center;margin-top:7px}
+.visitor-actions a{color:var(--ink);font:700 12px var(--mono);text-transform:uppercase;text-decoration:underline}
+
+.footer{display:flex;justify-content:space-between;align-items:center;font:600 10.5px var(--mono);color:var(--muted);padding-top:12px;margin-top:14px;border-top:1px solid var(--line-soft)}
+.footer a{color:var(--ink);text-decoration:underline}
+.consent-inline{font-size:11.5px;line-height:1.4;color:var(--muted);margin-top:8px}
+.consent-inline a{color:var(--ink);text-decoration:underline}
+
+@media (max-width:420px){
+  .bp-row{grid-template-columns:26px 44px 1fr;gap:9px}
+  .bp-meta{grid-column:1 / -1;border-left:0;border-top:1px dotted var(--line-soft);padding:7px 0 0;text-align:left;display:flex;justify-content:space-between;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ИЗОМЕТРИЧЕСКИЕ ЧЕРТЁЖНЫЕ ИКОНКИ (КАК НА ПЛАКАТЕ «ПРОГРАММА ГРУППЫ») -->
+<svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="iso-tower" viewBox="0 0 48 56" fill="none">
+    <polygon points="24,4 38,11 24,18 10,11" fill="#FAF8F3" stroke="#1E2A38" stroke-width="1.5"/>
+    <polygon points="10,11 24,18 24,44 10,37" fill="#1E2A38"/>
+    <polygon points="38,11 24,18 24,44 38,37" fill="#E6E0D4" stroke="#1E2A38" stroke-width="1.5"/>
+    <polygon points="6,39 24,48 42,39 42,45 24,54 6,45" fill="#FAF8F3" stroke="#1E2A38" stroke-width="1.4"/>
+    <text x="17" y="25" fill="#FAF8F3" font-family="monospace" font-size="6.5" font-weight="bold" transform="rotate(90 17 25)">МЕТОД</text>
+  </symbol>
+  <symbol id="iso-context" viewBox="0 0 48 48" fill="none">
+    <polygon points="8,34 26,42 42,32 24,24" fill="#E6E0D4" stroke="#1E2A38" stroke-width="1.4"/>
+    <rect x="13" y="10" width="18" height="22" rx="1" fill="#FAF8F3" stroke="#1E2A38" stroke-width="1.5"/>
+    <circle cx="18" cy="16" r="2.2" stroke="#B8894A" stroke-width="1.5"/>
+    <path d="M15 21C15 19.5 21 19.5 21 21" stroke="#B8894A" stroke-width="1.5"/>
+    <line x1="23" y1="15" x2="28" y2="15" stroke="#1E2A38" stroke-width="1.4"/>
+    <line x1="23" y1="19" x2="28" y2="19" stroke="#1E2A38" stroke-width="1.4"/>
+    <line x1="15" y1="26" x2="28" y2="26" stroke="#1E2A38" stroke-width="1.4"/>
+  </symbol>
+  <symbol id="iso-cubes" viewBox="0 0 48 48" fill="none">
+    <polygon points="24,8 33,13 24,18 15,13" fill="#FAF8F3" stroke="#1E2A38" stroke-width="1.4"/>
+    <polygon points="15,13 24,18 24,28 15,23" fill="#E6E0D4" stroke="#1E2A38" stroke-width="1.4"/>
+    <polygon points="33,13 24,18 24,28 33,23" fill="#B8894A" fill-opacity="0.35" stroke="#1E2A38" stroke-width="1.4"/>
+    <polygon points="15,23 24,28 15,33 6,28" fill="#FAF8F3" stroke="#1E2A38" stroke-width="1.4"/>
+    <polygon points="6,28 15,33 15,42 6,37" fill="#E6E0D4" stroke="#1E2A38" stroke-width="1.4"/>
+    <polygon points="24,28 15,33 15,42 24,37" fill="#FAF8F3" stroke="#1E2A38" stroke-width="1.4"/>
+    <polygon points="33,23 42,28 33,33 24,28" fill="#FAF8F3" stroke="#1E2A38" stroke-width="1.4"/>
+    <polygon points="24,28 33,33 33,42 24,37" fill="#E6E0D4" stroke="#1E2A38" stroke-width="1.4"/>
+    <polygon points="42,28 33,33 33,42 42,37" fill="#FAF8F3" stroke="#1E2A38" stroke-width="1.4"/>
+  </symbol>
+  <symbol id="iso-map" viewBox="0 0 48 48" fill="none">
+    <polygon points="6,14 18,9 30,14 42,9 42,35 30,40 18,35 6,40" fill="#FAF8F3" stroke="#1E2A38" stroke-width="1.5" stroke-linejoin="round"/>
+    <line x1="18" y1="9" x2="18" y2="35" stroke="#1E2A38" stroke-width="1.3" stroke-dasharray="2 2"/>
+    <line x1="30" y1="14" x2="30" y2="40" stroke="#1E2A38" stroke-width="1.3" stroke-dasharray="2 2"/>
+    <circle cx="31" cy="18" r="4" fill="#B8894A" stroke="#1E2A38" stroke-width="1.4"/>
+    <path d="M12 31C16 26 22 29 29 22" stroke="#B8894A" stroke-width="1.8" stroke-dasharray="2 2"/>
+  </symbol>
+  <symbol id="iso-scope" viewBox="0 0 48 48" fill="none">
+    <circle cx="22" cy="22" r="12" fill="#FAF8F3" stroke="#1E2A38" stroke-width="1.5"/>
+    <circle cx="22" cy="22" r="7" stroke="#B8894A" stroke-width="1.4"/>
+    <line x1="22" y1="7" x2="22" y2="37" stroke="#1E2A38" stroke-width="1.2"/>
+    <line x1="7" y1="22" x2="37" y2="22" stroke="#1E2A38" stroke-width="1.2"/>
+    <line x1="31" y1="31" x2="41" y2="41" stroke="#1E2A38" stroke-width="2.6" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="iso-launch" viewBox="0 0 48 48" fill="none">
+    <polygon points="8,36 24,44 40,36 24,28" fill="#E6E0D4" stroke="#1E2A38" stroke-width="1.4"/>
+    <path d="M24 7C29 13 30 22 30 30H18C18 22 19 13 24 7Z" fill="#FAF8F3" stroke="#1E2A38" stroke-width="1.5"/>
+    <circle cx="24" cy="19" r="2.8" fill="#B8894A" stroke="#1E2A38" stroke-width="1.3"/>
+    <polygon points="18,24 13,31 18,30" fill="#E6E0D4" stroke="#1E2A38" stroke-width="1.4"/>
+    <polygon points="30,24 35,31 30,30" fill="#E6E0D4" stroke="#1E2A38" stroke-width="1.4"/>
+  </symbol>
+  <symbol id="iso-trophy" viewBox="0 0 48 48" fill="none">
+    <path d="M15 10H33V20C33 25.5 29 29.5 24 29.5C19 29.5 15 25.5 15 20V10Z" fill="#FAF8F3" stroke="#1E2A38" stroke-width="1.5"/>
+    <path d="M15 13H10V18C10 21 12 23 15 23" stroke="#1E2A38" stroke-width="1.5"/>
+    <path d="M33 13H38V18C38 21 36 23 33 23" stroke="#1E2A38" stroke-width="1.5"/>
+    <line x1="24" y1="29.5" x2="24" y2="37" stroke="#1E2A38" stroke-width="1.7"/>
+    <rect x="16" y="37" width="16" height="4" fill="#E6E0D4" stroke="#1E2A38" stroke-width="1.5"/>
+    <circle cx="24" cy="19" r="3.2" fill="#B8894A"/>
+  </symbol>
+</svg>
+
+<div class="app">
+  <div class="sheet">
+    <!-- Шапка -->
+    <header class="top">
+      <div class="brand-block" id="brandLogo">
+        <svg class="iso-icon"><use href="#iso-tower"/></svg>
+        <div>
+          <div class="logo-title">TORIYA NOVA</div>
+          <div class="logo-sub">цифровая система бизнеса · v20</div>
+        </div>
+      </div>
+      <div class="top-right">
+        <button id="adminEntryBtn" class="admin-entry-btn">📊 ДАШБОРД</button>
+        <div class="principle-note">Главный принцип:<br><u>клиенту легко купить</u>, вам — легко управлять.</div>
+      </div>
+    </header>
+
+    <div id="routebar" class="routebar"></div>
+    <div id="routecap" class="routecap"></div>
+    <button id="webBack" class="webback" style="display:none">← Назад на шаг</button>
+
+    <!-- ЭКРАН 1: Вход по «Карте смыслов» + Второе видео -->
+    <section class="screen active" id="s0">
+      <div class="kicker" style="margin-top:4px">Вы занимаетесь бизнесом — а не обслуживанием хаоса вокруг него</div>
+      <h1>У ВАС БИЗНЕС ИЛИ КОЛЛЕКЦИЯ ПЕРЕПИСОК, ТАБЛИЦ И ССЫЛОК?</h1>
+      <p class="lead">Сколько заявок и тёплых людей вы теряете просто потому, что клиенту нужно пройти квест в личке, чтобы узнать цену, выбрать время или купить?</p>
+
+      <div class="video-frame">
+        <div class="label">ВИДЕО · КАК СИСТЕМА ПОКАЗЫВАЕТ КАЖДЫЙ ШАГ КЛИЕНТА</div>
+        <video controls playsinline preload="metadata">
+          <source src="/Toriya_2.mp4" type="video/mp4">
+          <source src="/02_TORIYA.mp4" type="video/mp4">
+          <source src="/Toriya_5.mp4" type="video/mp4">
+          <source src="/03_FINAL_TORIYA.mp4" type="video/mp4">
+          <source src="/Toriya_1.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="bp-card">
+        <div class="bp-row">
+          <div class="bp-num">1</div>
+          <svg class="iso-icon"><use href="#iso-map"/></svg>
+          <div class="bp-body">
+            <h3>1. ПЕРЕСТАНЬТЕ РАБОТАТЬ ДИСПЕТЧЕРОМ СВОЕГО БИЗНЕСА</h3>
+            <p>Не нужно по 20 раз в день отвечать на одни и те же вопросы. Клиент сам видит каталог, цены, свободные окна и записывается за 15 секунд.</p>
+          </div>
+          <div class="bp-meta">Без рутины<small>в 1 окне</small></div>
+        </div>
+      </div>
+
+      <div class="bp-card">
+        <div class="bp-row">
+          <div class="bp-num">2</div>
+          <svg class="iso-icon"><use href="#iso-scope"/></svg>
+          <div class="bp-body">
+            <h3>2. НИ ОДНА ЗАЯВКА БОЛЬШЕ НЕ ТЕРЯЕТСЯ</h3>
+            <p>Вы видите каждого, кто зашёл в ваше приложение, какую услугу смотрел и на каком шаге остановился — а бот сам мягко возвращает тех, кто отвлёкся.</p>
+          </div>
+          <div class="bp-meta">100%<small>контроль</small></div>
+        </div>
+        <div class="flow-strip">
+          <div class="flow-node"><b>интерес</b><span>зашёл в бот</span></div>
+          <div class="flow-arr">→</div>
+          <div class="flow-node"><b>выбор</b><span>витрина / слот</span></div>
+          <div class="flow-arr">→</div>
+          <div class="flow-node"><b>контроль</b><span>видно кто молчит</span></div>
+          <div class="flow-arr">→</div>
+          <div class="flow-node"><b>продажа</b><span>заявка и оплата</span></div>
+        </div>
+      </div>
+
+      <button id="startFunnelBtn" class="btn">
+        <span>1. ПОСМОТРЕТЬ ЖИВЫЕ ПРИМЕРЫ И КЕЙСЫ</span>
+        <span>→</span>
+      </button>
+      <p class="consent-inline">Нажимая кнопку, вы соглашаетесь с <a data-doc href="/privacy.html">политикой конфиденциальности</a>, <a data-doc href="/consent.html">обработкой данных</a> и получением напоминаний.</p>
+    </section>
+
+    <!-- ЭКРАН 2: Живые кейсы с правильными путями /img/lemoon_... -->
+    <section id="cases" class="screen">
+      <div class="kicker">Реальные сценарии вместо сложных сайтов и CRM</div>
+      <h2>КАК ЭТО РАБОТАЕТ НА ПРАКТИКЕ</h2>
+      <p class="small">Нажимайте на вкладки ниже — посмотрите, как клиент покупает и записывается без бесконечных переписок:</p>
+
+      <div class="case-tabs" id="caseTabs">
+        <div class="case-tab on" data-pane="shop">1. МАГАЗИН / ВИТРИНА</div>
+        <div class="case-tab" data-pane="book">2. ЗАПИСЬ БЕЗ ПЕРЕПИСКИ</div>
+        <div class="case-tab" data-pane="quiz">3. ОТБОР И ПРОГРЕВ</div>
+        <div class="case-tab" data-pane="crm">4. КАБИНЕТ И ЗАЯВКИ</div>
+      </div>
+
+      <!-- Вкладка 1: Кейс Lemoon 8/9 (файлы из папки /img/) -->
+      <div class="case-pane on" id="pane-shop">
+        <div class="bp-card">
+          <div class="kicker">Кейс · Бренд одежды Lemoon 8/9</div>
+          <h3 style="margin-bottom:4px">КАТАЛОГ И КОРЗИНА ПРЯМО В TELEGRAM</h3>
+          <p class="small" style="margin-bottom:8px">Вместо вопросов «какой размер в наличии?» клиент сам выбирает модель, размер и в 1 клик отправляет готовый заказ с адресом СДЭК:</p>
+          <div class="lemoon-car">
+            <div class="lemoon-slide"><img src="/img/lemoon_1.PNG" alt="Lemoon витрина" loading="lazy"></div>
+            <div class="lemoon-slide"><img src="/img/lemoon_2.jpg" alt="Lemoon корзина" loading="lazy"></div>
+            <div class="lemoon-slide"><img src="/img/lemoon_3.jpg" alt="Lemoon отзыв" loading="lazy"></div>
+          </div>
+        </div>
+
+        <div class="bp-card gold">
+          <div class="bp-row compact">
+            <div class="bp-num">★</div>
+            <div class="bp-body">
+              <h3>РЕЗУЛЬТАТ КЛИЕНТА · СОФЬЯ (LEMOON 8/9)</h3>
+              <p>«Сделали сейл −70%, протестировали на широкой аудитории — всем очень удобно пользоваться прямо в телеге! Заявки приходят сразу с выбранным товаром, менеджер сразу ведёт человека до заказа. Конверсия выросла с первого дня!»</p>
+            </div>
+            <div class="bp-meta">Аудио<small>0:50</small></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Вкладка 2: Запись -->
+      <div class="case-pane" id="pane-book">
+        <div class="bp-card">
+          <h3 style="margin-bottom:6px">КЛИЕНТ ЗАПИСЫВАЕТСЯ САМ, ПОКА ВЫ РАБОТАЕТЕ</h3>
+          <p class="small" style="margin-bottom:8px">Больше не нужно согласовывать время в пяти сообщениях:</p>
+          <div class="car">
+            <figure class="slide"><img src="/img/book1.webp" alt="Услуги" loading="lazy"><figcaption><b>1. Понятная витрина услуг</b>Клиент сразу видит форматы работы и цены.</figcaption></figure>
+            <figure class="slide"><img src="/img/book3.webp" alt="Слоты" loading="lazy"><figcaption><b>2. Свободные окошки</b>Выбирает день и час — слот автоматически закрывается за ним.</figcaption></figure>
+            <figure class="slide"><img src="/img/notify.webp" alt="Уведомление" loading="lazy"><figcaption><b>3. Готовая заявка у вас</b>Вам прилетает карточка клиента, а бот сам напомнит ему о встрече.</figcaption></figure>
+          </div>
+        </div>
+      </div>
+
+      <!-- Вкладка 3: Отбор и прогрев -->
+      <div class="case-pane" id="pane-quiz">
+        <div class="bp-card">
+          <h3 style="margin-bottom:6px">КЛИЕНТ ПРИХОДИТ УЖЕ ТЁПЛЫМ И С ПОНЯТНЫМ ЗАПРОСОМ</h3>
+          <p class="small" style="margin-bottom:8px">Интерактивный маршрут вместо мёртвых PDF-гайдов, которые скачивают и забывают открыть:</p>
+          <div class="car">
+            <figure class="slide"><img src="/img/quiz.webp" alt="Квиз" loading="lazy"><figcaption><b>1. Вопросы в 1 тап</b>Человек сам определяет свою задачу ещё до созвона с вами.</figcaption></figure>
+            <figure class="slide"><img src="/img/result.webp" alt="Итог" loading="lazy"><figcaption><b>2. Персональный разбор</b>Видит свои узкие места и понимает, зачем ему ваш продукт.</figcaption></figure>
+          </div>
+        </div>
+      </div>
+
+      <!-- Вкладка 4: Кабинет -->
+      <div class="case-pane" id="pane-crm">
+        <div class="bp-card">
+          <h3 style="margin-bottom:6px">ВЕСЬ БИЗНЕС В ОДНОМ ОКНЕ БЕЗ СЛОЖНЫХ CRM</h3>
+          <p class="small" style="margin-bottom:8px">Никаких разбросанных таблиц и забытых клиентов:</p>
+          <div class="car">
+            <figure class="slide"><img src="/img/crm.webp" alt="CRM" loading="lazy"><figcaption><b>1. Кабинет владельца и команды</b>Все обращения, расписание, статусы и отдельные права для ассистента.</figcaption></figure>
+            <figure class="slide"><img src="/img/admin.webp" alt="Админка" loading="lazy"><figcaption><b>2. Управление расписанием</b>Открывайте и закрывайте рабочие часы одним касанием в Telegram.</figcaption></figure>
+          </div>
+        </div>
+      </div>
+
+      <a class="btn emerald" href="#price">
+        <span>2. ВЫБРАТЬ РЕШЕНИЕ И УЗНАТЬ СТОИМОСТЬ</span>
+        <span>→</span>
+      </a>
+    </section>
+
+    <!-- ЭКРАН 3: Продуктовая лестница и цены (тап сразу переводит дальше) -->
+    <section id="price" class="screen">
+      <div class="kicker">Сначала решаем главную задачу — без переплаты за лишнее</div>
+      <h2>С ЧЕГО НАЧНЁМ НАВОДИТЬ ПОРЯДОК?</h2>
+      <p class="small">Нажмите на подходящий вариант — и мы сразу перейдём к выбору времени или анкете:</p>
+
+      <!-- Вариант 1: Разбор + Прототип 2 500 ₽ -->
+      <div class="bp-card gold tier" data-step="proto" data-next="calendar" data-label="2 500 ₽ · Персональный разбор + Прототип (несгораемый депозит)" style="cursor:pointer">
+        <div class="bp-row">
+          <div class="bp-num">1</div>
+          <svg class="iso-icon"><use href="#iso-context"/></svg>
+          <div class="bp-body">
+            <h3>1. АРХИТЕКТУРНЫЙ РАЗБОР + ПРОТОТИП СИСТЕМЫ</h3>
+            <p>Для тех, кто хочет сначала увидеть структуру своего приложения: разберём, где вы теряете заявки и время, и соберём карту экранов под ваш бизнес. <b>Несгораемый депозит: эти 2 500 ₽ полностью входят в стоимость разработки!</b></p>
+          </div>
+          <div class="bp-meta">2 500 ₽<small>депозит →</small></div>
+        </div>
+      </div>
+
+      <!-- Вариант 2: Под ключ 35 000 ₽ -->
+      <div class="bp-card gold tier" data-step="dev35" data-next="calendar" data-label="35 000 ₽ · Mini App под ключ со смыслами (2–3 дня)" style="cursor:pointer">
+        <div class="bp-row">
+          <div class="bp-num">2</div>
+          <svg class="iso-icon"><use href="#iso-cubes"/></svg>
+          <div class="bp-body">
+            <h3>2. MINI APP ПОД КЛЮЧ + РАЗБОР И СМЫСЛЫ (ХИТ)</h3>
+            <p>Вы не пишете сложных ТЗ: проводим личный созвон-разбор, я сама формулирую вопросы, структуру витрины или записи, собираю дизайн, бота с авто-возвратом и ваш личный дашборд.</p>
+          </div>
+          <div class="bp-meta">35 000 ₽<small>2–3 дня →</small></div>
+        </div>
+        <div class="flow-strip">
+          <div class="flow-node"><b>созвон</b><span>распаковка</span></div>
+          <div class="flow-arr">→</div>
+          <div class="flow-node"><b>структура</b><span>вопросы/тексты</span></div>
+          <div class="flow-arr">→</div>
+          <div class="flow-node"><b>сборка</b><span>mini app + бот</span></div>
+          <div class="flow-arr">→</div>
+          <div class="flow-node"><b>дашборд</b><span>контроль лидов</span></div>
+        </div>
+      </div>
+
+      <!-- Вариант 3: На ваших материалах 30 000 ₽ -->
+      <div class="bp-card tier" data-step="dev30" data-next="calendar" data-label="30 000 ₽ · Mini App на ваших готовых данных (2 дня)" style="cursor:pointer">
+        <div class="bp-row">
+          <div class="bp-num">3</div>
+          <svg class="iso-icon"><use href="#iso-launch"/></svg>
+          <div class="bp-body">
+            <h3>3. MINI APP НА ВАШИХ ГОТОВЫХ ДАННЫХ</h3>
+            <p>Если у вас уже есть готовые вопросы, описание услуг или каталог — быстро упакуем их в работающее приложение с ботом и аналитикой за 2 дня.</p>
+          </div>
+          <div class="bp-meta">30 000 ₽<small>2 дня →</small></div>
+        </div>
+      </div>
+
+      <!-- Вариант 4: Магазин / Запись / CRM от 40 000 ₽ -->
+      <div class="bp-card tier" data-step="dev40" data-next="calendar" data-label="от 40 000 ₽ · Сложная система (Магазин / Запись / CRM)" style="cursor:pointer">
+        <div class="bp-row">
+          <div class="bp-num">4</div>
+          <svg class="iso-icon"><use href="#iso-map"/></svg>
+          <div class="bp-body">
+            <h3>4. ПОЛНАЯ СИСТЕМА: МАГАЗИН / ЗАПИСЬ / КАБИНЕТ CRM</h3>
+            <p>Многостраничный каталог с корзиной (как у Lemoon 8/9), расписание со слотами, база клиентов и разделение прав доступа для команды.</p>
+          </div>
+          <div class="bp-meta">от 40 000 ₽<small>по задаче →</small></div>
+        </div>
+      </div>
+
+      <!-- Вариант 5: Голосовой краш-тест 0 ₽ -->
+      <div class="bp-card tier" data-step="voice" data-next="order" data-label="0 ₽ · Бесплатный голосовой краш-тест канала" style="cursor:pointer">
+        <div class="bp-row">
+          <div class="bp-num">5</div>
+          <svg class="iso-icon"><use href="#iso-scope"/></svg>
+          <div class="bp-body">
+            <h3>5. СОМНЕВАЕТЕСЬ? ГОЛОСОВОЙ КРАШ-ТЕСТ КАНАЛА</h3>
+            <p>Без созвонов: пришлите ссылку на ваш Telegram-канал или блог — я посмотрю путь вашего клиента и наговорю голосовое (3–5 мин), где теряются продажи и какое решение окупится с первого заказа.</p>
+          </div>
+          <div class="bp-meta">0 ₽<small>в личку →</small></div>
+        </div>
+      </div>
+
+      <div class="result-banner">
+        <svg class="iso-icon"><use href="#iso-trophy"/></svg>
+        <div>
+          <b>РЕЗУЛЬТАТ ДЛЯ ВАШЕГО БИЗНЕСА</b>
+          <span>короткий путь к покупке + ноль потерянных заявок + свободное время владельца</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ЭКРАН 4: Календарь слотов -->
+    <section id="calendar" class="screen">
+      <div class="kicker">Шаг 3 · Расписание (Время МСК)</div>
+      <h2>ВЫБЕРИТЕ ДЕНЬ И ВРЕМЯ ДЛЯ СВЯЗИ</h2>
+      <p class="small" id="calChosenStep"></p>
+
+      <div class="bp-card">
+        <div class="cal-days" id="calDays"></div>
+        <div class="cal-slots" id="calSlots"></div>
+        <p id="pickedSlotInfo" class="small" style="margin:12px 0 0;color:var(--emerald);font-weight:700"></p>
+      </div>
+
+      <div id="addonNet" class="bp-card" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <div>
+          <b style="font:600 15px var(--display);text-transform:uppercase;color:var(--ink)">+ ЗАПУСТИТЬ ЭТУ ЖЕ СИСТЕМУ В VK, MAX И WEB</b>
+          <span class="small" style="display:block;margin:3px 0 0">Чтобы клиенты из ВКонтакте, Instagram и Threads тоже проходили путь без преград</span>
+        </div>
+        <div class="bp-meta">+10 000 ₽</div>
+      </div>
+
+      <a class="btn emerald" href="#order">
+        <span>ДАЛЕЕ: КОРОТКАЯ АНКЕТА (30 СЕКУНД)</span>
+        <span>→</span>
+      </a>
+    </section>
+
+    <!-- ЭКРАН 5: Финальная анкета -->
+    <section id="order" class="screen">
+      <div class="kicker">Финальный шаг · Подтверждение</div>
+      <h2>ПАРА СЛОВ О ВАШЕМ ПРОЕКТЕ</h2>
+      <p class="small">Ваш выбор сохранён. Укажите ссылку на ваш проект и что сейчас неудобно в работе с заявками:</p>
+
+      <div id="fmtChips" class="chips"></div>
+
+      <div class="bp-card">
+        <label class="form-label" style="margin-top:0">ЧТО ВАМ БЛИЖЕ (МОЖНО ОТМЕТИТЬ):</label>
+        <div class="focus-pills">
+          <span class="focus-pill" data-f="Витрина / Магазин">Витрина / Магазин</span>
+          <span class="focus-pill" data-f="Онлайн-запись">Запись без переписки</span>
+          <span class="focus-pill" data-f="Отбор и прогрев">Отбор и прогрев</span>
+          <span class="focus-pill" data-f="Кабинет / База">Кабинет и учёт заявок</span>
+        </div>
+
+        <label class="form-label" for="channelInput">1. ВАША НИША, ЧТО ПРОДАЁТЕ + ССЫЛКА НА КАНАЛ / САЙТ</label>
+        <input id="channelInput" type="text" class="field" placeholder="Например: бренд одежды / коуч / студия, @moy_kanal">
+
+        <label class="form-label" for="productInput">2. ГДЕ СЕЙЧАС ТЕРЯЕТСЯ ВРЕМЯ ИЛИ КЛИЕНТЫ?</label>
+        <textarea id="productInput" class="field" placeholder="Например: приходится долго отвечать в личке, клиенты спрашивают цену и уходят, бардак в таблицах…"></textarea>
+
+        <button id="consultBtn" class="btn emerald" style="margin-top:14px">
+          <span>ПОДТВЕРДИТЬ И ПЕРЕЙТИ В ЧАТ С ТОРИЕЙ</span>
+          <span>→</span>
+        </button>
+        <div id="consultStatus"></div>
+      </div>
+    </section>
+
+    <!-- ЗАКРЫТЫЙ ДАШБОРД ВЛАДЕЛЬЦА (#admin) -->
+    <section id="admin" class="screen">
+      <div class="kicker">Закрытый контур · Toriya Studio</div>
+      <h2>ДАШБОРД АНАЛИТИКИ И СЛОТОВ</h2>
+
+      <div id="adminAuthBox" class="bp-card">
+        <label class="form-label" for="adminPassInput" style="margin-top:0">КЛЮЧ ДОСТУПА ВЛАДЕЛЬЦА</label>
+        <input id="adminPassInput" type="text" class="field" value="toriya2026">
+        <button id="adminLoginBtn" class="btn" style="margin-top:12px">
+          <span>ОТКРЫТЬ ДАШБОРД</span>
+          <span>→</span>
+        </button>
+        <div id="adminAuthErr" class="error"></div>
+      </div>
+
+      <div id="adminContent" style="display:none">
+        <div class="admin-stat-grid" id="adminStats"></div>
+        <div class="bp-card">
+          <div class="kicker">Управление расписанием</div>
+          <p class="small" style="margin-bottom:8px">Нажмите на слот, чтобы закрыть или освободить окно для клиентов:</p>
+          <div class="cal-days" id="adminCalDays"></div>
+          <div class="cal-slots" id="adminCalSlots"></div>
+        </div>
+        <div class="form-label">КТО ЗАШЁЛ И ПОЧЕМУ ОСТАНОВИЛСЯ:</div>
+        <div id="adminVisitorsList"></div>
+        <button id="adminRefreshBtn" class="btn ghost" style="margin-top:10px">
+          <span>ОБНОВИТЬ ДАННЫЕ</span>
+          <span>↻</span>
+        </button>
+      </div>
+    </section>
+
+    <div class="footer">
+      <span><a data-doc href="/privacy.html">Политика</a> · <a data-doc href="/consent.html">Согласие</a></span>
+      <span>designed by TORIYA STUDIO ⬢</span>
+    </div>
+  </div>
+</div>
+
+<script>
+window.__errs=[];addEventListener('error',function(e){var t=(e.message||'ошибка')+' @'+String(e.filename||'').split('/').pop()+':'+e.lineno;window.__errs.push(t)});
+(function(){var N=function(){};if(/tgWebApp/.test(location.hash+location.search)||window.TelegramWebviewProxy){document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>')}else{window.Telegram={WebApp:{initData:'',initDataUnsafe:{},ready:N,expand:N,setHeaderColor:N,setBackgroundColor:N,onEvent:N,requestWriteAccess:N,BackButton:{show:N,hide:N,onClick:N},HapticFeedback:{impactOccurred:N,selectionChanged:N,notificationOccurred:N},openLink:function(u){window.open(u,'_blank')},openTelegramLink:function(u){window.open(u,'_blank')},viewportHeight:innerHeight,viewportStableHeight:innerHeight}}}})();
+</script>
+<script>
+const $=id=>document.getElementById(id);
+const CONFIG={consultationUrl:'https://t.me/toriya_nova',ownerId:'6894849502'},CONSENT_V='2026-11-01';
+const tg=window.Telegram&&window.Telegram.WebApp||null;
+const web=!(tg&&tg.initData);
+const isLocal=location.protocol==='file:'||['localhost','127.0.0.1'].includes(location.hostname);
+const screens=['s0','cases','price','calendar','order','admin'];
+const NOSTACK=['s0'];
+const DEFAULT_SLOTS=['11:00','13:00','15:00','17:00','19:00'];
+
+const state={
+  consent:false,
+  formats:new Set(),
+  activeTab:'shop',
+  step:'proto',
+  stepLabel:'2 500 ₽ · Персональный разбор + Прототип (депозит)',
+  otherNets:false,
+  days:[],
+  selectedDate:'',
+  selectedTime:'',
+  busyMap:{},
+  adminKey:sessionStorage.getItem('tn_adm_key')||'toriya2026',
+  sending:false
+};
+
+try{state.consent=localStorage.getItem('tn_consent')===CONSENT_V}catch{}
+const qs=new URLSearchParams(location.search);
+const src=qs.get('src')||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||'';
+
+function webId(){
+  let id='';try{id=localStorage.getItem('tn_webid')||''}catch{}
+  if(!/^[a-f0-9-]{36}$/.test(id)){
+    id=crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16)});
+    try{localStorage.setItem('tn_webid',id)}catch{}
+  }
+  return id;
+}
+
+async function apiPost(url,payload){
+  const initData=tg&&tg.initData||'';
+  const r=await fetch(url,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Telegram-Init-Data':initData,'X-Web-Id':initData?'':webId()},
+    body:JSON.stringify({...payload,initData})
+  });
+  return r.json();
+}
+
+let consentP=null;
+function track(event,meta={}){
+  if(isLocal)return;
+  const send=()=>apiPost('/api/event',{event,meta}).catch(()=>{});
+  consentP&&event!=='consent'?consentP.then(send):send();
+}
+function haptic(k,v){try{tg.HapticFeedback[k](v)}catch{}}
+function openTg(u){if(!web&&tg.openTelegramLink&&u.startsWith('https://t.me/'))tg.openTelegramLink(u);else location.href=u}
+
+function initDays(){
+  const dNames=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+  const mNames=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+  const out=[];
+  const now=new Date();
+  for(let i=0;i<7;i++){
+    const d=new Date(now.getTime()+i*86400000);
+    const iso=d.toISOString().slice(0,10);
+    out.push({iso,dow:i===0?'Сег':dNames[d.getDay()],num:d.getDate()+' '+mNames[d.getMonth()]});
+  }
+  state.days=out;
+  state.selectedDate=out[0].iso;
+  state.selectedTime='13:00';
+}
+initDays();
+
+async function loadSlots(){
+  if(isLocal)return;
+  try{
+    const res=await apiPost('/api/slots',{action:'get'});
+    if(res&&res.busy)state.busyMap=res.busy;
+  }catch{}
+  renderCalendar();
+}
+
+function renderCalendar(){
+  const dBox=$('calDays'),sBox=$('calSlots'),info=$('pickedSlotInfo'),stepTxt=$('calChosenStep');
+  if(stepTxt)stepTxt.textContent='Выбранный шаг: '+state.stepLabel;
+  if(!dBox||!sBox)return;
+  dBox.innerHTML=state.days.map(d=>`<div class="cal-day${d.iso===state.selectedDate?' on':''}" data-date="${d.iso}"><small>${d.dow}</small><b>${d.num.split(' ')[0]}</b></div>`).join('');
+  const busyForDay=state.busyMap[state.selectedDate]||[];
+  if(busyForDay.includes(state.selectedTime)){
+    state.selectedTime=DEFAULT_SLOTS.find(t=>!busyForDay.includes(t))||'';
+  }
+  sBox.innerHTML=DEFAULT_SLOTS.map(t=>{
+    const isBusy=busyForDay.includes(t);
+    const isOn=!isBusy&&t===state.selectedTime;
+    return `<div class="cal-slot${isBusy?' busy':''}${isOn?' on':''}" data-time="${t}">${t}</div>`;
+  }).join('');
+  const dayObj=state.days.find(d=>d.iso===state.selectedDate);
+  info.textContent=state.selectedTime
+    ? `✓ ВЫБРАНО ВРЕМЯ: ${dayObj?dayObj.num:state.selectedDate} · ${state.selectedTime} МСК`
+    : 'На выбранный день нет свободных окон — выберите соседнюю дату.';
+}
+
+function switchCaseTab(pane){
+  state.activeTab=pane;
+  document.querySelectorAll('.case-tab').forEach(b=>b.classList.toggle('on',b.dataset.pane===pane));
+  document.querySelectorAll('.case-pane').forEach(p=>p.classList.toggle('on',p.id==='pane-'+pane));
+}
+
+const ROUTE=[
+  ['1. СИСТЕМА И МЕТОД',['s0']],
+  ['2. ЖИВЫЕ КЕЙСЫ',['cases']],
+  ['3. ФОРМАТ И ВРЕМЯ',['price','calendar']],
+  ['4. ЗАПУСК',['order']]
+];
+let routeK=-1;
+function setRoute(id){
+  const bar=$('routebar'),cap=$('routecap');
+  const k=ROUTE.findIndex(r=>r[1].includes(id));
+  if(k<0){bar.classList.remove('on');return}
+  if(!bar.dataset.built){
+    bar.innerHTML=ROUTE.map((r,i)=>(i?'<b class="l"></b>':'')+`<i class="n">${i+1}</i>`).join('');
+    bar.dataset.built='1';
+  }
+  bar.classList.add('on');
+  bar.querySelectorAll('.n').forEach((n,i)=>{n.className='n'+(i<k?' done':i===k?' cur':'')});
+  bar.querySelectorAll('.l').forEach((l,i)=>l.classList.toggle('done',i<k));
+  cap.textContent=ROUTE[k][0];
+  if(k>routeK&&routeK>=0)haptic('impactOccurred','light');
+  routeK=k;
+}
+
+let cur=null,backing=false;const navStack=[];
+function syncBack(){
+  const hide=NOSTACK.includes(cur)||!navStack.length;
+  try{hide?tg.BackButton.hide():tg.BackButton.show()}catch{}
+  const b=$('webBack');if(b)b.style.display=(web&&!hide)?'block':'none';
+}
+function goBack(){const prev=navStack.pop();if(!prev)return;backing=true;show(prev);backing=false}
+
+function renderChips(){
+  const dayObj=state.days.find(d=>d.iso===state.selectedDate);
+  const slotChip=(state.step!=='voice'&&state.selectedTime)?`${dayObj?dayObj.num:state.selectedDate} · ${state.selectedTime} МСК`:'';
+  const items=[state.stepLabel,slotChip,...(state.otherNets?['+10 000 ₽ · Другие сети']:[]),...state.formats];
+  if($('fmtChips'))$('fmtChips').innerHTML=items.filter(Boolean).map(x=>'<span class="chip">'+x+'</span>').join('');
+}
+
+function show(id){
+  if(!screens.includes(id))return;
+  screens.forEach(x=>{const el=$(x);if(el)el.classList.toggle('active',x===id)});
+  window.scrollTo(0,0);
+  if(cur!==id){
+    if(!backing&&cur&&!NOSTACK.includes(cur))navStack.push(cur);
+    cur=id;
+    if(id!=='admin')track('screen_view',{screen:id});
+    if(id==='cases')switchCaseTab(state.activeTab);
+    if(id==='calendar')loadSlots();
+    if(id==='order')renderChips();
+    if(id==='admin')loadAdminDashboard();
+  }
+  syncBack();
+  setRoute(id);
+}
+
+$('startFunnelBtn').onclick=()=>{
+  state.consent=true;
+  try{localStorage.setItem('tn_consent',CONSENT_V)}catch{}
+  consentP=apiPost('/api/event',{
+    event:'consent',
+    meta:{processing:true,privacy:true,messages:true,v:CONSENT_V,src,trigger:'next_button'}
+  }).catch(()=>{});
+  if(!web){
+    try{if(!tg.initDataUnsafe?.user?.allows_write_to_pm)tg.requestWriteAccess(()=>{})}catch{}
+  }
+  haptic('impactOccurred','light');
+  show('cases');
+};
+
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href^="#"]');
+  if(a){e.preventDefault();show(a.getAttribute('href').slice(1));return}
+
+  const l=e.target.closest('a[data-doc]');
+  if(l){
+    e.preventDefault();
+    const u=location.origin+l.getAttribute('href');
+    try{web?window.open(u,'_blank'):tg.openLink(u)}catch{window.open(u,'_blank')}
+    return;
+  }
+
+  const fp=e.target.closest('.focus-pill[data-f]');
+  if(fp){
+    const f=fp.dataset.f;
+    state.formats.has(f)?state.formats.delete(f):state.formats.add(f);
+    fp.classList.toggle('on');
+    renderChips();
+    track('format_pick',{format:f,selected:state.formats.has(f)});
+    haptic('selectionChanged');
+    return;
+  }
+
+  const ct=e.target.closest('.case-tab[data-pane]');
+  if(ct){
+    switchCaseTab(ct.dataset.pane);
+    track('case_tab',{tab:ct.dataset.pane});
+    haptic('selectionChanged');
+    return;
+  }
+
+  const t=e.target.closest('.tier[data-step]');
+  if(t){
+    state.step=t.dataset.step;
+    state.stepLabel=t.dataset.label;
+    track('tier_pick',{step:state.step,label:state.stepLabel});
+    const nextScreen=t.dataset.next||'calendar';
+    haptic('impactOccurred','light');
+    setTimeout(()=>show(nextScreen),120);
+    return;
+  }
+
+  const ad=e.target.closest('#addonNet');
+  if(ad){
+    state.otherNets=!state.otherNets;
+    ad.classList.toggle('gold',state.otherNets);
+    haptic('selectionChanged');
+    return;
+  }
+
+  const cd=e.target.closest('#calDays .cal-day');
+  if(cd){
+    state.selectedDate=cd.dataset.date;
+    renderCalendar();
+    haptic('selectionChanged');
+    return;
+  }
+  const cs=e.target.closest('#calSlots .cal-slot');
+  if(cs&&!cs.classList.contains('busy')){
+    state.selectedTime=cs.dataset.time;
+    renderCalendar();
+    track('slot_pick',{date:state.selectedDate,time:state.selectedTime});
+    haptic('selectionChanged');
+    return;
+  }
+
+  const acd=e.target.closest('#adminCalDays .cal-day');
+  if(acd){
+    state.selectedDate=acd.dataset.date;
+    renderAdminSlots();
+    return;
+  }
+  const acs=e.target.closest('#adminCalSlots .cal-slot');
+  if(acs){
+    toggleAdminSlot(state.selectedDate,acs.dataset.time);
+    return;
+  }
+});
+
+$('webBack').onclick=goBack;
+
+$('consultBtn').onclick=async()=>{
+  if(state.sending)return;
+  const channel=($('channelInput')&&$('channelInput').value||'').trim();
+  const product=$('productInput').value.trim();
+  const status=$('consultStatus');
+
+  if(!channel||!product){
+    status.className='error';
+    status.textContent='Заполните, пожалуйста, оба поля.';
+    return;
+  }
+
+  state.sending=true;
+  const b=$('consultBtn');
+  b.disabled=true;
+  b.innerHTML='<span>ФОРМИРУЮ ЗАЯВКУ…</span><span>→</span>';
+
+  const dayObj=state.days.find(d=>d.iso===state.selectedDate);
+  const slotStr=(state.step!=='voice'&&state.selectedTime)?`${dayObj?dayObj.num:state.selectedDate} в ${state.selectedTime} МСК`:'Без созвона (аудио-разбор)';
+  const formats=[state.stepLabel,`Время: ${slotStr}`,...(state.otherNets?['+10 000 ₽ · Другие сети']:[]),...state.formats].filter(Boolean);
+
+  const draft='TORIYA NOVA · ЗАЯВКА\n\nПривет, Тория!\nВыбранный шаг: '+state.stepLabel+
+    (state.step!=='voice'?'\nУдобное окно: '+slotStr:'')+
+    '\nНиша и канал/сайт: '+channel+
+    '\n\nЧто сейчас болит / задача:\n'+product+
+    (state.formats.size||state.otherNets?'\n\nИнтересует: '+[...state.formats,...(state.otherNets?['+10 000 ₽ (другие сети)']:[])].join(', '):'');
+
+  track('consultation_click',{step:state.step,slot:slotStr,formats});
+  const go=()=>setTimeout(()=>openTg(CONFIG.consultationUrl+'?text='+encodeURIComponent(draft)),300);
+
+  try{
+    if(!isLocal){
+      await apiPost('/api/consultation',{
+        product:channel,
+        request:product,
+        formats,
+        slotDate:state.step!=='voice'?state.selectedDate:'',
+        slotTime:state.step!=='voice'?state.selectedTime:'',
+        intent:state.step==='voice'?'voice':'miniapp',
+        src
+      });
+    }
+    status.className='success';
+    status.textContent='Перехожу в диалог с Торией в Telegram…';
+    track('consultation_sent',{step:state.step,slot:slotStr});
+    haptic('notificationOccurred','success');
+    go();
+  }catch(e){
+    go();
+  }finally{
+    setTimeout(()=>{state.sending=false;b.disabled=false;b.innerHTML='<span>ПОДТВЕРДИТЬ И ПЕРЕЙТИ В ЧАТ С ТОРИЕЙ</span><span>→</span>'},900);
+  }
+};
+
+const currentTgUserId=String(tg?.initDataUnsafe?.user?.id||'');
+if(currentTgUserId===CONFIG.ownerId){
+  $('adminEntryBtn').classList.add('show');
+}
+let logoTaps=0,logoTimer=null;
+$('brandLogo').onclick=()=>{
+  logoTaps++;
+  clearTimeout(logoTimer);
+  logoTimer=setTimeout(()=>{logoTaps=0},1200);
+  if(logoTaps>=4){logoTaps=0;$('adminEntryBtn').classList.add('show');show('admin')}
+};
+$('adminEntryBtn').onclick=()=>show('admin');
+
+function renderAdminSlots(){
+  const dBox=$('adminCalDays'),sBox=$('adminCalSlots');
+  if(!dBox||!sBox)return;
+  dBox.innerHTML=state.days.map(d=>`<div class="cal-day${d.iso===state.selectedDate?' on':''}" data-date="${d.iso}"><small>${d.dow}</small><b>${d.num.split(' ')[0]}</b></div>`).join('');
+  const busyForDay=state.busyMap[state.selectedDate]||[];
+  sBox.innerHTML=DEFAULT_SLOTS.map(t=>{
+    const isBusy=busyForDay.includes(t);
+    return `<div class="cal-slot${isBusy?' on':''}" style="${isBusy?'background:#8E3B33;border-color:#8E3B33;color:#FAF8F3':''}" data-time="${t}">${t} ${isBusy?'[ЗАНЯТО]':'[СВОБ]'}</div>`;
+  }).join('');
+}
+
+async function toggleAdminSlot(date,time){
+  try{
+    const res=await apiPost('/api/admin',{password:state.adminKey,action:'toggle_slot',date,time});
+    if(res&&res.ok){state.busyMap=res.busy||{};renderAdminSlots();haptic('impactOccurred','light')}
+  }catch{}
+}
+
+async function loadAdminDashboard(){
+  const err=$('adminAuthErr');
+  err.textContent='';
+  try{
+    const res=await apiPost('/api/admin',{password:state.adminKey,action:'dashboard'});
+    if(!res||!res.ok){
+      $('adminAuthBox').style.display='block';
+      $('adminContent').style.display='none';
+      err.textContent='Ответ сервера: '+(res?.error||'проверьте пароль');
+      return;
+    }
+    sessionStorage.setItem('tn_adm_key',state.adminKey);
+    $('adminAuthBox').style.display='none';
+    $('adminContent').style.display='block';
+    state.busyMap=res.busy||{};
+    renderAdminSlots();
+
+    $('adminStats').innerHTML=`
+      <div class="admin-stat"><b>${res.stats.totalUsers}</b><span>Визиты</span></div>
+      <div class="admin-stat"><b>${res.stats.silentUsers}</b><span>Смотрят</span></div>
+      <div class="admin-stat"><b>${res.stats.leads}</b><span>Заявки</span></div>
+    `;
+
+    const list=$('adminVisitorsList');
+    if(!res.visitors||!res.visitors.length){list.innerHTML='<div class="bp-card"><p class="small" style="margin:0">База готова! Сейчас появятся новые визиты.</p></div>';return}
+    list.innerHTML=res.visitors.map(v=>`
+      <div class="visitor-card">
+        <div class="visitor-top">
+          <b>${v.name} ${v.username?`(@${v.username})`:''}</b>
+          <span class="visitor-badge${v.consulted?' ok':''}">${v.consulted?'ЗАЯВКА':'ПАУЗА · '+v.idleMin+' МИН'}</span>
+        </div>
+        <div class="small" style="margin:0">Этап: <b>${v.stage}</b> · Был: ${v.lastSeen}</div>
+        <div class="visitor-why">${v.reason}</div>
+        <div class="visitor-actions"><span class="small" style="margin:0">Напоминаний: ${v.reminders}/2</span>${v.contactUrl?`<a href="${v.contactUrl}" target="_blank">Написать в Telegram →</a>`:''}</div>
+      </div>
+    `).join('');
+  }catch(e){err.textContent='Ошибка соединения с сервером.'}
+}
+
+$('adminLoginBtn').onclick=()=>{
+  state.adminKey=$('adminPassInput').value.trim();
+  loadAdminDashboard();
+};
+$('adminRefreshBtn').onclick=()=>loadAdminDashboard();
+
+if(!web){
+  try{
+    tg.ready();tg.expand();
+    tg.setHeaderColor('#F4F1EA');tg.setBackgroundColor('#F4F1EA');
+    tg.BackButton.onClick(goBack);
+  }catch{}
+}
+const go0=qs.get('go');
+show(go0==='booking'||go0==='price'?'price':go0==='order'?'order':go0==='admin'?'admin':go0==='cases'?'cases':'s0');
+track('app_open',{tz:new Date().getTimezoneOffset(),web,src});
+</script>
+</body>
+</html>
