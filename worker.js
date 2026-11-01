@@ -281,7 +281,7 @@ async function adminEndpoint(request, env) {
   let body = {};
   try { body = await request.json(); } catch {}
 
-  const expectedPass = env.ADMIN_PASSWORD || "toriya2026";
+  const expectedPass = env.ADMIN_PASSWORD || "tor2026";
   const providedPass = String(body.password || "").trim();
 
   const initData = request.headers.get("X-Telegram-Init-Data") || body.initData || "";
