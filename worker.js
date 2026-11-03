@@ -1,5 +1,5 @@
 /**
- * TORIYA NOVA — LID Worker v20 (Auto-Migration D1 & Resilient Dashboard)
+ * TORIYA NOVA — LID Worker v23 (Full History DB + Custom Broadcast + First-Screen Follow-up + Threads Tracking)
  */
 
 const HTML_HEADERS = {
@@ -7,7 +7,7 @@ const HTML_HEADERS = {
   "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
   "Pragma": "no-cache",
   "Expires": "0",
-  "X-TORIYA-APP": "v20-resilient",
+  "X-TORIYA-APP": "v23-full-crm",
 };
 
 function json(data, status = 200) {
@@ -84,8 +84,8 @@ const SCREEN_LABELS = {
 
 function diagnoseDropoff(u) {
   if (u.consulted) return "Оформил заявку / бронь слота.";
-  if (u.screen === "s0") return "Открыл главный экран и видео, но не нажал переход к кейсам.";
-  if (u.screen === "cases") return `Смотрел кейсы (${u.lastTab || "Магазин Lemoon 8/9"}), но не перешёл к ценам.`;
+  if (u.screen === "s0") return "Открыл только 1-й экран и ещё не нажал переход к примерам (бот сам отправит ему дожим с ссылкой на кейсы).";
+  if (u.screen === "cases") return `Смотрел живые кейсы (${u.lastTab || "Магазин Lemoon 8/9"}), но не перешёл к ценам.`;
   if (u.screen === "price") return "Изучал тарифы (2 500 ₽ / 35 000 ₽), выбирает формат.";
   if (u.screen === "calendar") return `Выбирал время в календаре${u.slot ? " (" + u.slot + ")" : ""} — горячий интерес!`;
   if (u.screen === "order") return `Выбрал «${u.tier || "формат"}», дошёл до анкеты, но не отправил.`;
@@ -97,7 +97,11 @@ async function authUser(request, env, body = {}) {
   if (initData) return getTelegramUser(initData, env);
   const wid = request.headers.get("X-Web-Id") || "";
   if (/^[a-f0-9-]{36}$/.test(wid)) {
-    return { ok: true, user: { id: "web:" + wid, first_name: "Гость (браузер)", web: true } };
+    const ua = request.headers.get("User-Agent") || "";
+    const isThreads = /threads|barcelona/i.test(ua);
+    const isInsta = /instagram/i.test(ua);
+    const label = isThreads ? "Гость из Threads" : isInsta ? "Гость из Instagram" : "Гость (браузер)";
+    return { ok: true, user: { id: "web:" + wid, first_name: label, web: true } };
   }
   return { ok: false, reason: "missing_init_data_or_bot_token" };
 }
@@ -117,7 +121,7 @@ async function tgSend(env, chatId, text, buttons) {
 
 async function notifyOwner(env, text, user) {
   if (!env.BOT_TOKEN || !env.OWNER_CHAT_ID) return;
-  const buttons = user && contactUrl(user) ? [[{ text: "Написать клиенту", url: contactUrl(user) }]] : null;
+  const buttons = user && contactUrl(user) ? [[{ text: "✉️ Написать клиенту", url: contactUrl(user) }]] : null;
   try {
     await tgSend(env, env.OWNER_CHAT_ID, text, buttons);
   } catch {
@@ -125,25 +129,22 @@ async function notifyOwner(env, text, user) {
   }
 }
 
-/* АВТО-ПОЧИНКА СХЕМЫ D1: если в старой таблице events нет колонки user_id, пересоздаём её автоматически! */
+/* АВТО-СИНХРОНИЗАЦИЯ БАЗЫ: переносим всех пользователей из старой таблицы users в tn_users, чтобы в дашборде были вообще все за всё время! */
 async function ensureSchema(env) {
-  if (!env.DB || globalThis.__schemaV20) return;
+  if (!env.DB || globalThis.__schemaV23) return;
   try {
     await env.DB.batch([
       env.DB.prepare("CREATE TABLE IF NOT EXISTS tn_users (telegram_id TEXT PRIMARY KEY, username TEXT, first_name TEXT, last_name TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')))"),
       env.DB.prepare("CREATE TABLE IF NOT EXISTS tn_events (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT NOT NULL, event_type TEXT NOT NULL, payload TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')))"),
       env.DB.prepare("CREATE TABLE IF NOT EXISTS tn_slots (slot_key TEXT PRIMARY KEY, status TEXT NOT NULL, booked_by TEXT, updated_at TEXT NOT NULL DEFAULT (datetime('now')))"),
     ]);
-    // Также чиним старые таблицы events / users на случай обращения к ним
     try {
-      await env.DB.prepare("SELECT user_id FROM events LIMIT 1").first();
-    } catch {
-      await env.DB.batch([
-        env.DB.prepare("DROP TABLE IF EXISTS events"),
-        env.DB.prepare("CREATE TABLE events (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT NOT NULL, event_type TEXT NOT NULL, payload TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')))"),
-      ]);
-    }
-    globalThis.__schemaV20 = true;
+      await env.DB.prepare(
+        `INSERT OR IGNORE INTO tn_users (telegram_id, username, first_name, last_name, created_at, updated_at)
+         SELECT telegram_id, username, first_name, last_name, created_at, updated_at FROM users`
+      ).run();
+    } catch {}
+    globalThis.__schemaV23 = true;
   } catch (e) {
     console.error("ensureSchema", e);
   }
@@ -154,7 +155,7 @@ async function saveEvent(env, user, type, payload = {}) {
   try {
     await env.DB.prepare(`INSERT INTO tn_events (user_id, event_type, payload, created_at) VALUES (?, ?, ?, datetime('now'))`)
       .bind(String(user.id), type, JSON.stringify(payload)).run();
-  } catch (e) { console.error("saveEvent", e); }
+  } catch {}
 }
 
 async function ensureUser(env, user) {
@@ -165,7 +166,7 @@ async function ensureUser(env, user) {
        VALUES (?, ?, ?, ?, datetime('now'), datetime('now'))
        ON CONFLICT(telegram_id) DO UPDATE SET username=excluded.username, first_name=excluded.first_name, last_name=excluded.last_name, updated_at=datetime('now')`
     ).bind(String(user.id), user.username || null, user.first_name || null, user.last_name || null).run();
-  } catch (e) { console.error("ensureUser", e); }
+  } catch {}
 }
 
 async function hasRecentEvent(env, userId, type, minutes = 60) {
@@ -176,26 +177,30 @@ async function hasRecentEvent(env, userId, type, minutes = 60) {
   } catch { return false; }
 }
 
-async function getBusySlotsMap(env) {
-  const busy = {};
-  if (!env.DB) return busy;
+async function getSlotsMaps(env) {
+  const busy = {}, custom = {};
+  if (!env.DB) return { busy, custom };
   try {
-    const { results } = await env.DB.prepare("SELECT slot_key FROM tn_slots WHERE status='busy'").all();
+    const { results } = await env.DB.prepare("SELECT slot_key, status FROM tn_slots").all();
     for (const r of results || []) {
       const [d, t] = String(r.slot_key).split("|");
-      if (d && t) {
+      if (!d || !t) continue;
+      if (r.status === "busy") {
         busy[d] = busy[d] || [];
         busy[d].push(t);
+      } else if (r.status === "custom_free") {
+        custom[d] = custom[d] || [];
+        custom[d].push(t);
       }
     }
   } catch {}
-  return busy;
+  return { busy, custom };
 }
 
 async function slotsEndpoint(request, env) {
   await ensureSchema(env);
-  const busy = await getBusySlotsMap(env);
-  return json({ ok: true, busy });
+  const { busy, custom } = await getSlotsMaps(env);
+  return json({ ok: true, busy, custom });
 }
 
 async function eventEndpoint(request, env) {
@@ -211,26 +216,31 @@ async function eventEndpoint(request, env) {
   const type = body.event || body.type || "event";
   const meta = body.meta || {};
 
+  // Уведомляем и о Telegram-визитах, и о переходах из Threads!
   if (type === "app_open") {
-    const recentlyNotified = await hasRecentEvent(env, auth.user.id, "app_open", 60);
+    const recentlyNotified = await hasRecentEvent(env, auth.user.id, "app_open", 45);
     await saveEvent(env, auth.user, "app_open", meta);
-    if (!recentlyNotified && !auth.user.web) {
-      await notifyOwner(env, `👀 <b>В Mini App зашёл пользователь:</b>\n${who(auth.user)}${meta.src ? `\nИсточник: <code>${esc(meta.src)}</code>` : ""}\n📍 Этап: 1. Главный экран`, auth.user);
+    if (!recentlyNotified) {
+      await notifyOwner(
+        env,
+        `👀 <b>В витрину зашёл посетитель:</b>\n${who(auth.user)}${meta.src ? `\n🔗 Источник: <b>${esc(meta.src)}</b>` : ""}\n📍 Этап: 1. Главный экран`,
+        auth.user
+      );
     }
     return json({ ok: true });
   }
 
-  if (type === "screen_view" && !auth.user.web) {
+  if (type === "screen_view") {
     await saveEvent(env, auth.user, "screen_view", meta);
-    if (meta.screen === "cases" || meta.screen === "price" || meta.screen === "calendar") {
-      await notifyOwner(env, `📍 ${who(auth.user)} перешёл на этап:\n<b>${esc(SCREEN_LABELS[meta.screen] || meta.screen)}</b>`, auth.user);
+    if (!auth.user.web || /threads|instagram/i.test(String(meta.src || ""))) {
+      await notifyOwner(env, `📍 ${who(auth.user)} перешёл на экран:\n<b>${esc(SCREEN_LABELS[meta.screen] || meta.screen)}</b>`, auth.user);
     }
     return json({ ok: true });
   }
 
-  if (type === "tier_pick" && !auth.user.web) {
+  if (type === "tier_pick") {
     await saveEvent(env, auth.user, "tier_pick", meta);
-    await notifyOwner(env, `🎯 ${who(auth.user)} нажал формат:\n<b>${esc(meta.label || meta.step)}</b>`, auth.user);
+    await notifyOwner(env, `🎯 ${who(auth.user)} выбрал тариф:\n<b>${esc(meta.label || meta.step)}</b>`, auth.user);
     return json({ ok: true });
   }
 
@@ -264,7 +274,7 @@ async function consultation(request, env) {
     } catch {}
   }
 
-  await saveEvent(env, auth.user, "consultation_request", { product, goal, formats, slotDate, slotTime });
+  await saveEvent(env, auth.user, "consultation_request", { product, goal, formats, slotDate, slotTime, src: body.src || "" });
 
   await notifyOwner(
     env,
@@ -300,39 +310,105 @@ async function adminEndpoint(request, env) {
   }
 
   await ensureSchema(env);
+  const base = (env.MINI_APP_URL || "https://lid.toriya-sudba.workers.dev/v2/").split("?")[0];
 
+  // 1) Персональная отправка сообщения одному человеку через бота
+  if (body.action === "send_one") {
+    const targetId = String(body.userId || "").trim();
+    const text = String(body.text || "").trim();
+    if (!targetId || targetId.startsWith("web:")) {
+      return json({ ok: false, error: "Это гость из браузера без Telegram ID" });
+    }
+    try {
+      await tgSend(env, targetId, esc(text), [[{ text: "✨ Открыть витрину TORIYA NOVA", web_app: { url: `${base}?go=cases` } }]]);
+      await saveEvent(env, { id: targetId }, "reminder_sent", { manual: true });
+      return json({ ok: true });
+    } catch (e) {
+      return json({ ok: false, error: String(e.message || e) });
+    }
+  }
+
+  // 2) Массовая рассылка своего текста всем пользователям базы
+  if (body.action === "broadcast") {
+    let sentCount = 0, totalTargets = 0;
+    const customText = String(body.text || "").trim();
+    const btnText = String(body.btnText || "✨ Открыть витрину TORIYA NOVA").trim();
+    try {
+      const { results: allUsers } = await env.DB.prepare("SELECT telegram_id FROM tn_users").all();
+      const tgIds = [...new Set((allUsers || []).map((r) => String(r.telegram_id)).filter((id) => id && !id.startsWith("web:")))];
+      totalTargets = tgIds.length;
+      for (const chatId of tgIds) {
+        try {
+          await tgSend(env, chatId, esc(customText), [[{ text: btnText, web_app: { url: `${base}?go=cases` } }]]);
+          sentCount++;
+        } catch {}
+      }
+    } catch (e) {
+      return json({ ok: false, error: "Ошибка рассылки: " + e.message });
+    }
+    return json({ ok: true, sentCount, totalTargets });
+  }
+
+  // 3) Добавление произвольного времени владельцем
+  if (body.action === "add_custom_slot") {
+    try {
+      const key = `${body.date}|${body.time}`;
+      await env.DB.prepare("INSERT OR REPLACE INTO tn_slots (slot_key, status, booked_by) VALUES (?, 'custom_free', 'admin')").bind(key).run();
+    } catch {}
+    const maps = await getSlotsMaps(env);
+    return json({ ok: true, ...maps });
+  }
+
+  // 4) Переключение занятости слота
   if (body.action === "toggle_slot") {
     try {
       const key = `${body.date}|${body.time}`;
       const existing = await env.DB.prepare("SELECT status FROM tn_slots WHERE slot_key=?").bind(key).first();
       if (existing && existing.status === "busy") {
-        await env.DB.prepare("DELETE FROM tn_slots WHERE slot_key=?").bind(key).run();
+        await env.DB.prepare("UPDATE tn_slots SET status='custom_free' WHERE slot_key=?").bind(key).run();
       } else {
-        await env.DB.prepare("INSERT INTO tn_slots (slot_key, status, booked_by) VALUES (?, 'busy', 'admin')").bind(key).run();
+        await env.DB.prepare("INSERT OR REPLACE INTO tn_slots (slot_key, status, booked_by) VALUES (?, 'busy', 'admin')").bind(key).run();
       }
     } catch {}
-    return json({ ok: true, busy: await getBusySlotsMap(env) });
+    const maps = await getSlotsMaps(env);
+    return json({ ok: true, ...maps });
   }
 
+  // 5) Собираем и недавние визиты, и ВСЮ БАЗУ за всё время
   let evs = [], usrRows = [];
   try {
-    const r1 = await env.DB.prepare("SELECT user_id, event_type, payload, created_at FROM tn_events WHERE created_at > datetime('now','-7 days') ORDER BY id ASC LIMIT 6000").all();
+    const r1 = await env.DB.prepare("SELECT user_id, event_type, payload, created_at FROM tn_events ORDER BY id ASC LIMIT 8000").all();
     evs = r1.results || [];
-    const r2 = await env.DB.prepare("SELECT telegram_id, username, first_name, last_name FROM tn_users LIMIT 2000").all();
+    const r2 = await env.DB.prepare("SELECT telegram_id, username, first_name, last_name, created_at, updated_at FROM tn_users ORDER BY updated_at DESC LIMIT 3000").all();
     usrRows = r2.results || [];
-  } catch (dbErr) {
-    return json({ ok: true, stats: { totalUsers: 0, silentUsers: 0, leads: 0 }, visitors: [], busy: {} });
-  }
+  } catch {}
 
   const userDirectory = new Map();
-  for (const r of usrRows) userDirectory.set(String(r.telegram_id), r);
+  const allMap = new Map();
 
-  const map = new Map();
+  for (const r of usrRows) {
+    const id = String(r.telegram_id);
+    userDirectory.set(id, r);
+    const t = new Date(String(r.updated_at || r.created_at).replace(" ", "T") + "Z").getTime() || Date.now();
+    allMap.set(id, {
+      id,
+      lastAt: t,
+      lastSeen: String(r.updated_at || r.created_at || "").slice(5, 16).replace("T", " "),
+      screen: "s0",
+      src: "",
+      lastTab: "",
+      tier: "",
+      slot: "",
+      consulted: false,
+      reminders: 0,
+    });
+  }
+
   for (const e of evs) {
-    let u = map.get(e.user_id);
+    let u = allMap.get(e.user_id);
     if (!u) {
-      u = { id: e.user_id, lastAt: 0, screen: "s0", lastTab: "", tier: "", slot: "", consulted: false, reminders: 0 };
-      map.set(e.user_id, u);
+      u = { id: e.user_id, lastAt: 0, lastSeen: "", screen: "s0", src: "", lastTab: "", tier: "", slot: "", consulted: false, reminders: 0 };
+      allMap.set(e.user_id, u);
     }
     let p = {};
     try { p = JSON.parse(e.payload || "{}"); } catch {}
@@ -341,8 +417,11 @@ async function adminEndpoint(request, env) {
     if (e.event_type === "reminder_sent") { u.reminders++; continue; }
     if (e.event_type === "owner_stop_report") continue;
 
-    u.lastAt = t;
-    u.lastSeen = e.created_at.slice(5, 16).replace("T", " ");
+    if (t >= u.lastAt) {
+      u.lastAt = t;
+      u.lastSeen = e.created_at.slice(5, 16).replace("T", " ");
+    }
+    if (p.src) u.src = p.src;
     if (e.event_type === "screen_view" && p.screen) u.screen = p.screen;
     if (e.event_type === "case_tab" && p.tab) u.lastTab = p.tab;
     if (e.event_type === "tier_pick" && p.label) u.tier = p.label;
@@ -351,31 +430,43 @@ async function adminEndpoint(request, env) {
   }
 
   const now = Date.now();
-  const visitors = [...map.values()].sort((a, b) => b.lastAt - a.lastAt).slice(0, 50).map((u) => {
+  const formatUserItem = (u) => {
     const info = userDirectory.get(String(u.id)) || { telegram_id: u.id };
+    const idleMin = Math.max(1, Math.round((now - u.lastAt) / 60000));
+    const idleText = idleMin < 60 ? `${idleMin} мин` : idleMin < 1440 ? `${Math.round(idleMin / 60)} ч` : `${Math.round(idleMin / 1440)} дн`;
     return {
       id: u.id,
       name: displayName(info),
       username: info.username || null,
       contactUrl: contactUrl(info),
+      src: u.src || (String(u.id).startsWith("web:") ? "threads / браузер" : "telegram"),
       stage: SCREEN_LABELS[u.screen] || u.screen,
-      lastSeen: u.lastSeen + " UTC",
-      idleMin: Math.max(1, Math.round((now - u.lastAt) / 60000)),
+      lastSeen: (u.lastSeen || "ранее") + " UTC",
+      idleMin,
+      idleText,
       consulted: u.consulted,
       reminders: u.reminders,
       reason: diagnoseDropoff(u),
     };
-  });
+  };
+
+  const allSorted = [...allMap.values()].sort((a, b) => b.lastAt - a.lastAt);
+  const recent7d = allSorted.filter((u) => now - u.lastAt <= 7 * 86400 * 1000);
+  const onlyFirstScreen = allSorted.filter((u) => !u.consulted && u.screen === "s0").length;
+  const leads = allSorted.filter((u) => u.consulted).length;
+  const maps = await getSlotsMaps(env);
 
   return json({
     ok: true,
     stats: {
-      totalUsers: map.size,
-      silentUsers: map.size - [...map.values()].filter((x) => x.consulted).length,
-      leads: [...map.values()].filter((x) => x.consulted).length,
+      allTimeUsers: allSorted.length,
+      totalUsers: recent7d.length,
+      onlyFirstScreen,
+      leads,
     },
-    visitors,
-    busy: await getBusySlotsMap(env),
+    visitors: recent7d.slice(0, 60).map(formatUserItem),
+    allUsers: allSorted.slice(0, 200).map(formatUserItem),
+    ...maps,
   });
 }
 
@@ -385,6 +476,7 @@ const isQuietHours = (now, tzMin = 180) => {
   return h >= 22 || h < 9;
 };
 
+/* АВТО-КРОН: отправляет отдельный дожим тем, кто открыл только 1-й экран (через 45 мин), и тем, кто застрял дальше (через 90 мин) */
 async function runFunnelCron(env) {
   if (!env.DB || !env.BOT_TOKEN) return;
   await ensureSchema(env);
@@ -428,6 +520,7 @@ async function runFunnelCron(env) {
     const row = await env.DB.prepare("SELECT telegram_id, username, first_name, last_name FROM tn_users WHERE telegram_id=?").bind(u.id).first().catch(() => null);
     const user = row || { telegram_id: u.id };
 
+    // 1) Отчёт Тории через 15 минут паузы
     if (idleMin >= 15 && u.reportAt < u.lastAt) {
       await notifyOwner(
         env,
@@ -438,18 +531,25 @@ async function runFunnelCron(env) {
       sent++;
     }
 
+    // 2) Авто-дожим клиенту: если открыл только 1-й экран (s0) — пишем через 45 минут и ведём сразу на кейсы!
     if (!u.msgOk || u.blocked || isQuietHours(now, u.tzMin)) continue;
-    if (u.reminders === 0 && idleMin >= 120 && idleMin <= 1440) {
-      const hi = row?.first_name ? `${esc(row.first_name)}, здравствуйте. ` : "Здравствуйте. ";
+    const waitThreshold = u.screen === "s0" ? 45 : 90;
+    if (u.reminders === 0 && idleMin >= waitThreshold && idleMin <= 1440) {
+      const hi = row?.first_name ? `${esc(row.first_name)}, здравствуйте! ` : "Здравствуйте! ";
       const base = (env.MINI_APP_URL || "https://lid.toriya-sudba.workers.dev/v2/").split("?")[0];
+
+      const isFirstScreenOnly = u.screen === "s0";
+      const msgText = isFirstScreenOnly
+        ? `${hi}Вы открыли Mini App TORIYA NOVA, но остановились на первом экране и ещё не посмотрели живые примеры систем (магазин с корзиной в Telegram, самозапись без переписок и личный кабинет).\n\nНажмите кнопку ниже — откроется сразу витрина с примерами в деле:`
+        : `${hi}Вы смотрели примеры цифровых систем в TORIYA NOVA, но не завершили выбор формата или времени разбора.\n\nЕсли актуально перестать терять заявки в переписках — выберите удобный вариант старта:`;
+
+      const targetGo = isFirstScreenOnly ? "cases" : "price";
+      const btnTitle = isFirstScreenOnly ? "✨ Посмотреть примеры и кейсы" : "📅 Выбрать формат и время";
+
       try {
-        await tgSend(
-          env,
-          u.id,
-          `${hi}Вы смотрели примеры цифровых систем в TORIYA NOVA, но не завершили выбор времени разбора.\n\nЕсли актуально перестать терять заявки в переписках и собрать понятный маршрут клиента в Telegram — выберите удобное окно в расписании:`,
-          [[{ text: "Выбрать время разбора", web_app: { url: `${base}?go=price` } }]]
-        );
+        await tgSend(env, u.id, msgText, [[{ text: btnTitle, web_app: { url: `${base}?go=${targetGo}` } }]]);
         await saveEvent(env, { id: u.id }, "reminder_sent", { n: 1, stage: u.screen });
+        await notifyOwner(env, `🤖 Бот автоматически отправил дожим пользователю ${who(user)} (остановился на «${esc(SCREEN_LABELS[u.screen] || u.screen)}»)`, user);
         sent++;
       } catch (err) {
         await saveEvent(env, { id: u.id }, "reminder_failed", { error: String(err.message || err) });
