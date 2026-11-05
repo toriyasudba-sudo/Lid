@@ -1,0 +1,1282 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<!-- TORIYA NOVA BUILD 2026-11-05-V27-ORIGINAL-WARM-ANIMATED -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="description" content="TORIYA NOVA — Лид-магнит нового времени в формате мини-приложения. Целевые и платёжеспособные клиенты без рутины.">
+<title>TORIYA NOVA — ЛИД-МАГНИТ НОВОГО ВРЕМЕНИ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap" onload="this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap"></noscript>
+<style>
+:root{
+  --bg:#F3EDE2;
+  --paper:#FBF7EE;
+  --ink:#1D1A15;
+  --text:#3B352B;
+  --muted:#7A7062;
+  --clay:#B4552D;
+  --line:#DAD1C0;
+  --ok:#3F6248;
+  --danger:#9A4F2C;
+  --display:'Fraunces',Georgia,'Times New Roman',serif;
+  --sans:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%;height:100%;overflow-x:hidden;overflow-y:auto;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.48;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch}
+button,input,textarea,a{font:inherit;color:inherit}
+
+body.lang-en .ru-only{display:none!important}
+body.lang-ru .en-only{display:none!important}
+
+.app{
+  width:100%;
+  max-width:520px;
+  min-height:100dvh;
+  margin:0 auto;
+  padding:0 15px calc(24px + env(safe-area-inset-bottom));
+  display:flex;
+  flex-direction:column;
+}
+
+/* Верхняя панель */
+.top{
+  height:54px;
+  flex:none;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.logo{font:italic 400 19px var(--display);color:var(--ink);cursor:pointer;user-select:none}
+.top-right{display:flex;align-items:center;gap:8px}
+.lang-switch{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);overflow:hidden}
+.lang-btn{padding:4px 8px;font:600 11px var(--sans);border:0;background:transparent;color:var(--muted);cursor:pointer}
+.lang-btn.on{background:var(--ink);color:var(--paper)}
+.admin-entry-btn{display:none;padding:5px 10px;border-radius:999px;border:1px solid var(--clay);background:var(--paper);color:var(--clay);font:600 11px var(--sans);cursor:pointer}
+.admin-entry-btn.show{display:inline-flex;align-items:center;gap:4px}
+
+/* Линия шагов */
+.routebar{display:none;align-items:center;padding:10px 2px 0;flex:none}.routebar.on{display:flex}
+.routebar .n{flex:none;width:10px;height:10px;border-radius:50%;border:1.5px solid var(--ink);background:var(--bg);transition:.25s}
+.routebar .n.done{background:var(--ink)}
+.routebar .n.cur{background:var(--clay);border-color:var(--clay);box-shadow:0 0 0 3px rgba(180,85,45,.18)}
+.routebar .l{flex:1;height:0;margin:0 4px;border-top:1.5px dashed #CDBFA6}
+.routebar .l.done{border-color:var(--clay)}
+.routecap{display:none;padding:4px 2px 0;font:italic 400 13px var(--display);color:var(--muted);flex:none}.routebar.on+.routecap{display:block}
+
+/* Кнопка «Назад» (всегда на виду, чтобы можно было вернуться и передумать) */
+.back-bar{display:none;margin:8px 0 0}
+.back-bar.show{display:block}
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:999px;
+  border:1px solid var(--line);background:var(--paper);
+  color:var(--clay);font:600 13px var(--sans);cursor:pointer;
+}
+.back-btn:active{transform:scale(.98)}
+
+.screen{display:none!important;padding:14px 0 20px;position:relative}
+.screen.active{display:block!important}
+
+h1,h2,h3{font-family:var(--display);font-weight:400;color:var(--ink);letter-spacing:-.02em;margin:0}
+h1{font-size:clamp(27px,7.6vw,35px);line-height:1.08;margin-bottom:10px}
+h2{font-size:clamp(23px,6.4vw,29px);line-height:1.12;margin-bottom:8px}
+h3{font-size:18px;line-height:1.22}
+.lead{font-size:15.5px;line-height:1.5;color:var(--text);margin:8px 0 12px}
+.small,.muted{font-size:13.5px;line-height:1.45;color:var(--muted);margin:0 0 12px}
+.kicker{font:italic 400 15px/1.2 var(--display);color:var(--clay);margin-bottom:6px}
+.kicker::before{content:"✦ ";font-style:normal}
+.hand{font:italic 400 1.05em var(--display);color:var(--clay)}
+
+.card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  margin:10px 0;
+  box-shadow:0 10px 24px -18px rgba(29,26,21,.22);
+}
+
+/* АНИМАЦИЯ ПУТИ КЛИЕНТА (СТАРЫЙ ПУТЬ VS НОВОЕ МИНИ-ПРИЛОЖЕНИЕ) */
+.path-anim-card{
+  background:var(--paper);
+  border:1.5px solid var(--line);
+  border-radius:18px;
+  padding:15px 14px;
+  margin:12px 0;
+  overflow:hidden;
+}
+.path-title{font:600 11.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.path-track{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+  padding:10px 8px;
+  border-radius:14px;
+  background:#EFE8DA;
+  margin-bottom:10px;
+}
+.path-track.new-way{
+  background:linear-gradient(135deg,#FBF7EE 0%,#F2E4D4 100%);
+  border:1.5px solid rgba(180,85,45,.4);
+  margin-bottom:0;
+}
+.p-step{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  padding:6px 4px;
+  border-radius:10px;
+  font-size:11px;
+  line-height:1.25;
+}
+.p-step b{display:block;font-size:11.5px;color:var(--ink);margin-bottom:2px}
+.p-step span{color:var(--muted);font-size:10.5px}
+.path-track.old-way .p-step.dead{opacity:.55;text-decoration:line-through}
+
+/* Бегущий импульс по новому пути клиента */
+.path-track.new-way .p-step{
+  animation:stepGlow 4s infinite;
+}
+.path-track.new-way .p-step:nth-child(1){animation-delay:0s}
+.path-track.new-way .p-step:nth-child(2){animation-delay:1s}
+.path-track.new-way .p-step:nth-child(3){animation-delay:2s}
+.path-track.new-way .p-step:nth-child(4){animation-delay:3s}
+
+@keyframes stepGlow{
+  0%,100%{background:transparent;transform:scale(1)}
+  15%,30%{background:var(--clay);color:#fff;transform:scale(1.04);box-shadow:0 6px 14px -6px rgba(180,85,45,.55)}
+}
+.path-track.new-way .p-step b,.path-track.new-way .p-step span{transition:color .2s}
+@keyframes textWhite{
+  0%,100%{color:inherit}
+  15%,30%{color:#fff}
+}
+.path-track.new-way .p-step b{animation:textWhite 4s infinite}
+.path-track.new-way .p-step span{animation:textWhite 4s infinite}
+.path-track.new-way .p-step:nth-child(1) b,.path-track.new-way .p-step:nth-child(1) span{animation-delay:0s}
+.path-track.new-way .p-step:nth-child(2) b,.path-track.new-way .p-step:nth-child(2) span{animation-delay:1s}
+.path-track.new-way .p-step:nth-child(3) b,.path-track.new-way .p-step:nth-child(3) span{animation-delay:2s}
+.path-track.new-way .p-step:nth-child(4) b,.path-track.new-way .p-step:nth-child(4) span{animation-delay:3s}
+
+/* Список выгод человеческим языком */
+.pain-list{display:grid;gap:8px;margin:10px 0}
+.pain-item{
+  display:flex;gap:11px;align-items:flex-start;
+  background:var(--paper);border:1px solid var(--line);
+  border-radius:14px;padding:12px 13px;font-size:14px;line-height:1.42;
+}
+.pain-dot{
+  width:24px;height:24px;border-radius:50%;
+  background:#F2E4D4;color:var(--clay);
+  font:700 12px var(--sans);display:grid;place-items:center;flex:none;margin-top:1px;
+}
+.pain-item b{color:var(--ink);display:block;margin-bottom:2px}
+
+/* Видео без обрезки */
+.video-frame{
+  border-radius:16px;
+  background:var(--ink);
+  border:1px solid var(--line);
+  position:relative;
+  overflow:hidden;
+  margin:12px 0;
+}
+.video-frame .label{
+  position:absolute;top:10px;left:12px;z-index:2;
+  background:rgba(29,26,21,.82);
+  padding:4px 10px;border-radius:999px;
+  font-size:10px;letter-spacing:.08em;color:#E8D5B7;text-transform:uppercase;
+}
+.video-frame video{
+  display:block;width:100%;max-height:390px;height:auto;object-fit:contain;background:#1D1A15;
+}
+
+/* Кнопки */
+.btn{
+  background:var(--ink);border:1px solid var(--ink);color:var(--paper);
+  border-radius:999px;font-weight:600;font-size:15px;
+  min-height:54px;padding:14px 20px;width:100%;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  text-decoration:none;cursor:pointer;
+  box-shadow:0 8px 22px -10px rgba(180,85,45,.45);
+  margin-top:10px;
+}
+.btn:active{transform:scale(.98)}
+.btn.clay{background:var(--clay);border-color:var(--clay);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none}
+
+/* Вкладки примеров (#cases) */
+.case-tabs,.adm-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:8px 0 12px}
+.case-tab,.adm-tab{
+  padding:10px 8px;border-radius:12px;border:1px solid var(--line);
+  background:var(--paper);font:600 13px var(--sans);color:var(--text);
+  text-align:center;cursor:pointer;
+}
+.case-tab.on,.adm-tab.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.case-pane,.adm-pane{display:none}
+.case-pane.on,.adm-pane.on{display:block}
+
+.lemoon-car,.car{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:8px -15px;padding:4px 15px 10px;scrollbar-width:none}
+.lemoon-car::-webkit-scrollbar,.car::-webkit-scrollbar{display:none}
+.lemoon-slide,.slide{flex:0 0 80%;scroll-snap-align:center;margin:0}
+.lemoon-slide img,.slide img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line);background:var(--paper)}
+.slide figcaption{font:italic 400 13.5px/1.35 var(--display);color:var(--muted);margin-top:6px}
+.slide figcaption b{display:block;font-style:normal;font:600 13px var(--sans);color:var(--ink);margin-bottom:2px}
+
+.tg-review{background:#232028;color:#EFEAF2;border-radius:16px;padding:14px;margin:10px 0}
+.tg-review-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font-size:13px}
+.tg-review-text{font-size:13.5px;line-height:1.45;color:#E2DCE8;border-left:2px solid #5E96FF;padding-left:10px;margin:0}
+
+/* Английский интерактивный симулятор для Facebook */
+.us-sim{border:1px solid var(--line);border-radius:16px;background:var(--paper);padding:14px;margin:10px 0}
+.us-sim-bar{display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;margin-bottom:10px;border-bottom:1px solid var(--line);font:700 11px var(--mono);text-transform:uppercase;color:var(--ink)}
+.us-sim-bar span{color:var(--ok)}
+.us-sizes{display:flex;gap:6px;margin:10px 0}
+.us-size{padding:6px 12px;border-radius:8px;border:1px solid var(--ink);background:var(--bg);font:600 12px var(--sans);cursor:pointer}
+.us-size.on{background:var(--ink);color:var(--paper)}
+
+/* ДВА ВАРИАНТА НА ЭКРАНЕ ВЫБОРА (2 500 ₽ РАЗБОР И 0 ₽ ГОЛОСОВОЙ РАЗБОР) */
+.offer-cards{display:grid;gap:12px;margin:10px 0}
+.offer-card{
+  background:var(--paper);
+  border:2px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  cursor:pointer;
+  transition:transform .15s,border-color .15s;
+}
+.offer-card:active{transform:scale(.99)}
+.offer-card.main-offer{
+  background:linear-gradient(155deg,#FBF7EE 0%,#F3E4D2 100%);
+  border-color:var(--clay);
+}
+.offer-card.voice-offer{
+  background:linear-gradient(155deg,#FBF7EE 0%,#E8F0E8 100%);
+  border-color:var(--ok);
+}
+.offer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.offer-badge{
+  display:inline-block;padding:4px 9px;border-radius:999px;
+  font:600 10.5px/1 var(--sans);text-transform:uppercase;letter-spacing:.05em;
+  background:var(--clay);color:#fff;margin-bottom:6px;
+}
+.offer-card.voice-offer .offer-badge{background:var(--ok)}
+.offer-title{font:400 20px/1.15 var(--display);color:var(--ink)}
+.offer-price{font:500 22px/1 var(--display);color:var(--clay);white-space:nowrap;text-align:right}
+.offer-card.voice-offer .offer-price{color:var(--ok)}
+.offer-sub{display:block;font-size:11px;color:var(--muted);text-align:right;margin-top:3px}
+.offer-desc{font-size:14px;line-height:1.45;color:var(--text);margin:8px 0 0}
+.offer-list{margin:8px 0 0;padding-left:18px;font-size:13.5px;color:var(--text)}
+.offer-list li{margin-bottom:4px}
+.offer-cta{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);
+  font:700 13.5px var(--sans);color:var(--clay);
+}
+.offer-card.voice-offer .offer-cta{color:var(--ok)}
+
+/* ДВА ИНТЕРВАЛА ВРЕМЕНИ НА ФИНАЛЬНОМ ШАГЕ */
+.picked-box{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  background:var(--paper);border:1.5px solid var(--clay);border-radius:14px;
+  padding:11px 13px;margin-bottom:12px;
+}
+.picked-box b{font-size:14px;color:var(--ink);display:block}
+.change-btn{
+  flex:none;padding:6px 11px;border-radius:999px;
+  border:1px solid var(--ink);background:var(--bg);
+  font:600 12px var(--sans);cursor:pointer;
+}
+.two-windows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 0 12px}
+.win-card{
+  border:1.5px solid var(--line);border-radius:14px;
+  background:#fff;padding:12px 11px;cursor:pointer;transition:.15s;
+}
+.win-card b{display:block;font:600 14px/1.2 var(--sans);color:var(--ink)}
+.win-card span{display:block;font-size:12px;color:var(--muted);margin-top:3px}
+.win-card.on{border-color:var(--clay);background:#F9ECE2;box-shadow:0 0 0 2px rgba(180,85,45,.15)}
+
+.form-label{display:block;font:700 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--clay);margin:12px 0 5px}
+.field{width:100%;border:1px solid rgba(29,26,21,.22);background:#fff;border-radius:12px;padding:12px;color:var(--ink);font-size:15px;outline:none}
+.field:focus{border-color:var(--clay)}
+textarea.field{min-height:80px;resize:vertical}
+.success{color:var(--ok);font-size:14px;margin-top:8px;font-weight:600}
+.error{color:var(--danger);font-size:14px;margin-top:8px;font-weight:600}
+
+/* Дашборд владельца */
+.admin-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:10px 0}
+.admin-stat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:9px 4px;text-align:center}
+.admin-stat b{display:block;font:500 20px var(--display);color:var(--ink)}
+.admin-stat span{font-size:10px;color:var(--muted)}
+.visitor-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:9px;font-size:13px}
+.visitor-top{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:4px}
+.visitor-badge{padding:3px 8px;border-radius:999px;font-size:10px;font-weight:600;background:#EFE4D4;color:var(--clay)}
+.visitor-badge.ok{background:#E3EEE6;color:var(--ok)}
+.visitor-why{margin:6px 0;padding:7px 9px;border-radius:8px;background:rgba(29,26,21,.04);color:var(--text)}
+.visitor-actions{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
+.visitor-actions a,.bot-dm-btn{color:var(--clay);font-weight:600;font-size:12px;text-decoration:none;background:none;border:0;padding:0;cursor:pointer}
+.bot-dm-btn{color:var(--ok)}
+
+.threads-bar{display:none;background:var(--ink);color:var(--paper);padding:10px 12px;border-radius:12px;margin-top:8px;align-items:center;justify-content:space-between;gap:10px}
+.threads-bar.show{display:flex}
+.threads-bar span{font-size:12px;line-height:1.3}
+.threads-bar a{flex:none;background:var(--clay);color:#fff;padding:6px 11px;border-radius:999px;font-weight:600;font-size:12px;text-decoration:none}
+
+.tpl-pills{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.tpl-pill{padding:6px 10px;border-radius:999px;border:1px solid var(--clay);background:var(--paper);color:var(--clay);font:600 11.5px var(--sans);cursor:pointer}
+
+.footer{text-align:center;font:600 10px/1.5 var(--mono);letter-spacing:.05em;color:var(--muted);padding:14px 6px 4px;margin-top:auto}
+.footer a{color:var(--clay);text-decoration:underline}
+.consent-inline{font-size:11px;line-height:1.35;color:var(--muted);text-align:center;margin-top:8px}
+.consent-inline a{color:var(--clay);text-decoration:underline}
+
+@media (max-width:420px){
+  .path-track{grid-template-columns:repeat(2,1fr)}
+  .two-windows{grid-template-columns:1fr}
+  .admin-stat-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body class="lang-ru">
+
+<div class="app">
+  <div id="threadsBar" class="threads-bar ru-only">
+    <span>Вы открыли страницу в браузере. Откройте внутри Telegram в 1 клик:</span>
+    <a href="https://t.me/lidmini_bot?startapp=threads">В Telegram ↗</a>
+  </div>
+
+  <header class="top">
+    <div class="logo" id="brandLogo">Toriya Nova</div>
+    <div class="top-right">
+      <div class="lang-switch">
+        <button type="button" class="lang-btn" id="btnLangRu">RU</button>
+        <button type="button" class="lang-btn" id="btnLangEn">EN</button>
+      </div>
+      <button id="adminEntryBtn" class="admin-entry-btn">📊 Кто заходил</button>
+    </div>
+  </header>
+
+  <div id="routebar" class="routebar"></div>
+  <div id="routecap" class="routecap"></div>
+
+  <!-- ЗАМЕТНАЯ КНОПКА «НАЗАД» НА ВСЕХ ШАГАХ -->
+  <div id="backBar" class="back-bar">
+    <button type="button" id="topBackBtn" class="back-btn">← Назад на предыдущий шаг</button>
+  </div>
+
+  <!-- ==================== ШАГ 1: ОФФЕР ПРО ЛИД-МАГНИТЫ НОВОГО ВРЕМЕНИ + АНИМАЦИЯ ПУТИ ==================== -->
+  <section class="screen active" id="s0">
+    <!-- RU ВЕРСИЯ -->
+    <div class="ru-only">
+      <div class="kicker">Лид-магнит нового времени в Telegram</div>
+      <h1>Трафик дорогой, а люди спрашивают цену и уходят <span class="hand">«подумать»?</span></h1>
+      <p class="lead">Старые PDF-гайды, чек-листы и обычные боты больше не работают — файлы скачивают и забывают открыть. А вы полдня работаете секретарём и ассистентом в собственном проекте, отвечая на одни и те же вопросы в личке.</p>
+
+      <!-- АНИМАЦИЯ ПУТИ КЛИЕНТА (ТОТ САМЫЙ НАГЛЯДНЫЙ БЛОК!) -->
+      <div class="path-anim-card">
+        <div class="path-title"><span>❌ Как сейчас теряются люди:</span><span>Старый путь</span></div>
+        <div class="path-track old-way">
+          <div class="p-step dead"><b>1. Пост / Рилс</b><span>перешёл</span></div>
+          <div class="p-step dead"><b>2. PDF-файл</b><span>скачал и забыл</span></div>
+          <div class="p-step dead"><b>3. 20 переписок</b><span>«а сколько стоит?»</span></div>
+          <div class="p-step dead"><b>4. Тишина</b><span>«я подумаю…»</span></div>
+        </div>
+
+        <div class="path-title" style="color:var(--clay)"><span>✨ Лид-магнит нового времени (Мини-апп):</span><span>Живой путь</span></div>
+        <div class="path-track new-way">
+          <div class="p-step"><b>1. Открыл в 1 тап</b><span>прямо в Telegram</span></div>
+          <div class="p-step"><b>2. Нажал кнопки</b><span>увидел пользу</span></div>
+          <div class="p-step"><b>3. Прогрелся сам</b><span>без вашей рутины</span></div>
+          <div class="p-step"><b>4. Готовая заявка</b><span>платёжеспособный</span></div>
+        </div>
+      </div>
+
+      <div class="pain-list">
+        <div class="pain-item">
+          <div class="pain-dot">1</div>
+          <div><b>Приходят целевые и платёжеспособные клиенты</b>Человек сам проходит интерактивный маршрут за 2 минуты, понимает ценность вашей работы и пишет вам в личку уже готовым к покупке.</div>
+        </div>
+        <div class="pain-item">
+          <div class="pain-dot">2</div>
+          <div><b>Вы не работаете секретаршей в своём проекте</b>Не нужно по 20 раз в день пересылать ссылки, прайсы и описания — всё собрано в одном красивом окне.</div>
+        </div>
+        <div class="pain-item">
+          <div class="pain-dot">3</div>
+          <div><b>Видно каждого человека, а тех, кто ушёл думать — бот мягко возвращает</b>На экране телефона вы видите, кто зашёл и на каком шаге остановился. А если человек отвлёкся, бот сам напишет ему вовремя и вернёт к диалогу.</div>
+        </div>
+      </div>
+
+      <div class="video-frame">
+        <div class="label">Видео · 1 мин · Как это работает</div>
+        <video controls playsinline preload="metadata">
+          <source src="/Toriya_2.mp4" type="video/mp4">
+          <source src="/02_TORIYA.mp4" type="video/mp4">
+          <source src="/Toriya_5.mp4" type="video/mp4">
+          <source src="/03_FINAL_TORIYA.mp4" type="video/mp4">
+          <source src="/Toriya_1.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <!-- EN ВЕРСИЯ (ДЛЯ АМЕРИКАНОК В FACEBOOK) -->
+    <div class="en-only">
+      <div class="kicker">New-Gen Interactive Lead Magnet for Facebook & IG</div>
+      <h1>Traffic is expensive — why let warm people say <span class="hand">"I'll think about it"</span> and disappear?</h1>
+      <p class="lead">Old PDF freebies get downloaded and forgotten. And you end up working as the unpaid receptionist in your own business, answering the same DM questions all day.</p>
+
+      <div class="path-anim-card">
+        <div class="path-title"><span>❌ Why old funnels leak buyers:</span><span>Old Way</span></div>
+        <div class="path-track old-way">
+          <div class="p-step dead"><b>1. Ad / Post</b><span>clicks link</span></div>
+          <div class="p-step dead"><b>2. PDF Guide</b><span>never opens it</span></div>
+          <div class="p-step dead"><b>3. 20 DMs</b><span>"how much is it?"</span></div>
+          <div class="p-step dead"><b>4. Ghosts</b><span>"I'll think about it"</span></div>
+        </div>
+
+        <div class="path-title" style="color:var(--clay)"><span>✨ Interactive Micro-App Lead Magnet:</span><span>New Way</span></div>
+        <div class="path-track new-way">
+          <div class="p-step"><b>1. Opens in 1 Tap</b><span>inside FB / IG</span></div>
+          <div class="p-step"><b>2. Taps & Tries</b><span>instant value</span></div>
+          <div class="p-step"><b>3. Warms Up</b><span>sees your method</span></div>
+          <div class="p-step"><b>4. Ready Buyer</b><span>messages you in DM</span></div>
+        </div>
+      </div>
+
+      <div class="pain-list">
+        <div class="pain-item">
+          <div class="pain-dot">1</div>
+          <div><b>Attract targeted, ready-to-buy clients</b>Followers tap through your interactive micro-app in 2 minutes, see their bottleneck, and message you ready to work together.</div>
+        </div>
+        <div class="pain-item">
+          <div class="pain-dot">2</div>
+          <div><b>Stop being the full-time assistant in your own project</b>No more sending 10 separate links or answering repetitive price questions in Messenger.</div>
+        </div>
+        <div class="pain-item">
+          <div class="pain-dot">3</div>
+          <div><b>See every visitor on your phone</b>You see everyone who opened your link, what they clicked, and where they paused.</div>
+        </div>
+      </div>
+    </div>
+
+    <button id="startFunnelBtn" class="btn">
+      <span class="ru-only">✨ Посмотреть живые примеры в деле →</span>
+      <span class="en-only">✨ See Live Examples in Action →</span>
+    </button>
+    <p class="consent-inline ru-only">Нажимая кнопку, вы соглашаетесь с <a data-doc href="/privacy.html">политикой конфиденциальности</a>, <a data-doc href="/consent.html">обработкой данных</a> и получением напоминаний в боте.</p>
+    <p class="consent-inline en-only">By continuing, you agree to our <a data-doc href="/privacy.html">Privacy Policy</a>.</p>
+  </section>
+
+  <!-- ==================== ШАГ 2: ЖИВЫЕ ПРИМЕРЫ ==================== -->
+  <section id="cases" class="screen">
+    <div class="kicker ru-only">Примеры реализации · Нажимайте на вкладки</div>
+    <div class="kicker en-only">Live Examples · Tap to Switch</div>
+    <h2 class="ru-only">Как выглядит лид-магнит нового времени</h2>
+    <h2 class="en-only">How it works in real life</h2>
+    <p class="small ru-only">Переключайте вкладки ниже — посмотрите, как человек вовлекается и покупает без долгих переписок:</p>
+    <p class="small en-only">Tap the 4 tabs below to see how your followers interact and buy:</p>
+
+    <div class="case-tabs" id="caseTabs">
+      <div class="case-tab on" data-pane="quiz"><span class="ru-only">🎯 Тест вместо PDF</span><span class="en-only">🎯 Interactive Quiz</span></div>
+      <div class="case-tab" data-pane="shop"><span class="ru-only">🛍️ Магазин (Lemoon)</span><span class="en-only">🛍️ Boutique Store</span></div>
+      <div class="case-tab" data-pane="book"><span class="ru-only">📅 Услуги и запись</span><span class="en-only">📅 Services & Booking</span></div>
+      <div class="case-tab" data-pane="crm"><span class="ru-only">👀 Кто заходил</span><span class="en-only">👀 Visitor Tracker</span></div>
+    </div>
+
+    <!-- Вкладка 1: Интерактивный тест вместо PDF (на первом месте, так как мы говорим про лид-магниты нового времени!) -->
+    <div class="case-pane on" id="pane-quiz">
+      <div class="ru-only">
+        <div class="card" style="padding:13px">
+          <div class="kicker" style="margin-bottom:4px">Вместо скучных гайдов, которые лежат мёртвым грузом</div>
+          <p class="small" style="margin-bottom:8px">Человек нажимает на кнопки, за 1 минуту получает разбор своей ситуации и сам понимает, зачем ему ваш платный продукт:</p>
+          <div class="car">
+            <figure class="slide"><img src="/img/quiz.webp" alt="Вопросы" loading="lazy"><figcaption><b>1. Вовлекающие вопросы в 1 тап</b>Легко пройти прямо с телефона без скачиваний.</figcaption></figure>
+            <figure class="slide"><img src="/img/result.webp" alt="Результат" loading="lazy"><figcaption><b>2. Наглядный результат</b>Подписчик видит свои точки роста и переходит к покупке.</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="en-only">
+        <div class="us-sim">
+          <div class="us-sim-bar"><b>INTERACTIVE DIAGNOSTIC</b><span>INSTEAD OF DEAD PDFS</span></div>
+          <p style="font-size:14px;margin:0 0 8px">Followers answer 3 quick tap-questions, see their personalized clarity score (e.g. <b>68% Readiness</b>), and message you already warmed up and ready to buy.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Вкладка 2: Магазин Lemoon 8/9 -->
+    <div class="case-pane" id="pane-shop">
+      <div class="ru-only">
+        <div class="card" style="padding:13px">
+          <div class="kicker" style="margin-bottom:4px">Кейс · Бренд одежды Lemoon 8/9</div>
+          <p class="small" style="margin-bottom:8px">Листайте экраны: клиентка сама смотрит фото, выбирает размер и в 1 клик отправляет готовый заказ менеджеру:</p>
+          <div class="lemoon-car">
+            <div class="lemoon-slide"><img src="/img/lemoon_1.PNG" alt="Lemoon 1" loading="lazy"></div>
+            <div class="lemoon-slide"><img src="/img/lemoon_2.jpg" alt="Lemoon 2" loading="lazy"></div>
+            <div class="lemoon-slide"><img src="/img/lemoon_3.jpg" alt="Lemoon 3" loading="lazy"></div>
+          </div>
+        </div>
+        <div class="tg-review">
+          <div class="tg-review-head"><b>🎙 Отзыв: Софья (бренд Lemoon 8/9)</b><span>голосовое 0:50</span></div>
+          <p class="tg-review-text">«Сделали сейл −70%, протестировали на широкой аудитории — <b>всем очень удобно пользоваться прямо в телеге!</b> Заявки присылают сразу с выбранными моделями, доводим людей до заказа без потерь».</p>
+        </div>
+      </div>
+
+      <div class="en-only">
+        <div class="us-sim">
+          <div class="us-sim-bar"><b>LEMOON 8/9 · IN-CHAT BOUTIQUE</b><span>● −70% SALE CASE</span></div>
+          <p style="font-size:13.5px;margin:0 0 8px">Tap a size below — buyers browse your lookbook and send a pre-filled order straight to Messenger:</p>
+          <div style="padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--bg)">
+            <b>Zodiac Armani Silk Slip Dress</b> — <span style="color:var(--clay);font-weight:700">$98 USD</span>
+            <div class="us-sizes">
+              <button type="button" class="us-size" data-sz="XS">XS</button>
+              <button type="button" class="us-size" data-sz="S">S</button>
+              <button type="button" class="us-size on" data-sz="M">M</button>
+              <button type="button" class="us-size" data-sz="L">L</button>
+            </div>
+            <div id="usOrderPreview" style="font-size:12.5px;color:var(--ok);font-weight:600">✓ Selected: Size M ($98) · 1-Tap Messenger Order</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Вкладка 3: Услуги и запись -->
+    <div class="case-pane" id="pane-book">
+      <div class="ru-only">
+        <div class="card" style="padding:13px">
+          <div class="kicker" style="margin-bottom:4px">Витрина услуг для экспертов и практиков</div>
+          <p class="small" style="margin-bottom:8px">Клиент сразу видит ваши форматы работы, стоимость и оставляет заявку без 20 сообщений в личке:</p>
+          <div class="car">
+            <figure class="slide"><img src="/img/book1.webp" alt="Услуги" loading="lazy"><figcaption><b>1. Все ваши услуги в одном месте</b>Понятно, с чем вы помогаете и сколько это стоит.</figcaption></figure>
+            <figure class="slide"><img src="/img/book3.webp" alt="Запись" loading="lazy"><figcaption><b>2. Быстрая заявка</b>Человек выбирает услугу в пару нажатий.</figcaption></figure>
+            <figure class="slide"><img src="/img/notify.webp" alt="Уведомление" loading="lazy"><figcaption><b>3. Контакт сразу у вас</b>Бот мгновенно присылает вам карточку клиента.</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="en-only">
+        <div class="us-sim">
+          <div class="us-sim-bar"><b>SERVICE SHOWCASE</b><span>NO LOGIN REQUIRED</span></div>
+          <p style="font-size:14px;margin:0">Clients see your packages, prices, and request a call in 15 seconds without creating accounts on external websites.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Вкладка 4: Экран учёта посетителей -->
+    <div class="case-pane" id="pane-crm">
+      <div class="ru-only">
+        <div class="card" style="padding:13px">
+          <div class="kicker" style="margin-bottom:4px">Ни один тёплый человек больше не пропадает</div>
+          <p class="small" style="margin-bottom:8px">Прямо в телефоне вам видно всех, кто открывал приложение, а бот сам мягко напоминает о вас тем, кто отвлёкся:</p>
+          <div class="car">
+            <figure class="slide"><img src="/img/crm.webp" alt="Список" loading="lazy"><figcaption><b>1. Видно каждого посетителя</b>Имя, ссылка на профиль и что именно человек смотрел.</figcaption></figure>
+            <figure class="slide"><img src="/img/admin.webp" alt="Возврат" loading="lazy"><figcaption><b>2. Мягкое напоминание в боте</b>Возвращает тех, кто закрыл окно и ушёл «подумать».</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="en-only">
+        <div class="us-sim">
+          <div class="us-sim-bar"><b>VISITOR TRACKER</b><span>100% VISIBILITY</span></div>
+          <p style="font-size:14px;margin:0">See everyone who opened your link, which offer they viewed, and where they stopped.</p>
+        </div>
+      </div>
+    </div>
+
+    <a class="btn clay" href="#price">
+      <span class="ru-only">Дальше: примерить на свой проект →</span>
+      <span class="en-only">Next: Try This for Your Business →</span>
+    </a>
+  </section>
+
+  <!-- ==================== ШАГ 3: ТОЛЬКО 2 ПОНЯТНЫХ ВАРИАНТА (2 500 ₽ И ГОЛОСОВОЙ РАЗБОР 0 ₽) ==================== -->
+  <section id="price" class="screen">
+    <div class="ru-only">
+      <div class="kicker">Без сложных обязательств · Выберите удобный шаг</div>
+      <h2>С чего вам удобнее начать?</h2>
+      <p class="small">Нажмите на один из двух вариантов ниже (на следующем экране вы всегда сможете нажать «Назад» и поменять решение):</p>
+
+      <div class="offer-cards">
+        <!-- ВАРИАНТ 1: Личный разбор + макет за 2 500 ₽ -->
+        <div class="offer-card main-offer tier" data-step="proto" data-label="2 500 ₽ · Личный разбор проекта + макет вашего мини-приложения">
+          <div class="offer-top">
+            <div>
+              <span class="offer-badge">★ Основной формат</span>
+              <div class="offer-title">Личный разбор + макет вашего мини-приложения</div>
+            </div>
+            <div>
+              <div class="offer-price">2 500 ₽</div>
+              <span class="offer-sub">входит в разработку</span>
+            </div>
+          </div>
+          <p class="offer-desc">Созвонимся на 20 минут, разберём ваш текущий путь клиента и соберём наглядный макет экранов вашего нового лид-магнита в мини-приложении:</p>
+          <ul class="offer-list">
+            <li>Найдём, на каком шаге сейчас отваливаются ваши целевые клиенты;</li>
+            <li>Пропишем идею и сценарий мини-приложения под ваш продукт;</li>
+            <li><b>Эти 2 500 ₽ не сгорают</b> — они полностью вычитаются из стоимости, если идём в сборку.</li>
+          </ul>
+          <div class="offer-cta"><span>Выбрать этот вариант и перейти в личку</span><span>→</span></div>
+        </div>
+
+        <!-- ВАРИАНТ 2: Бесплатный голосовой разбор лид-магнита и канала -->
+        <div class="offer-card voice-offer tier" data-step="voice" data-label="0 ₽ · Голосовой разбор вашего лид-магнита и пути клиента с канала">
+          <div class="offer-top">
+            <div>
+              <span class="offer-badge">🎙 Без созвона · В личку</span>
+              <div class="offer-title">Голосовой разбор вашего лид-магнита и канала</div>
+            </div>
+            <div>
+              <div class="offer-price">0 ₽</div>
+              <span class="offer-sub">аудио 3–5 мин</span>
+            </div>
+          </div>
+          <p class="offer-desc">Пришлите ссылку на ваш канал (или ваш нынешний лид-магнит / бот) — я посмотрю глазами клиента и запишу вам голосовое сообщение в личку:</p>
+          <ul class="offer-list">
+            <li>Что сейчас мешает подписчикам с канала оставлять заявки;</li>
+            <li>Как усилить путь клиента с помощью мини-приложения, чтобы приходили платёжеспособные люди.</li>
+          </ul>
+          <div class="offer-cta"><span>Отправить ссылку на разбор</span><span>→</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EN ВЕРСИЯ (ТОЛЬКО 2 ВАРИАНТА ДЛЯ США) -->
+    <div class="en-only">
+      <div class="kicker">Simple Next Step · Tap One Option</div>
+      <h2>How would you like to start?</h2>
+      <p class="small">Choose one of the two options below (you can easily go back and change it anytime):</p>
+
+      <div class="offer-cards">
+        <div class="offer-card main-offer tier" data-step="proto" data-label="$49 USD · 1:1 Funnel Audit + Custom Micro-App Prototype">
+          <div class="offer-top">
+            <div>
+              <span class="offer-badge">★ Most Popular</span>
+              <div class="offer-title">1:1 Funnel Audit + Custom Micro-App Prototype</div>
+            </div>
+            <div>
+              <div class="offer-price">$49 USD</div>
+              <span class="offer-sub">credited to build</span>
+            </div>
+          </div>
+          <p class="offer-desc">We hop on a quick 20-min chat, find where your warm leads are dropping off, and map out a clickable prototype of your custom micro-app. <b>100% credited toward your full build!</b></p>
+          <div class="offer-cta"><span>Select this option & continue</span><span>→</span></div>
+        </div>
+
+        <div class="offer-card voice-offer tier" data-step="voice" data-label="FREE · 3-Min Voice/Video Review of Your Lead Magnet & Page">
+          <div class="offer-top">
+            <div>
+              <span class="offer-badge">🎙 No Call Needed · In Messenger</span>
+              <div class="offer-title">Free Voice/Video Review of Your Current Lead Magnet</div>
+            </div>
+            <div>
+              <div class="offer-price">FREE</div>
+              <span class="offer-sub">3–5 min in DM</span>
+            </div>
+          </div>
+          <p class="offer-desc">Send a link to your Facebook/IG page or current freebie — I'll review your client path and send a personal 3-min breakdown in Messenger showing how to get more ready-to-buy clients.</p>
+          <div class="offer-cta"><span>Send my link for a free review</span><span>→</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ШАГ 4: ПЕРЕХОД В ЛС + 2 ИНТЕРВАЛА ВРЕМЕНИ ==================== -->
+  <section id="order" class="screen">
+    <div class="kicker ru-only">Финальный шаг · Переход в личные сообщения</div>
+    <div class="kicker en-only">Final Step · Continue in Direct Messages</div>
+    <h2 class="ru-only">Пара деталей — и продолжим в личке</h2>
+    <h2 class="en-only">Two quick details & let's chat in DM</h2>
+
+    <!-- Выбранный вариант + кнопка вернуться назад -->
+    <div class="picked-box">
+      <div>
+        <span class="small" style="margin:0;font-size:11.5px;display:block">Ваш выбор:</span>
+        <b id="chosenTierTitle">2 500 ₽ · Личный разбор проекта + макет</b>
+      </div>
+      <button type="button" id="changeTierBtn" class="change-btn">← Изменить</button>
+    </div>
+
+    <div class="card">
+      <!-- ДВА ИНТЕРВАЛА ВРЕМЕНИ (Показываются для разбора за 2 500 ₽) -->
+      <div id="twoWinBlock">
+        <label class="form-label" style="margin-top:0">
+          <span class="ru-only">1. КОГДА ВАМ ОБЫЧНО УДОБНЕЕ ВЫЙТИ НА СВЯЗЬ (15–20 МИН)?</span>
+          <span class="en-only">1. WHICH TIME WINDOW WORKS BEST FOR YOU?</span>
+        </label>
+        <p class="small" style="margin:0 0 8px">
+          <span class="ru-only">Выберите один из двух интервалов — точный день согласуем с вами в личных сообщениях:</span>
+          <span class="en-only">Pick one of the two windows — we'll confirm the exact day in Messenger:</span>
+        </p>
+        <div class="two-windows">
+          <div class="win-card on" data-win="В будни до обеда (10:00–14:00 МСК) / Morning-Midday">
+            <b class="ru-only">☀️ До обеда</b>
+            <b class="en-only">☀️ Morning / Midday</b>
+            <span class="ru-only">в интервале 10:00 – 14:00 МСК</span>
+            <span class="en-only">9:00 AM – 1:00 PM EST</span>
+          </div>
+          <div class="win-card" data-win="В будни после обеда (15:00–19:00 МСК) / Afternoon-Evening">
+            <b class="ru-only">🌆 После обеда</b>
+            <b class="en-only">🌆 Afternoon / Evening</b>
+            <span class="ru-only">в интервале 15:00 – 19:00 МСК</span>
+            <span class="en-only">2:00 PM – 6:00 PM EST</span>
+          </div>
+        </div>
+      </div>
+
+      <label class="form-label" for="channelInput">
+        <span class="ru-only">ССЫЛКА НА ВАШ КАНАЛ / ПРОЕКТ И ЧЕМ ЗАНИМАЕТЕСЬ</span>
+        <span class="en-only">YOUR NICHE + LINK TO YOUR FACEBOOK / IG PAGE</span>
+      </label>
+      <input id="channelInput" type="text" class="field" placeholder="Например: эксперт / психолог / бренд одежды, @moy_kanal">
+
+      <label class="form-label" for="productInput">
+        <span class="ru-only">ЧТО СЕЙЧАС ПРОДАЁТЕ И КАКАЯ ГЛАВНАЯ ЗАДАЧА?</span>
+        <span class="en-only">WHAT DO YOU SELL & WHAT'S YOUR #1 GOAL WITH LEADS?</span>
+      </label>
+      <textarea id="productInput" class="field" placeholder="Например: хочу заменить старый лид-магнит / чтобы с канала приходили целевые клиенты без долгих переписок…"></textarea>
+
+      <button id="consultBtn" class="btn clay" style="margin-top:14px">
+        <span class="ru-only">✨ Написать Тории в личку →</span>
+        <span class="en-only">✨ Send & Continue in Facebook Messenger →</span>
+      </button>
+      <div id="consultStatus"></div>
+    </div>
+  </section>
+
+  <!-- ==================== ПАНЕЛЬ ВЛАДЕЛЬЦА (#admin) ==================== -->
+  <section id="admin" class="screen">
+    <div class="kicker">Закрытая панель · Toriya Nova</div>
+    <h2>Кто заходил в приложение и рассылка</h2>
+
+    <div id="adminAuthBox" class="card">
+      <label class="form-label" for="adminPassInput" style="margin-top:0">ПАРОЛЬ ВЛАДЕЛЬЦА</label>
+      <input id="adminPassInput" type="text" class="field" value="toriya2026">
+      <button id="adminLoginBtn" class="btn" style="margin-top:10px">Открыть панель →</button>
+      <div id="adminAuthErr" class="error"></div>
+    </div>
+
+    <div id="adminContent" style="display:none">
+      <div class="admin-stat-grid" id="adminStats"></div>
+
+      <div class="adm-tabs" style="grid-template-columns:repeat(3,1fr)">
+        <div class="adm-tab on" data-adm="active">За 7 дней</div>
+        <div class="adm-tab" data-adm="all">Вся база</div>
+        <div class="adm-tab" data-adm="broadcast">Рассылка в бот</div>
+      </div>
+
+      <div class="adm-pane on" id="adm-active">
+        <p class="small">Кто заходил недавно и на каком шаге остановился:</p>
+        <div id="adminVisitorsList"></div>
+      </div>
+
+      <div class="adm-pane" id="adm-all">
+        <p class="small">Все люди за всё время:</p>
+        <div id="adminAllUsersList"></div>
+      </div>
+
+      <div class="adm-pane" id="adm-broadcast">
+        <div class="card">
+          <div class="kicker">Сообщение всем через бота</div>
+          <div class="tpl-pills">
+            <button type="button" class="tpl-pill" data-tpl="update">Шаблон: Обновление</button>
+            <button type="button" class="tpl-pill" data-tpl="firstscreen">Шаблон: Открыли только 1-й экран</button>
+            <button type="button" class="tpl-pill" data-tpl="slots">Шаблон: Голосовой разбор</button>
+          </div>
+          <label class="form-label" for="broadcastText">ТЕКСТ СООБЩЕНИЯ:</label>
+          <textarea id="broadcastText" class="field" style="min-height:110px">Здравствуйте! Я обновила своё мини-приложение TORIYA NOVA: показала на живой схеме, почему старые лид-магниты больше не работают и как получать целевых клиентов без вечных переписок в личке.
+
+Загляните посмотреть (займёт 1 минуту):</textarea>
+          <label class="form-label" for="broadcastBtnText">ТЕКСТ НА КНОПКЕ:</label>
+          <input id="broadcastBtnText" type="text" class="field" value="✨ Посмотреть внутри">
+          <button id="broadcastSendBtn" class="btn clay" style="margin-top:12px">📢 Отправить всем в бот →</button>
+          <div id="broadcastStatus" style="margin-top:8px;font-size:13px;font-weight:600"></div>
+        </div>
+      </div>
+
+      <button id="adminRefreshBtn" class="btn ghost" style="margin-top:8px">🔄 Обновить список</button>
+    </div>
+  </section>
+
+  <div class="footer">TORIYA NOVA · <a data-doc href="/privacy.html">Политика</a> · <a data-doc href="/consent.html">Согласие</a></div>
+</div>
+
+<script>
+window.__errs=[];addEventListener('error',function(e){var t=(e.message||'ошибка')+' @'+String(e.filename||'').split('/').pop()+':'+e.lineno;window.__errs.push(t)});
+(function(){var N=function(){};if(/tgWebApp/.test(location.hash+location.search)||window.TelegramWebviewProxy){document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>')}else{window.Telegram={WebApp:{initData:'',initDataUnsafe:{},ready:N,expand:N,setHeaderColor:N,setBackgroundColor:N,onEvent:N,requestWriteAccess:N,BackButton:{show:N,hide:N,onClick:N},HapticFeedback:{impactOccurred:N,selectionChanged:N,notificationOccurred:N},openLink:function(u){window.open(u,'_blank')},openTelegramLink:function(u){window.open(u,'_blank')},viewportHeight:innerHeight,viewportStableHeight:innerHeight}}}})();
+</script>
+<script>
+const $=id=>document.getElementById(id);
+const CONFIG={
+  consultationUrl:'https://t.me/toriya_nova',
+  fbMessengerUrl:'https://m.me/toriya.nova',
+  botAppUrl:'https://t.me/lidmini_bot?startapp=',
+  ownerId:'6894849502'
+},CONSENT_V='2026-11-05';
+
+const tg=window.Telegram&&window.Telegram.WebApp||null;
+const web=!(tg&&tg.initData);
+const isLocal=location.protocol==='file:'||['localhost','127.0.0.1'].includes(location.hostname);
+const screens=['s0','cases','price','order','admin'];
+const NOSTACK=['s0'];
+
+const qs=new URLSearchParams(location.search);
+const ref=document.referrer||'';
+const ua=navigator.userAgent||'';
+const isEnUrl=/^\/en(\/|$)/i.test(location.pathname)||qs.get('lang')==='en'||/facebook|fbAN|fbAV/i.test(ref+ua);
+
+const state={
+  lang:isEnUrl?'en':'ru',
+  consent:false,
+  activeTab:'quiz',
+  admTab:'active',
+  step:'proto',
+  stepLabel:isEnUrl?'$49 USD · 1:1 Funnel Audit + Custom Micro-App Prototype':'2 500 ₽ · Личный разбор проекта + макет вашего мини-приложения',
+  timeWindow:'В будни до обеда (10:00–14:00 МСК) / Morning-Midday',
+  adminKey:sessionStorage.getItem('tn_adm_key')||'toriya2026',
+  sending:false
+};
+
+function setLang(lang){
+  state.lang=lang==='en'?'en':'ru';
+  document.body.classList.toggle('lang-en',state.lang==='en');
+  document.body.classList.toggle('lang-ru',state.lang==='ru');
+  $('btnLangRu').classList.toggle('on',state.lang==='ru');
+  $('btnLangEn').classList.toggle('on',state.lang==='en');
+  $('topBackBtn').textContent=state.lang==='en'?'← Back to previous step':'← Назад на предыдущий шаг';
+  $('changeTierBtn').textContent=state.lang==='en'?'← Change':'← Изменить';
+  if(state.step==='proto'){
+    state.stepLabel=state.lang==='en'
+      ?'$49 USD · 1:1 Funnel Audit + Custom Micro-App Prototype'
+      :'2 500 ₽ · Личный разбор проекта + макет вашего мини-приложения';
+  }else{
+    state.stepLabel=state.lang==='en'
+      ?'FREE · 3-Min Voice/Video Review of Your Lead Magnet & Page'
+      :'0 ₽ · Голосовой разбор вашего лид-магнита и пути клиента с канала';
+  }
+  setRoute(cur||'s0');
+}
+
+const autoSrc=/facebook|fbAN|fbAV/i.test(ref+ua)?'facebook_us':/threads|barcelona/i.test(ref+ua)?'threads':/instagram/i.test(ref+ua)?'instagram':'';
+const src=qs.get('src')||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||autoSrc||(state.lang==='en'?'facebook_en':web?'web_direct':'tg_direct');
+
+if(web&&!isLocal&&state.lang==='ru'){
+  const tb=$('threadsBar');
+  if(tb){
+    tb.classList.add('show');
+    const a=tb.querySelector('a');
+    if(a)a.href=CONFIG.botAppUrl+encodeURIComponent(src||'threads');
+  }
+}
+
+function webId(){
+  let id='';try{id=localStorage.getItem('tn_webid')||''}catch{}
+  if(!/^[a-f0-9-]{36}$/.test(id)){
+    id=crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16)});
+    try{localStorage.setItem('tn_webid',id)}catch{}
+  }
+  return id;
+}
+
+async function apiPost(url,payload){
+  const initData=tg&&tg.initData||'';
+  const r=await fetch(url,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Telegram-Init-Data':initData,'X-Web-Id':initData?'':webId()},
+    body:JSON.stringify({...payload,initData})
+  });
+  return r.json();
+}
+
+function track(event,meta={}){
+  if(isLocal)return;
+  apiPost('/api/event',{event,meta:{...meta,src,lang:state.lang}}).catch(()=>{});
+}
+function haptic(k,v){try{tg.HapticFeedback[k](v)}catch{}}
+function openTg(u){if(!web&&tg.openTelegramLink&&u.startsWith('https://t.me/'))tg.openTelegramLink(u);else location.href=u}
+
+function switchCaseTab(pane){
+  state.activeTab=pane;
+  document.querySelectorAll('.case-tab').forEach(b=>b.classList.toggle('on',b.dataset.pane===pane));
+  document.querySelectorAll('.case-pane').forEach(p=>p.classList.toggle('on',p.id==='pane-'+pane));
+}
+
+function switchAdminTab(tab){
+  state.admTab=tab;
+  document.querySelectorAll('.adm-tab').forEach(b=>b.classList.toggle('on',b.dataset.adm===tab));
+  document.querySelectorAll('.adm-pane').forEach(p=>p.classList.toggle('on',p.id==='adm-'+tab));
+}
+
+const ROUTE_RU=[
+  ['Шаг 1 из 4 · Как работает метод',['s0']],
+  ['Шаг 2 из 4 · Живые примеры',['cases']],
+  ['Шаг 3 из 4 · Выбор формата',['price']],
+  ['Шаг 4 из 4 · Переход в личку',['order']]
+];
+const ROUTE_EN=[
+  ['Step 1 of 4 · How It Works',['s0']],
+  ['Step 2 of 4 · Live Examples',['cases']],
+  ['Step 3 of 4 · Choose Option',['price']],
+  ['Step 4 of 4 · Connect in DM',['order']]
+];
+let routeK=-1;
+function setRoute(id){
+  const ROUTE=state.lang==='en'?ROUTE_EN:ROUTE_RU;
+  const bar=$('routebar'),cap=$('routecap');
+  const k=ROUTE.findIndex(r=>r[1].includes(id));
+  if(k<0){bar.classList.remove('on');return}
+  if(!bar.dataset.built){
+    bar.innerHTML=ROUTE.map((r,i)=>(i?'<b class="l"></b>':'')+'<i class="n"></i>').join('');
+    bar.dataset.built='1';
+  }
+  bar.classList.add('on');
+  bar.querySelectorAll('.n').forEach((n,i)=>{n.className='n'+(i<k?' done':i===k?' cur':'')});
+  bar.querySelectorAll('.l').forEach((l,i)=>l.classList.toggle('done',i<k));
+  cap.textContent=ROUTE[k][0];
+  if(k>routeK&&routeK>=0)haptic('impactOccurred','light');
+  routeK=k;
+}
+
+let cur=null,backing=false;const navStack=[];
+function syncBack(){
+  const hide=NOSTACK.includes(cur);
+  try{hide?tg.BackButton.hide():tg.BackButton.show()}catch{}
+  const bb=$('backBar');
+  if(bb)bb.classList.toggle('show',!hide);
+}
+function goBack(){
+  let prev=navStack.pop();
+  if(!prev){
+    prev=cur==='order'?'price':cur==='price'?'cases':cur==='cases'?'s0':'s0';
+  }
+  backing=true;
+  show(prev);
+  backing=false;
+}
+
+function renderOrderScreen(){
+  if($('chosenTierTitle'))$('chosenTierTitle').textContent=state.stepLabel;
+  const winBlock=$('twoWinBlock');
+  if(winBlock)winBlock.style.display=state.step==='voice'?'none':'block';
+}
+
+function forceScrollTop(){
+  window.scrollTo(0,0);
+  document.documentElement.scrollTop=0;
+  document.body.scrollTop=0;
+}
+
+function show(id){
+  if(!screens.includes(id))return;
+  screens.forEach(x=>{const el=$(x);if(el)el.classList.toggle('active',x===id)});
+  forceScrollTop();
+  setTimeout(forceScrollTop,40);
+  if(cur!==id){
+    if(!backing&&cur&&!NOSTACK.includes(cur))navStack.push(cur);
+    cur=id;
+    if(id!=='admin')track('screen_view',{screen:id});
+    if(id==='cases')switchCaseTab(state.activeTab);
+    if(id==='order')renderOrderScreen();
+    if(id==='admin')loadAdminDashboard();
+  }
+  syncBack();
+  setRoute(id);
+}
+
+$('btnLangRu').onclick=()=>setLang('ru');
+$('btnLangEn').onclick=()=>setLang('en');
+$('topBackBtn').onclick=goBack;
+$('changeTierBtn').onclick=()=>show('price');
+
+$('startFunnelBtn').onclick=()=>{
+  state.consent=true;
+  try{localStorage.setItem('tn_consent',CONSENT_V)}catch{}
+  track('consent',{processing:true,privacy:true,messages:true,v:CONSENT_V});
+  if(!web){
+    try{if(!tg.initDataUnsafe?.user?.allows_write_to_pm)tg.requestWriteAccess(()=>{})}catch{}
+  }
+  haptic('impactOccurred','light');
+  show('cases');
+};
+
+const TPL_TEXTS={
+  update:`Здравствуйте! Я обновила своё мини-приложение TORIYA NOVA: показала на живой схеме, почему старые лид-магниты больше не работают и как получать целевых клиентов без вечных переписок в личке.\n\nЗагляните посмотреть (займёт 1 минуту):`,
+  firstscreen:`Здравствуйте! Вы недавно открывали моё мини-приложение TORIYA NOVA, но остановились на первом экране и не посмотрели живые примеры (как работает лид-магнит нового времени и дожим тех, кто ушёл подумать).\n\nНажмите кнопку ниже — откроется сразу страница с примерами:`,
+  slots:`Здравствуйте! Если хотите посмотреть, где сейчас теряются заявки в вашем канале и как усилить ваш лид-магнит — пришлите мне ссылку на проект внутри приложения, я запишу для вас голосовой разбор:`
+};
+
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href^="#"]');
+  if(a){e.preventDefault();show(a.getAttribute('href').slice(1));return}
+
+  const l=e.target.closest('a[data-doc]');
+  if(l){
+    e.preventDefault();
+    const u=location.origin+l.getAttribute('href');
+    try{web?window.open(u,'_blank'):tg.openLink(u)}catch{window.open(u,'_blank')}
+    return;
+  }
+
+  const sz=e.target.closest('.us-size[data-sz]');
+  if(sz){
+    document.querySelectorAll('.us-size').forEach(b=>b.classList.remove('on'));
+    sz.classList.add('on');
+    $('usOrderPreview').textContent=`✓ Selected: Size ${sz.dataset.sz} ($98) · 1-Tap Messenger Order`;
+    haptic('selectionChanged');
+    return;
+  }
+
+  const ct=e.target.closest('.case-tab[data-pane]');
+  if(ct){
+    switchCaseTab(ct.dataset.pane);
+    track('case_tab',{tab:ct.dataset.pane});
+    haptic('selectionChanged');
+    return;
+  }
+
+  const at=e.target.closest('.adm-tab[data-adm]');
+  if(at){
+    switchAdminTab(at.dataset.adm);
+    haptic('selectionChanged');
+    return;
+  }
+
+  const tpl=e.target.closest('.tpl-pill[data-tpl]');
+  if(tpl){
+    const key=tpl.dataset.tpl;
+    if(TPL_TEXTS[key])$('broadcastText').value=TPL_TEXTS[key];
+    haptic('selectionChanged');
+    return;
+  }
+
+  const dm=e.target.closest('.bot-dm-btn[data-uid]');
+  if(dm){
+    const targetId=dm.dataset.uid,targetName=dm.dataset.name||'клиенту';
+    const msg=prompt(`Напишите сообщение для ${targetName} (придёт от лица бота):`,`${targetName}, здравствуйте! Увидела, что вы заглядывали в моё мини-приложение TORIYA NOVA. Хотите, запишу для вас короткий голосовой разбор вашего канала и лид-магнита?`);
+    if(!msg||!msg.trim())return;
+    apiPost('/api/admin',{password:state.adminKey,action:'send_one',userId:targetId,text:msg.trim()}).then(r=>{
+      alert(r&&r.ok?'✅ Сообщение доставлено!':'❌ Не удалось отправить: '+(r?.error||''));
+    });
+    return;
+  }
+
+  const t=e.target.closest('.tier[data-step]');
+  if(t){
+    state.step=t.dataset.step;
+    state.stepLabel=t.dataset.label;
+    track('tier_pick',{step:state.step,label:state.stepLabel});
+    haptic('impactOccurred','light');
+    setTimeout(()=>show('order'),100);
+    return;
+  }
+
+  const wc=e.target.closest('.win-card[data-win]');
+  if(wc){
+    document.querySelectorAll('.win-card').forEach(el=>el.classList.remove('on'));
+    wc.classList.add('on');
+    state.timeWindow=wc.dataset.win;
+    track('slot_pick',{date:'2_intervals',time:state.timeWindow});
+    haptic('selectionChanged');
+    return;
+  }
+});
+
+$('broadcastSendBtn').onclick=async()=>{
+  const text=($('broadcastText').value||'').trim();
+  const btnText=($('broadcastBtnText').value||'✨ Посмотреть внутри').trim();
+  const status=$('broadcastStatus');
+  if(!text){
+    status.style.color='var(--danger)';
+    status.textContent='Напишите текст сообщения.';
+    return;
+  }
+  if(!confirm('Отправить это сообщение всем пользователям базы через бота?'))return;
+  const b=$('broadcastSendBtn');
+  b.disabled=true;
+  status.style.color='var(--ink)';
+  status.textContent='⏳ Идёт рассылка…';
+  try{
+    const res=await apiPost('/api/admin',{password:state.adminKey,action:'broadcast',text,btnText});
+    if(res&&res.ok){
+      status.style.color='var(--ok)';
+      status.textContent=`✅ Доставлено в личку: ${res.sentCount} из ${res.totalTargets}.`;
+    }else{
+      status.style.color='var(--danger)';
+      status.textContent='Ошибка: '+(res?.error||'не удалось отправить');
+    }
+  }catch(e){
+    status.style.color='var(--danger)';
+    status.textContent='Ошибка соединения.';
+  }finally{
+    b.disabled=false;
+  }
+};
+
+$('consultBtn').onclick=async()=>{
+  if(state.sending)return;
+  const channel=($('channelInput')&&$('channelInput').value||'').trim();
+  const product=$('productInput').value.trim();
+  const status=$('consultStatus');
+
+  if(!channel||!product){
+    status.className='error';
+    status.textContent=state.lang==='en'?'Please fill in both fields above.':'Заполните, пожалуйста, оба поля выше.';
+    return;
+  }
+
+  state.sending=true;
+  const b=$('consultBtn');
+  b.disabled=true;
+  b.textContent=state.lang==='en'?'Opening Messenger…':'Открываю личку с Торией…';
+
+  const slotStr=state.step!=='voice'?state.timeWindow:(state.lang==='en'?'Async Voice/Video Review in DM':'Голосовой разбор в личке (без созвона)');
+  const formats=[state.stepLabel,`Время: ${slotStr}`];
+
+  const draft=state.lang==='en'
+    ? `Hi Toriya! I just picked an option in your Micro-App:\n\n• Option: ${state.stepLabel}\n• Time Window: ${slotStr}\n• My Page / Niche: ${channel}\n• Goal: ${product}`
+    : 'Привет, Тория!\n\nЯ из твоего мини-приложения:\n• Выбрала: '+state.stepLabel+
+      (state.step!=='voice'?'\n• Когда удобнее созвониться: '+slotStr:'')+
+      '\n• Проект и ссылка: '+channel+
+      '\n• Задача: '+product;
+
+  track('consultation_click',{step:state.step,slot:slotStr,formats,lang:state.lang});
+
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(draft).catch(()=>{});
+    }
+  }catch{}
+
+  const go=()=>{
+    if(state.lang==='en'){
+      setTimeout(()=>{location.href=`${CONFIG.fbMessengerUrl}?text=${encodeURIComponent(draft)}`},450);
+    }else{
+      setTimeout(()=>openTg(CONFIG.consultationUrl+'?text='+encodeURIComponent(draft)),300);
+    }
+  };
+
+  try{
+    if(!isLocal){
+      await apiPost('/api/consultation',{
+        product:channel,
+        request:product,
+        formats,
+        slotDate:'',
+        slotTime:slotStr,
+        intent:state.lang==='en'?'facebook_us':(state.step==='voice'?'voice':'miniapp'),
+        src:state.lang==='en'?('us_'+src):src
+      });
+    }
+    status.className='success';
+    status.textContent=state.lang==='en'
+      ? '✓ Saved! Opening Facebook Messenger…'
+      : '✓ Открываю личный диалог с Торией…';
+    track('consultation_sent',{step:state.step,slot:slotStr,lang:state.lang});
+    haptic('notificationOccurred','success');
+    go();
+  }catch(e){
+    go();
+  }finally{
+    setTimeout(()=>{
+      state.sending=false;
+      b.disabled=false;
+      b.innerHTML=state.lang==='en'
+        ?'<span class="en-only">✨ Send & Continue in Facebook Messenger →</span>'
+        :'<span class="ru-only">✨ Написать Тории в личку →</span>';
+    },1200);
+  }
+};
+
+const currentTgUserId=String(tg?.initDataUnsafe?.user?.id||'');
+if(currentTgUserId===CONFIG.ownerId){
+  $('adminEntryBtn').classList.add('show');
+}
+let logoTaps=0,logoTimer=null;
+$('brandLogo').onclick=()=>{
+  logoTaps++;
+  clearTimeout(logoTimer);
+  logoTimer=setTimeout(()=>{logoTaps=0},1200);
+  if(logoTaps>=4){logoTaps=0;$('adminEntryBtn').classList.add('show');show('admin')}
+};
+$('adminEntryBtn').onclick=()=>show('admin');
+
+function renderVisitorCard(v){
+  const isTg=!String(v.id).startsWith('web:');
+  return `
+    <div class="visitor-card">
+      <div class="visitor-top">
+        <div>
+          <b>${v.name} ${v.username?`(@${v.username})`:''}</b>
+          <div class="small" style="margin:2px 0 0">ID: <code>${v.id}</code> ${v.src?`· 🔗 <b>${v.src}</b>`:''}</div>
+        </div>
+        <span class="visitor-badge${v.consulted?' ok':''}">${v.consulted?'✅ Заявка':'⏸ '+v.idleText}</span>
+      </div>
+      <div class="small" style="margin:0">📍 Шаг: <b>${v.stage}</b> · Был: ${v.lastSeen}</div>
+      <div class="visitor-why">💡 ${v.reason}</div>
+      <div class="visitor-actions">
+        <span class="small" style="margin:0">Напоминаний: ${v.reminders}/2</span>
+        <div style="display:flex;gap:12px;align-items:center">
+          ${isTg?`<button type="button" class="bot-dm-btn" data-uid="${v.id}" data-name="${v.name}">🤖 Написать через бота</button>`:''}
+          ${v.contactUrl?`<a href="${v.contactUrl}" target="_blank">✉️ В личку →</a>`:'<span class="small" style="margin:0">Facebook / Браузер</span>'}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function loadAdminDashboard(){
+  const err=$('adminAuthErr');
+  err.textContent='';
+  try{
+    const res=await apiPost('/api/admin',{password:state.adminKey,action:'dashboard'});
+    if(!res||!res.ok){
+      $('adminAuthBox').style.display='block';
+      $('adminContent').style.display='none';
+      err.textContent='Ответ сервера: '+(res?.error||'проверьте пароль');
+      return;
+    }
+    sessionStorage.setItem('tn_adm_key',state.adminKey);
+    $('adminAuthBox').style.display='none';
+    $('adminContent').style.display='block';
+
+    $('adminStats').innerHTML=`
+      <div class="admin-stat"><b>${res.stats.allTimeUsers}</b><span>Вся база</span></div>
+      <div class="admin-stat"><b>${res.stats.totalUsers}</b><span>За 7 дней</span></div>
+      <div class="admin-stat"><b>${res.stats.onlyFirstScreen}</b><span>На 1 экране</span></div>
+      <div class="admin-stat"><b>${res.stats.leads}</b><span>Заявки</span></div>
+    `;
+
+    $('adminVisitorsList').innerHTML=(res.visitors&&res.visitors.length)
+      ? res.visitors.map(renderVisitorCard).join('')
+      : '<div class="card"><p class="small" style="margin:0">За 7 дней визитов пока нет.</p></div>';
+
+    $('adminAllUsersList').innerHTML=(res.allUsers&&res.allUsers.length)
+      ? res.allUsers.map(renderVisitorCard).join('')
+      : '<div class="card"><p class="small" style="margin:0">База пока пуста.</p></div>';
+  }catch(e){err.textContent='Ошибка соединения с сервером.'}
+}
+
+$('adminLoginBtn').onclick=()=>{
+  state.adminKey=$('adminPassInput').value.trim();
+  loadAdminDashboard();
+};
+$('adminRefreshBtn').onclick=()=>loadAdminDashboard();
+
+setLang(state.lang);
+
+if(!web){
+  try{
+    tg.ready();tg.expand();
+    tg.setHeaderColor('#F3EDE2');tg.setBackgroundColor('#F3EDE2');
+    tg.BackButton.onClick(goBack);
+    setTimeout(()=>{
+      try{if(!tg.initDataUnsafe?.user?.allows_write_to_pm)tg.requestWriteAccess(()=>{})}catch{}
+    },900);
+  }catch{}
+}
+const tab0=qs.get('tab');
+if(tab0&&['shop','book','quiz','crm'].includes(tab0))state.activeTab=tab0;
+const go0=qs.get('go');
+show(go0==='booking'||go0==='price'?'price':go0==='order'?'order':go0==='admin'?'admin':go0==='cases'?'cases':'s0');
+track('app_open',{tz:new Date().getTimezoneOffset(),web,src,lang:state.lang,ref:ref.slice(0,80)});
+</script>
+</body>
+</html>
