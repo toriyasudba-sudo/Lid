@@ -1,0 +1,1515 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<!-- TORIYA NOVA BUILD 2026-11-11-V29-REAL-BOT-SCREENS -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="description" content="TORIYA NOVA — Из хаоса в систему. Мини-приложения и Карта проекта для экспертов и продюсеров в Telegram.">
+<title>TORIYA NOVA — ИЗ ХАОСА В СИСТЕМУ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap" onload="this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap"></noscript>
+<style>
+:root{
+  --bg:#F3EDE2;
+  --paper:#FBF7EE;
+  --ink:#1D1A15;
+  --text:#3B352B;
+  --muted:#7A7062;
+  --clay:#B4552D;
+  --line:#DAD1C0;
+  --ok:#3F6248;
+  --danger:#9A4F2C;
+  --display:'Fraunces',Georgia,'Times New Roman',serif;
+  --sans:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%;height:100%;overflow-x:hidden;overflow-y:auto;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch}
+button,input,textarea,a{font:inherit;color:inherit}
+
+body.lang-en .ru-only{display:none!important}
+body.lang-ru .en-only{display:none!important}
+
+.app{
+  width:100%;
+  max-width:520px;
+  min-height:100dvh;
+  margin:0 auto;
+  padding:0 15px calc(28px + env(safe-area-inset-bottom));
+  display:flex;
+  flex-direction:column;
+}
+
+/* Шапка */
+.top{
+  height:54px;
+  flex:none;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.logo{font:italic 400 19px var(--display);color:var(--ink);cursor:pointer;user-select:none}
+.top-right{display:flex;align-items:center;gap:8px}
+.lang-switch{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);overflow:hidden}
+.lang-btn{padding:4px 8px;font:600 11px var(--sans);border:0;background:transparent;color:var(--muted);cursor:pointer}
+.lang-btn.on{background:var(--ink);color:var(--paper)}
+.admin-entry-btn{display:none;padding:5px 10px;border-radius:999px;border:1px solid var(--clay);background:var(--paper);color:var(--clay);font:600 11px var(--sans);cursor:pointer}
+.admin-entry-btn.show{display:inline-flex;align-items:center;gap:4px}
+
+/* Линия шагов */
+.routebar{display:none;align-items:center;padding:10px 2px 0;flex:none}.routebar.on{display:flex}
+.routebar .n{flex:none;width:10px;height:10px;border-radius:50%;border:1.5px solid var(--ink);background:var(--bg);transition:.25s}
+.routebar .n.done{background:var(--ink)}
+.routebar .n.cur{background:var(--clay);border-color:var(--clay);box-shadow:0 0 0 3px rgba(180,85,45,.18)}
+.routebar .l{flex:1;height:0;margin:0 4px;border-top:1.5px dashed #CDBFA6}
+.routebar .l.done{border-color:var(--clay)}
+.routecap{display:none;padding:4px 2px 0;font:italic 400 13px var(--display);color:var(--muted);flex:none}.routebar.on+.routecap{display:block}
+
+/* Заметная кнопка «Назад» */
+.back-bar{display:none;margin:8px 0 0}
+.back-bar.show{display:block}
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:999px;
+  border:1px solid var(--line);background:var(--paper);
+  color:var(--clay);font:600 13px var(--sans);cursor:pointer;
+}
+.back-btn:active{transform:scale(.98)}
+
+.screen{display:none!important;padding:14px 0 24px;position:relative}
+.screen.active{display:block!important}
+
+h1,h2,h3{font-family:var(--display);font-weight:400;color:var(--ink);letter-spacing:-.02em;margin:0}
+h1{font-size:clamp(26px,7.5vw,34px);line-height:1.1;margin-bottom:10px}
+h2{font-size:clamp(23px,6.4vw,29px);line-height:1.14;margin-bottom:8px}
+h3{font-size:18.5px;line-height:1.22}
+.lead{font-size:16px;line-height:1.52;color:var(--text);margin:8px 0 14px}
+.small,.muted{font-size:14px;line-height:1.45;color:var(--muted);margin:0 0 12px}
+.kicker{font:italic 400 15px/1.25 var(--display);color:var(--clay);margin-bottom:6px}
+.kicker::before{content:"✦ ";font-style:normal}
+.hand{font:italic 400 1.05em var(--display);color:var(--clay)}
+
+.card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  margin:12px 0;
+  box-shadow:0 10px 24px -18px rgba(29,26,21,.22);
+}
+
+/* АНИМАЦИЯ ПУТИ КЛИЕНТА (КАК СЕЙЧАС / КАК МОЖНО) */
+.path-anim-card{
+  background:var(--paper);
+  border:1.5px solid var(--line);
+  border-radius:18px;
+  padding:15px 14px;
+  margin:14px 0;
+}
+.path-title{font:700 11.5px var(--sans);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.path-track{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+  padding:10px 8px;
+  border-radius:14px;
+  background:#EFE8DA;
+  margin-bottom:12px;
+}
+.path-track.new-way{
+  background:linear-gradient(135deg,#FBF7EE 0%,#F2E4D4 100%);
+  border:1.5px solid rgba(180,85,45,.45);
+  margin-bottom:0;
+}
+.p-step{
+  text-align:center;
+  padding:7px 4px;
+  border-radius:10px;
+  font-size:11.5px;
+  line-height:1.25;
+}
+.p-step b{display:block;font-size:12px;color:var(--ink);margin-bottom:2px}
+.p-step span{color:var(--muted);font-size:11px}
+.path-track.old-way .p-step.dead{opacity:.6}
+
+.path-track.new-way .p-step{animation:stepGlow 4s infinite}
+.path-track.new-way .p-step:nth-child(1){animation-delay:0s}
+.path-track.new-way .p-step:nth-child(2){animation-delay:1s}
+.path-track.new-way .p-step:nth-child(3){animation-delay:2s}
+.path-track.new-way .p-step:nth-child(4){animation-delay:3s}
+
+@keyframes stepGlow{
+  0%,100%{background:transparent;transform:scale(1)}
+  15%,30%{background:var(--clay);color:#fff;transform:scale(1.04);box-shadow:0 6px 14px -6px rgba(180,85,45,.55)}
+}
+@keyframes textWhite{
+  0%,100%{color:inherit}
+  15%,30%{color:#fff}
+}
+.path-track.new-way .p-step b,.path-track.new-way .p-step span{animation:textWhite 4s infinite}
+.path-track.new-way .p-step:nth-child(1) b,.path-track.new-way .p-step:nth-child(1) span{animation-delay:0s}
+.path-track.new-way .p-step:nth-child(2) b,.path-track.new-way .p-step:nth-child(2) span{animation-delay:1s}
+.path-track.new-way .p-step:nth-child(3) b,.path-track.new-way .p-step:nth-child(3) span{animation-delay:2s}
+.path-track.new-way .p-step:nth-child(4) b,.path-track.new-way .p-step:nth-child(4) span{animation-delay:3s}
+
+/* Видео */
+.video-frame{
+  border-radius:16px;
+  background:var(--ink);
+  border:1px solid var(--line);
+  position:relative;
+  overflow:hidden;
+  margin:10px 0;
+}
+.video-frame .label{
+  position:absolute;top:10px;left:12px;z-index:2;
+  background:rgba(29,26,21,.82);
+  padding:4px 10px;border-radius:999px;
+  font-size:10.5px;letter-spacing:.06em;color:#E8D5B7;text-transform:uppercase;
+}
+.video-frame video{
+  display:block;width:100%;max-height:380px;height:auto;object-fit:contain;background:#1D1A15;
+}
+
+/* Галерея скринов Lemoon и Скринов бота на Экране 2 */
+.lemoon-car,.car{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:8px -15px 4px;padding:4px 15px 10px;scrollbar-width:none}
+.lemoon-car::-webkit-scrollbar,.car::-webkit-scrollbar{display:none}
+.lemoon-slide,.slide{flex:0 0 80%;scroll-snap-align:center;margin:0}
+.lemoon-slide img,.slide img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line);background:var(--paper)}
+.slide figcaption{font-size:13px;line-height:1.35;color:var(--muted);margin-top:6px}
+.slide figcaption b{display:block;color:var(--ink);font-weight:700;margin-bottom:2px}
+
+/* Два реальных скриншота из бота (Уведомления о шагах + Утренний авто-дожим) */
+.bot-proof-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:8px;
+}
+.bot-shot{
+  background:#191B22;
+  border-radius:16px;
+  padding:8px;
+  border:1px solid rgba(29,26,21,.2);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.bot-shot-badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:8px;
+  background:rgba(180,85,45,.25);
+  color:#F5D0B5;
+  font:700 10.5px/1.2 var(--sans);
+  margin-bottom:6px;
+}
+.bot-shot.green .bot-shot-badge{
+  background:rgba(63,98,72,.35);
+  color:#C4E6CB;
+}
+.bot-shot img{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.12);
+}
+.bot-shot-cap{
+  font-size:12px;
+  line-height:1.35;
+  color:#E2DFD9;
+  margin-top:7px;
+}
+.bot-shot-cap b{color:#fff;display:block;margin-bottom:2px}
+
+/* Резервный макет, если файл картинки еще не загружен в папку /img/ */
+.bot-fallback{
+  background:#22252F;
+  color:#F2EFE9;
+  border-radius:11px;
+  padding:11px;
+  font-size:12px;
+  line-height:1.4;
+  border:1px solid rgba(255,255,255,.1);
+}
+.bot-fallback b{color:#79B8FF}
+.bot-fallback-btn{
+  margin-top:7px;padding:6px;border-radius:7px;
+  background:rgba(255,255,255,.12);text-align:center;
+  font-weight:600;font-size:11.5px;color:#fff;
+}
+
+/* Отзыв Софьи крупным шрифтом */
+.sofia-review{
+  background:#232028;
+  color:#F5F1F8;
+  border-radius:18px;
+  padding:16px;
+  margin:12px 0;
+}
+.sofia-head{display:flex;align-items:center;gap:11px;margin-bottom:10px}
+.sofia-avatar{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,#B4552D,#D89B6C);
+  color:#fff;font:600 17px var(--display);
+  display:grid;place-items:center;flex:none;
+}
+.sofia-name b{display:block;font-size:16px;color:#fff}
+.sofia-name span{font-size:12.5px;color:#B9B0C4}
+.sofia-quote{
+  font-size:16px;
+  line-height:1.5;
+  color:#F5F1F8;
+  border-left:3px solid #64B5F6;
+  padding-left:12px;
+  margin:0;
+}
+
+/* Закреплённая кнопка внизу Экрана 2 */
+.sticky-cta-wrap{
+  position:sticky;
+  bottom:10px;
+  z-index:15;
+  padding:8px 0 0;
+  background:linear-gradient(180deg,rgba(243,237,226,0) 0%,var(--bg) 35%);
+}
+
+details.more-examples{
+  margin-top:16px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:11px 14px;
+}
+details.more-examples summary{
+  font:600 14px var(--sans);
+  color:var(--muted);
+  cursor:pointer;
+}
+
+/* Кнопки */
+.btn{
+  background:var(--ink);border:1px solid var(--ink);color:var(--paper);
+  border-radius:999px;font-weight:600;font-size:15.5px;
+  min-height:54px;padding:14px 20px;width:100%;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  text-decoration:none;cursor:pointer;
+  box-shadow:0 10px 24px -10px rgba(29,26,21,.4);
+  margin-top:10px;
+}
+.btn:active{transform:scale(.98)}
+.btn.clay{background:var(--clay);border-color:var(--clay);color:#fff;box-shadow:0 10px 24px -10px rgba(180,85,45,.55)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none}
+
+/* ЭКРАН 3: МИНИ-КАЛЬКУЛЯТОР ЧЕКА + РОЛЬ + СИТУАЦИИ */
+.role-pills,.check-pills{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+  margin:6px 0 12px;
+}
+.check-pills{grid-template-columns:repeat(4,minmax(0,1fr))}
+.r-pill,.c-pill{
+  padding:9px 8px;
+  border-radius:12px;
+  border:1.5px solid var(--line);
+  background:var(--paper);
+  font:600 12.5px/1.25 var(--sans);
+  color:var(--ink);
+  text-align:center;
+  cursor:pointer;
+  transition:.15s;
+}
+.r-pill.on,.c-pill.on{
+  background:var(--ink);
+  border-color:var(--ink);
+  color:var(--paper);
+}
+
+.sit-cards{display:grid;gap:9px;margin:8px 0 10px}
+.sit-card{
+  display:flex;gap:12px;align-items:center;
+  background:var(--paper);border:1.5px solid var(--line);
+  border-radius:16px;padding:13px 14px;cursor:pointer;transition:.15s;
+}
+.sit-num{
+  width:28px;height:28px;border-radius:50%;
+  border:1.5px solid var(--ink);background:var(--bg);
+  font:700 13px var(--sans);color:var(--ink);
+  display:grid;place-items:center;flex:none;
+}
+.sit-card b{display:block;font-size:15.5px;color:var(--ink);margin-bottom:2px}
+.sit-card span{display:block;font-size:13.5px;color:var(--muted);line-height:1.35}
+.sit-card.on{border-color:var(--clay);background:#F9ECE2;box-shadow:0 6px 16px -10px rgba(180,85,45,.45)}
+.sit-card.on .sit-num{background:var(--clay);border-color:var(--clay);color:#fff}
+
+.loss-box{
+  padding:13px 14px;border-radius:14px;
+  background:#232028;color:#F5F1F8;
+  font-size:14px;line-height:1.45;margin:10px 0 14px;
+  border-left:4px solid var(--clay);
+}
+.loss-box b{color:#F5C299}
+
+/* Офферы 7 500 ₽ и 2 500 ₽ (и Партнёрка для продюсеров) */
+.offer-card{
+  background:var(--paper);
+  border:1.5px solid var(--line);
+  border-radius:18px;
+  padding:17px 16px;
+  margin:12px 0;
+}
+.offer-card.flagship{
+  background:linear-gradient(155deg,#FBF7EE 0%,#F3E4D2 100%);
+  border:2px solid var(--clay);
+  box-shadow:0 12px 28px -16px rgba(180,85,45,.45);
+}
+.offer-card.partner-card{
+  display:none;
+  background:linear-gradient(155deg,#FBF7EE 0%,#E5EFE8 100%);
+  border:2px solid var(--ok);
+}
+.offer-card.partner-card.show{display:block}
+.offer-badge{
+  display:inline-block;padding:4px 10px;border-radius:999px;
+  font:600 11px/1 var(--sans);text-transform:uppercase;letter-spacing:.05em;
+  background:var(--clay);color:#fff;margin-bottom:8px;
+}
+.offer-badge.soft{background:rgba(29,26,21,.1);color:var(--ink)}
+.offer-badge.green{background:var(--ok);color:#fff}
+.offer-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
+.offer-title{font:400 21px/1.15 var(--display);color:var(--ink)}
+.offer-price{font:500 23px/1 var(--display);color:var(--clay);white-space:nowrap;text-align:right}
+.offer-list{margin:8px 0;padding-left:18px;font-size:14.5px;color:var(--text)}
+.offer-list li{margin-bottom:4px}
+.credit-box{
+  background:rgba(63,98,72,.1);
+  border:1px solid rgba(63,98,72,.35);
+  border-radius:12px;
+  padding:10px 12px;
+  margin:10px 0 4px;
+  font-size:13.5px;
+  color:var(--ink);
+}
+.credit-box b{color:var(--ok);display:block;margin-bottom:2px}
+
+.map-preview-box{
+  display:none;
+  background:#fff;
+  border:1.5px dashed var(--clay);
+  border-radius:16px;
+  padding:14px;
+  margin:10px 0;
+}
+.map-preview-box.open{display:block}
+.map-preview-step{
+  padding:8px 10px;border-radius:10px;background:var(--bg);
+  margin-bottom:6px;font-size:13px;line-height:1.38;
+}
+.map-preview-step b{color:var(--ink);display:block}
+
+/* ЭКРАН 4 */
+.picked-box{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  background:var(--paper);border:1.5px solid var(--clay);border-radius:14px;
+  padding:11px 13px;margin-bottom:12px;
+}
+.picked-box b{font-size:14.5px;color:var(--ink);display:block}
+.change-btn{
+  flex:none;padding:6px 12px;border-radius:999px;
+  border:1px solid var(--ink);background:var(--bg);
+  font:600 12px var(--sans);cursor:pointer;
+}
+.two-windows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 0 12px}
+.win-card{
+  border:1.5px solid var(--line);border-radius:14px;
+  background:#fff;padding:12px 11px;cursor:pointer;transition:.15s;
+}
+.win-card b{display:block;font:600 14.5px/1.2 var(--sans);color:var(--ink)}
+.win-card span{display:block;font-size:12px;color:var(--muted);margin-top:3px}
+.win-card.on{border-color:var(--clay);background:#F9ECE2;box-shadow:0 0 0 2px rgba(180,85,45,.15)}
+
+.form-label{display:block;font:700 12px/1.35 var(--sans);color:var(--ink);margin:14px 0 5px}
+.field{width:100%;border:1px solid rgba(29,26,21,.24);background:#fff;border-radius:12px;padding:11px 12px;color:var(--ink);font-size:15px;outline:none}
+.field:focus{border-color:var(--clay)}
+textarea.field{min-height:66px;resize:vertical}
+.success{color:var(--ok);font-size:14px;margin-top:8px;font-weight:600}
+.error{color:var(--danger);font-size:14px;margin-top:8px;font-weight:600}
+
+/* Панель владельца (#admin) */
+.adm-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}
+.adm-tab{padding:9px 6px;border-radius:10px;border:1px solid var(--line);background:var(--paper);font:600 12px var(--sans);text-align:center;cursor:pointer}
+.adm-tab.on{background:var(--ink);color:var(--paper)}
+.adm-pane{display:none}.adm-pane.on{display:block}
+.admin-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:10px 0}
+.admin-stat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:9px 4px;text-align:center}
+.admin-stat b{display:block;font:500 20px var(--display);color:var(--ink)}
+.admin-stat span{font-size:10px;color:var(--muted)}
+.visitor-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:9px;font-size:13px}
+.visitor-top{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:4px}
+.visitor-badge{padding:3px 8px;border-radius:999px;font-size:10px;font-weight:600;background:#EFE4D4;color:var(--clay)}
+.visitor-badge.ok{background:#E3EEE6;color:var(--ok)}
+.visitor-why{margin:6px 0;padding:7px 9px;border-radius:8px;background:rgba(29,26,21,.04);color:var(--text)}
+.visitor-actions{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
+.visitor-actions a,.bot-dm-btn{color:var(--clay);font-weight:600;font-size:12px;text-decoration:none;background:none;border:0;padding:0;cursor:pointer}
+.bot-dm-btn{color:var(--ok)}
+.tpl-pills{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.tpl-pill{padding:6px 10px;border-radius:999px;border:1px solid var(--clay);background:var(--paper);color:var(--clay);font:600 11.5px var(--sans);cursor:pointer}
+
+.threads-bar{display:none;background:var(--ink);color:var(--paper);padding:10px 12px;border-radius:12px;margin-top:8px;align-items:center;justify-content:space-between;gap:10px}
+.threads-bar.show{display:flex}
+.threads-bar span{font-size:12px;line-height:1.3}
+.threads-bar a{flex:none;background:var(--clay);color:#fff;padding:6px 11px;border-radius:999px;font-weight:600;font-size:12px;text-decoration:none}
+
+.footer{text-align:center;font:600 10px/1.5 var(--mono);letter-spacing:.05em;color:var(--muted);padding:14px 6px 4px;margin-top:auto}
+.footer a{color:var(--clay);text-decoration:underline}
+.consent-inline{font-size:11.5px;line-height:1.35;color:var(--muted);text-align:center;margin-top:8px}
+.consent-inline a{color:var(--clay);text-decoration:underline}
+
+@media (max-width:440px){
+  .path-track{grid-template-columns:repeat(2,1fr)}
+  .bot-proof-grid{grid-template-columns:1fr}
+  .check-pills{grid-template-columns:repeat(2,1fr)}
+  .two-windows{grid-template-columns:1fr}
+  .admin-stat-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body class="lang-ru">
+
+<div class="app">
+  <div id="threadsBar" class="threads-bar ru-only">
+    <span>Вы открыли страницу в браузере. Откройте внутри Telegram в 1 клик:</span>
+    <a href="https://t.me/lidmini_bot?startapp=threads">В Telegram ↗</a>
+  </div>
+
+  <header class="top">
+    <div class="logo" id="brandLogo">Toriya Nova</div>
+    <div class="top-right">
+      <div class="lang-switch">
+        <button type="button" class="lang-btn" id="btnLangRu">RU</button>
+        <button type="button" class="lang-btn" id="btnLangEn">EN</button>
+      </div>
+      <button id="adminEntryBtn" class="admin-entry-btn">📊 Кто заходил</button>
+    </div>
+  </header>
+
+  <div id="routebar" class="routebar"></div>
+  <div id="routecap" class="routecap"></div>
+
+  <div id="backBar" class="back-bar">
+    <button type="button" id="topBackBtn" class="back-btn">← Назад на предыдущий шаг</button>
+  </div>
+
+  <!-- ==================== ЭКРАН 1. УЗНАВАНИЕ ==================== -->
+  <section class="screen active" id="s0">
+    <div class="ru-only">
+      <div class="kicker">Для экспертов, которые продают через Telegram</div>
+      <h1>Люди читают, лайкают и пишут «а сколько стоит?» — <span class="hand">и пропадают.</span></h1>
+      <p class="lead">Странная штука: вы объясняете одно и то же в личке по 20 раз в неделю. А клиент всё равно уходит «подумать»…</p>
+
+      <!-- Анимированный блок «Как сейчас» и «Как можно» -->
+      <div class="path-anim-card">
+        <div class="path-title"><span>Как сейчас:</span><span>Уходят подумать</span></div>
+        <div class="path-track old-way">
+          <div class="p-step dead"><b>1. Пост</b><span>прочитал</span></div>
+          <div class="p-step dead"><b>2. Вопрос</b><span>«сколько стоит?»</span></div>
+          <div class="p-step dead"><b>3. В личке</b><span>20 сообщений</span></div>
+          <div class="p-step dead"><b>4. Итог</b><span>тишина…</span></div>
+        </div>
+
+        <div class="path-title" style="color:var(--clay)"><span>Как можно:</span><span>Готовая заявка</span></div>
+        <div class="path-track new-way">
+          <div class="p-step"><b>1. Пост</b><span>нажал кнопку</span></div>
+          <div class="p-step"><b>2. Приложение</b><span>открыл в ТГ</span></div>
+          <div class="p-step"><b>3. Выбрал</b><span>свою ситуацию</span></div>
+          <div class="p-step"><b>4. Вам в бот</b><span>готовая заявка</span></div>
+        </div>
+      </div>
+
+      <div class="video-frame">
+        <div class="label">Видео · 1 мин · Как устроена воронка</div>
+        <video controls playsinline preload="metadata">
+          <source src="/Toriya_2.mp4" type="video/mp4">
+          <source src="/02_TORIYA.mp4" type="video/mp4">
+          <source src="/Toriya_5.mp4" type="video/mp4">
+          <source src="/03_FINAL_TORIYA.mp4" type="video/mp4">
+          <source src="/Toriya_1.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <!-- EN ВЕРСИЯ -->
+    <div class="en-only">
+      <div class="kicker">For Experts, Coaches & Service Providers Selling on Social</div>
+      <h1>People read your posts, ask "how much is it?" in DMs — <span class="hand">and disappear.</span></h1>
+      <p class="lead">Strange thing: you explain the exact same details in Messenger 20 times a week. And the prospect still says "I'll think about it"…</p>
+
+      <div class="path-anim-card">
+        <div class="path-title"><span>How it goes now:</span><span>Lost in DMs</span></div>
+        <div class="path-track old-way">
+          <div class="p-step dead"><b>1. Post</b><span>reads it</span></div>
+          <div class="p-step dead"><b>2. DM</b><span>"how much?"</span></div>
+          <div class="p-step dead"><b>3. 20 messages</b><span>back & forth</span></div>
+          <div class="p-step dead"><b>4. Result</b><span>silence…</span></div>
+        </div>
+
+        <div class="path-title" style="color:var(--clay)"><span>How it can work:</span><span>Ready Buyer</span></div>
+        <div class="path-track new-way">
+          <div class="p-step"><b>1. Post</b><span>taps link</span></div>
+          <div class="p-step"><b>2. Micro-App</b><span>opens instantly</span></div>
+          <div class="p-step"><b>3. Picks</b><span>their situation</span></div>
+          <div class="p-step"><b>4. To You</b><span>ready application</span></div>
+        </div>
+      </div>
+    </div>
+
+    <button id="startFunnelBtn" class="btn clay">
+      <span class="ru-only">Показать, как это выглядит →</span>
+      <span class="en-only">Show me how this looks →</span>
+    </button>
+    <p class="consent-inline ru-only">Нажимая кнопку, вы соглашаетесь с <a data-doc href="/privacy.html">политикой конфиденциальности</a>, <a data-doc href="/consent.html">обработкой данных</a> и получением сообщений в боте.</p>
+    <p class="consent-inline en-only">By continuing, you agree to our <a data-doc href="/privacy.html">Privacy Policy</a>.</p>
+  </section>
+
+  <!-- ==================== ЭКРАН 2. ДОКАЗАТЕЛЬСТВО (С РЕАЛЬНЫМИ СКРИНАМИ БОТА И ДОЖИМА) ==================== -->
+  <section id="cases" class="screen">
+    <div class="ru-only">
+      <div class="kicker">Шаг 2 из 4 · Наглядное доказательство</div>
+      <h2>Так клиент сам доходит до заявки</h2>
+      <p class="small">Посмотрите, что видит клиент внутри приложения — и какие уведомления приходят вам и ему в бот:</p>
+
+      <!-- 1. Что видит клиент (Lemoon 8/9) -->
+      <div class="card">
+        <div class="kicker" style="margin-bottom:4px">1. Что видит и нажимает ваш клиент</div>
+        <p class="small" style="margin-bottom:8px">Пример бренда одежды Lemoon 8/9: клиентка сама выбирает модель, размер и отправляет уже оформленный заказ:</p>
+        <div class="lemoon-car">
+          <div class="lemoon-slide"><img src="/img/lemoon_1.PNG" alt="Lemoon витрина" loading="lazy"></div>
+          <div class="lemoon-slide"><img src="/img/lemoon_2.jpg" alt="Lemoon корзина" loading="lazy"></div>
+          <div class="lemoon-slide"><img src="/img/lemoon_3.jpg" alt="Lemoon детали" loading="lazy"></div>
+        </div>
+      </div>
+
+      <!-- 2. ТВОИ РЕАЛЬНЫЕ СКРИНШОТЫ ИЗ LID_BOT (ЧТО ПРИХОДИТ ВАМ + КАК БОТ ДОЖИМАЕТ В 09:00) -->
+      <div class="card">
+        <div class="kicker" style="margin-bottom:4px">2. А это приходит вам и клиенту в бот</div>
+        <p class="small" style="margin-bottom:8px">Вы видите каждый шаг человека с кнопкой «Написать клиенту», а тем, кто отвлёкся — бот сам пишет утром и возвращает к записи:</p>
+
+        <div class="bot-proof-grid">
+          <!-- Скрин 1: Все шаги клиента у владельца (bot_steps.jpg) -->
+          <div class="bot-shot">
+            <div>
+              <span class="bot-shot-badge">👀 Приходит вам в личку</span>
+              <img src="/img/bot_steps.jpg" alt="Уведомления о каждом шаге клиента в боте" loading="lazy"
+                   onerror="if(!this.dataset.t1){this.dataset.t1=1;this.src='/img/bot_steps.PNG'}else if(!this.dataset.t2){this.dataset.t2=1;this.src='/img/bot_steps.png'}else{this.style.display='none';this.nextElementSibling.style.display='block'}">
+              <div class="bot-fallback" style="display:none">
+                👀 <b>В Mini App зашёл пользователь</b><br>
+                📍 Перешёл на этап: <b>2. Живые кейсы</b><br>
+                🎯 Нажал формат: <b>Разбор проекта</b><br>
+                ⏸ <b>Клиент остановился (23 мин назад)</b><br>
+                Этап: Финальная анкета проекта
+                <div class="bot-fallback-btn">Написать клиенту ↗</div>
+              </div>
+            </div>
+            <div class="bot-shot-cap">
+              <b>Виден каждый шаг</b>
+              Кто зашёл, какие экраны открывал и на чём именно остановился.
+            </div>
+          </div>
+
+          <!-- Скрин 2: Утренний авто-дожим клиенту в 09:00 (bot_remind.jpg) -->
+          <div class="bot-shot green">
+            <div>
+              <span class="bot-shot-badge">🤖 Бот дожимает сам</span>
+              <img src="/img/bot_remind.jpg" alt="Как бот сам возвращает клиента утром" loading="lazy"
+                   onerror="if(!this.dataset.t1){this.dataset.t1=1;this.src='/img/bot_remind.PNG'}else if(!this.dataset.t2){this.dataset.t2=1;this.src='/img/bot_remind.png'}else{this.style.display='none';this.nextElementSibling.style.display='block'}">
+              <div class="bot-fallback" style="display:none">
+                <b>Lid_bot · 09:00</b><br>
+                Здравствуйте! Вы смотрели примеры в TORIYA NOVA, но не завершили выбор времени разбора.<br><br>
+                Если актуально перестать терять заявки в переписках — выберите удобное окно:
+                <div class="bot-fallback-btn">Выбрать время разбора ❐</div>
+              </div>
+            </div>
+            <div class="bot-shot-cap">
+              <b>Возвращает тех, кто ушёл думать</b>
+              Если человек закрыл приложение, бот сам мягко напомнит и вернёт его к заявке.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Отзыв Софьи крупным шрифтом -->
+      <div class="sofia-review">
+        <div class="sofia-head">
+          <div class="sofia-avatar">С</div>
+          <div class="sofia-name">
+            <b>Софья · основатель бренда Lemoon 8/9</b>
+            <span>🎙 Голосовой отзыв · 0:50</span>
+          </div>
+        </div>
+        <p class="sofia-quote">«Сделали распродажу −70% и запустили поток через мини-приложение в Telegram — всем клиентам очень удобно пользоваться! Заявки приходят сразу с выбранными моделями, мы перестали терять людей в переписках и спокойно доводим их до заказа».</p>
+      </div>
+
+      <!-- Спойлер «Ещё примеры» -->
+      <details class="more-examples">
+        <summary>Посмотреть ещё примеры экранов (тест, запись на услуги, список визитов)</summary>
+        <div class="car">
+          <figure class="slide"><img src="/img/quiz.webp" alt="Тест" loading="lazy"><figcaption><b>Тест вместо PDF</b>Подписчик выбирает ответы и прогревается сам</figcaption></figure>
+          <figure class="slide"><img src="/img/book1.webp" alt="Услуги" loading="lazy"><figcaption><b>Витрина услуг</b>Все тарифы и запись в одном окне</figcaption></figure>
+          <figure class="slide"><img src="/img/crm.webp" alt="База" loading="lazy"><figcaption><b>Панель владельца</b>Список всех людей, кто открывал приложение</figcaption></figure>
+        </div>
+      </details>
+    </div>
+
+    <!-- EN ВЕРСИЯ ЭКРАНА 2 -->
+    <div class="en-only">
+      <div class="kicker">Step 2 of 4 · Proof in Action</div>
+      <h2>How a prospect reaches your application on their own</h2>
+
+      <div class="card">
+        <div class="kicker" style="margin-bottom:4px">1. What your client experiences</div>
+        <p style="font-size:15px;margin:0">In-chat boutique & service flow: the client picks their option or size and sends a complete order without waiting for you to reply in DMs.</p>
+      </div>
+
+      <div class="card">
+        <div class="kicker" style="margin-bottom:4px">2. Live Step Tracking & Auto Follow-Up</div>
+        <div class="bot-fallback">
+          👀 <b>Visitor opened Micro-App</b> → Viewed Case Studies → Selected Package → ⏸ <b>Paused at Brief (23 min ago)</b>.<br>
+          🤖 <b>09:00 AM Auto-Reminder sent:</b> brings warm prospects back to finish their booking.
+        </div>
+      </div>
+
+      <div class="sofia-review">
+        <div class="sofia-head">
+          <div class="sofia-avatar">S</div>
+          <div class="sofia-name">
+            <b>Sofia · Founder of Lemoon 8/9</b>
+            <span>🎙 Client Voice Review</span>
+          </div>
+        </div>
+        <p class="sofia-quote">"We ran our −70% sale through the micro-app — customers loved how effortless it is! Orders come in already formatted, and we stopped losing warm buyers between 'how much is it?' and checkout."</p>
+      </div>
+    </div>
+
+    <!-- ЗАКРЕПЛЁННАЯ КНОПКА ВНИЗУ ЭКРАНА 2 -->
+    <div class="sticky-cta-wrap">
+      <a class="btn clay" href="#price">
+        <span class="ru-only">Хочу так же →</span>
+        <span class="en-only">I want this too →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ==================== ЭКРАН 3. ИНТЕРАКТИВНЫЙ ВЫБОР + КАЛЬКУЛЯТОР ПОТЕРЬ + 7 500 ₽ И 2 500 ₽ ==================== -->
+  <section id="price" class="screen">
+    <div class="ru-only">
+      <div class="kicker">Шаг 3 из 4 · Примерим на ваш проект</div>
+      <h2>Что у вас сейчас происходит?</h2>
+      <p class="small">Отметьте вашу роль, средний чек и ситуацию — система посчитает, сколько денег сейчас застревает в переписках, и покажет подходящий вариант:</p>
+
+      <!-- 1. Роль (Эксперт или Продюсер/Трафик) -->
+      <label class="form-label" style="margin-top:4px">1. КТО ВЫ:</label>
+      <div class="role-pills" id="rolePicker">
+        <div class="r-pill on" data-role="expert">💎 Эксперт / Практик<br><span style="font-weight:400;font-size:11px;opacity:.8">продаю свои услуги</span></div>
+        <div class="r-pill" data-role="producer">🚀 Продюсер / Трафик<br><span style="font-weight:400;font-size:11px;opacity:.8">строю воронки клиентам</span></div>
+      </div>
+
+      <!-- 2. Средний чек (для авто-расчёта потерь) -->
+      <label class="form-label">2. СРЕДНИЙ ЧЕК ВАШЕГО ПРОДУКТА:</label>
+      <div class="check-pills" id="checkPicker">
+        <div class="c-pill" data-check="15000">15 000 ₽</div>
+        <div class="c-pill on" data-check="30000">30 000 ₽</div>
+        <div class="c-pill" data-check="50000">50 000 ₽</div>
+        <div class="c-pill" data-check="100000">100 000+ ₽</div>
+      </div>
+
+      <!-- 3. Три карточки ситуации -->
+      <label class="form-label">3. ГЛАВНАЯ БОЛЬ СЕЙЧАС:</label>
+      <div class="sit-cards" id="sitPicker">
+        <div class="sit-card" data-sit="1">
+          <div class="sit-num">1</div>
+          <div>
+            <b>Теряются заявки («Кладбище PDF и переписок»)</b>
+            <span>Скачивают бесплатную пользу или спрашивают цену в личке — и исчезают</span>
+          </div>
+        </div>
+        <div class="sit-card on" data-sit="2">
+          <div class="sit-num">2</div>
+          <div>
+            <b>Всё держится на мне вручную</b>
+            <span>Сама отвечаю, записываю и объясняю одно и то же каждому</span>
+          </div>
+        </div>
+        <div class="sit-card" data-sit="3">
+          <div class="sit-num">3</div>
+          <div>
+            <b>Много идей, нет системы</b>
+            <span>Не понимаю, как упаковать услуги в один понятный маршрут</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Автоматический расчёт упущенной выручки + персональная рекомендация -->
+      <div class="loss-box" id="lossCalcBox">
+        📊 <b>Математика вашей воронки:</b> при чеке <b>30 000 ₽</b> даже 3 человека в месяц, которые ушли «подумать» после вопроса о цене, — это <b>минус 90 000 ₽ каждый месяц</b>.<br>
+        <span id="sitRecSpan" style="display:block;margin-top:5px;color:#E2DFD9">Покажу, какой вариант поможет закрыть эту дыру и выстроить систему:</span>
+      </div>
+
+      <!-- ГЛАВНЫЙ ОФФЕР: АРХИТЕКТУРНЫЙ РАЗБОР «ИЗ ХАОСА В СИСТЕМУ» · 7 500 ₽ -->
+      <div class="offer-card flagship">
+        <span class="offer-badge">⭐ Основной формат · Хочу спроектировать всю систему</span>
+        <div class="offer-head">
+          <div class="offer-title">Архитектурный разбор «Из хаоса в систему»</div>
+          <div class="offer-price">7 500 ₽</div>
+        </div>
+        <p style="font-size:14.5px;margin:0 0 8px">Анкета + личная сессия 60–90 минут. На выходе у вас остаётся готовая <b>Карта проекта</b>:</p>
+        <ul class="offer-list">
+          <li>Схема пути клиента от поста до оплаты без вашего ручного участия;</li>
+          <li>Структура воронки и точный перечень функций вашего мини-приложения;</li>
+          <li>Сценарий сообщений бота, которые возвращают тех, кто ушёл «подумать»;</li>
+          <li>Последовательность внедрения по шагам.</li>
+        </ul>
+
+        <div class="credit-box">
+          <b>✓ Ваши 7 500 ₽ не пропадают:</b>
+          Если в течение 7 календарных дней после получения Карты проекта вы заказываете разработку мини-приложения под ключ, все 7 500 ₽ полностью засчитываются в стоимость.
+        </div>
+
+        <button type="button" class="btn clay tier-pick-btn" data-step="map7500" data-price="7 500 ₽" data-label="Архитектурный разбор «Из хаоса в систему» + Карта проекта · 7 500 ₽">
+          Хочу разбор и Карту проекта →
+        </button>
+
+        <button type="button" id="toggleMapPreviewBtn" class="btn ghost" style="min-height:42px;padding:8px 14px;font-size:13.5px;margin-top:8px">
+          📄 Посмотреть пример Карты проекта (пример структуры)
+        </button>
+
+        <div id="mapPreviewBox" class="map-preview-box">
+          <div class="kicker" style="margin-bottom:6px">Пример структуры Карты проекта</div>
+          <p class="small" style="margin-bottom:8px">Вот какой документ со схемой остаётся у вас на руках после разбора за 7 500 ₽:</p>
+          <div class="map-preview-step"><b>1. Точка входа из канала</b>Какой оффер и пост переводят человека в приложение вместо пустого вопроса «сколько стоит?».</div>
+          <div class="map-preview-step"><b>2. Поэкранный сценарий Mini App</b>4 экрана: узнавание ситуации, доказательство, выбор формата и анкета предзаписи.</div>
+          <div class="map-preview-step"><b>3. Уведомления владельцу и 3 дожима в боте</b>Тексты сообщений через 2 часа, 1 день и 3 дня, которые возвращают молчунов к покупке.</div>
+        </div>
+
+        <p class="small" style="text-align:center;margin:10px 0 0;font-size:12.5px">Разработка мини-приложения под ключ от 30 000 ₽</p>
+      </div>
+
+      <!-- ВТОРОЙ ВАРИАНТ: МИНИ-РАЗБОР · 2 500 ₽ -->
+      <div class="offer-card">
+        <span class="offer-badge soft">Вариант 2 · Хочу сначала разобраться с одной задачей</span>
+        <div class="offer-head">
+          <div class="offer-title">Мини-разбор + макет Mini App</div>
+          <div class="offer-price">2 500 ₽</div>
+        </div>
+        <p style="font-size:14.5px;margin:0 0 8px">20 минут личной встречи под один узкий вопрос:</p>
+        <ul class="offer-list">
+          <li>Разберём текущий путь вашего клиента и найдём 1–2 главных узких места;</li>
+          <li>Определим идею вашего мини-приложения и соберём предварительный визуальный макет.</li>
+        </ul>
+        <button type="button" class="btn ghost tier-pick-btn" data-step="mini2500" data-price="2 500 ₽" data-label="Мини-разбор (20 мин) + макет Mini App · 2 500 ₽">
+          Начать с мини-разбора за 2 500 ₽ →
+        </button>
+      </div>
+
+      <!-- ДОПОЛНИТЕЛЬНАЯ КАРТОЧКА ДЛЯ ПРОДЮСЕРОВ И ТРАФИК-СПЕЦОВ (показывается, если выбрана роль Продюсер) -->
+      <div id="partnerOfferCard" class="offer-card partner-card">
+        <span class="offer-badge green">🤝 Для продюсеров и трафик-агентств</span>
+        <div class="offer-head">
+          <div class="offer-title">Партнёрское внедрение в запуски клиентов</div>
+          <div class="offer-price">White Label / %</div>
+        </div>
+        <p style="font-size:14.5px;margin:0 0 8px">Внедрим такое мини-приложение с трекингом каждого шага и авто-дожимом в проект вашего эксперта (чтобы поднять окупаемость трафика) — или выплатим партнёрскую комиссию за переданного клиента.</p>
+        <button type="button" class="btn clay tier-pick-btn" style="background:var(--ok);border-color:var(--ok)" data-step="partner" data-price="Партнёрство" data-label="Партнёрский запуск / внедрение для продюсеров">
+          Обсудить партнёрство и проекты →
+        </button>
+      </div>
+    </div>
+
+    <!-- EN ВЕРСИЯ ЭКРАНА 3 -->
+    <div class="en-only">
+      <div class="kicker">Step 3 of 4 · Choose Your Depth</div>
+      <h2>What is happening in your project right now?</h2>
+      <div class="sit-cards">
+        <div class="sit-card on" data-sit="1"><div class="sit-num">1</div><div><b>Losing warm leads</b><span>People ask for prices in DMs and vanish</span></div></div>
+        <div class="sit-card" data-sit="2"><div class="sit-num">2</div><div><b>Everything relies on me</b><span>Answering, scheduling & explaining manually</span></div></div>
+        <div class="sit-card" data-sit="3"><div class="sit-num">3</div><div><b>Many ideas, no system</b><span>Not sure how to package my offers into one flow</span></div></div>
+      </div>
+
+      <div class="offer-card flagship">
+        <span class="offer-badge">⭐ Core Format · Full System Blueprint</span>
+        <div class="offer-head">
+          <div class="offer-title">System Architecture Session + Project Map</div>
+          <div class="offer-price">$120 USD</div>
+        </div>
+        <p style="font-size:14.5px;margin:0 0 8px">60–90 min 1:1 session. You walk away with a complete <b>Project Map</b>: client flow, micro-app screen structure, and implementation plan. <b>100% credited if you order a turnkey build within 7 days!</b></p>
+        <button type="button" class="btn clay tier-pick-btn" data-step="map7500" data-price="$120 USD" data-label="System Architecture Session + Project Map · $120 USD">
+          Book System Session ($120) →
+        </button>
+      </div>
+
+      <div class="offer-card">
+        <span class="offer-badge soft">Option 2 · Quick Start</span>
+        <div class="offer-head">
+          <div class="offer-title">Mini-Audit (20 min) + Screen Concept</div>
+          <div class="offer-price">$45 USD</div>
+        </div>
+        <p style="font-size:14.5px;margin:0 0 8px">20-minute focused call to solve one specific bottleneck and sketch your micro-app concept.</p>
+        <button type="button" class="btn ghost tier-pick-btn" data-step="mini2500" data-price="$45 USD" data-label="Mini-Audit (20 min) + Screen Concept · $45 USD">
+          Start with Mini-Audit ($45) →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ЭКРАН 4. ЗАПИСЬ: СНАЧАЛА БРОНЬ + ОКНО (УТРО/ВЕЧЕР) + АНКЕТА ИЗ 5 ВОПРОСОВ ==================== -->
+  <section id="order" class="screen">
+    <div class="kicker ru-only">Шаг 4 из 4 · Бронь места и анкета проекта</div>
+    <div class="kicker en-only">Step 4 of 4 · Lock In Your Spot & Project Brief</div>
+    <h2 class="ru-only">Сначала бронь, потом анкета</h2>
+    <h2 class="en-only">Reserve your spot & share your context</h2>
+    <p class="lead ru-only" style="margin-top:4px"><b>Оплата закрепляет ваше место. Дальше расскажете о проекте, а я подготовлюсь заранее.</b></p>
+    <p class="lead en-only" style="margin-top:4px"><b>Payment locks in your spot. Below, share 5 quick details about your project so I can prepare before we meet.</b></p>
+
+    <div class="picked-box">
+      <div>
+        <span class="small" style="margin:0;font-size:11.5px;display:block">Выбранный формат:</span>
+        <b id="chosenTierTitle">Архитектурный разбор «Из хаоса в систему» · 7 500 ₽</b>
+      </div>
+      <button type="button" id="changeTierBtn" class="change-btn">← Выбрать другое</button>
+    </div>
+
+    <div class="card">
+      <label class="form-label" style="margin-top:0">
+        <span class="ru-only">ВЫБЕРИТЕ УДОБНОЕ ОКНО ДЛЯ СЕССИИ (УТРО / ВЕЧЕР):</span>
+        <span class="en-only">PICK YOUR PREFERRED TIME WINDOW (MORNING / EVENING):</span>
+      </label>
+      <div class="two-windows">
+        <div class="win-card on" data-win="Утро / первая половина дня (10:00–14:00 МСК)">
+          <b class="ru-only">☀️ Утро / день</b>
+          <b class="en-only">☀️ Morning / Midday</b>
+          <span class="ru-only">10:00 – 14:00 МСК</span>
+          <span class="en-only">9:00 AM – 1:00 PM EST</span>
+        </div>
+        <div class="win-card" data-win="Вечер / вторая половина дня (15:00–19:00 МСК)">
+          <b class="ru-only">🌆 День / вечер</b>
+          <b class="en-only">🌆 Afternoon / Evening</b>
+          <span class="ru-only">15:00 – 19:00 МСК</span>
+          <span class="en-only">2:00 PM – 6:00 PM EST</span>
+        </div>
+      </div>
+
+      <!-- АНКЕТА ИЗ 5 ВОПРОСОВ (БЕЗ «ССЫЛКИ НА КАНАЛ» В НАЧАЛЕ!) -->
+      <label class="form-label" for="q1Input">
+        <span class="ru-only">1. ЧЕМ ЗАНИМАЕТЕСЬ И КОМУ ПРОДАЁТЕ?</span>
+        <span class="en-only">1. WHAT DO YOU DO & WHO DO YOU SELL TO?</span>
+      </label>
+      <input id="q1Input" type="text" class="field" placeholder="Например: психолог / коуч / репетитор, продаю консультации и сопровождение">
+
+      <label class="form-label" for="q2Input">
+        <span class="ru-only">2. КАК ЧЕЛОВЕК СЕЙЧАС ИДЁТ ОТ ЗНАКОМСТВА ДО ОПЛАТЫ?</span>
+        <span class="en-only">2. HOW DOES A CLIENT CURRENTLY GO FROM DISCOVERY TO PAYMENT?</span>
+      </label>
+      <textarea id="q2Input" class="field" placeholder="Например: читает посты → пишет в личку «сколько стоит» → я отвечаю и скидываю реквизиты…"></textarea>
+
+      <label class="form-label" for="q3Input">
+        <span class="ru-only">3. ЧТО ОТНИМАЕТ БОЛЬШЕ ВСЕГО ВРЕМЕНИ?</span>
+        <span class="en-only">3. WHAT TAKES UP MOST OF YOUR TIME RIGHT NOW?</span>
+      </label>
+      <input id="q3Input" type="text" class="field" placeholder="Например: долгие переписки с теми, кто потом уходит подумать">
+
+      <label class="form-label" for="q4Input">
+        <span class="ru-only">4. ЧТО УЖЕ ИСПОЛЬЗУЕТЕ (БОТ, ТАБЛИЦЫ, CRM)?</span>
+        <span class="en-only">4. WHAT TOOLS DO YOU ALREADY USE (BOTS, SHEETS, CRM)?</span>
+      </label>
+      <input id="q4Input" type="text" class="field" placeholder="Например: только личка в Telegram и заметки в телефоне">
+
+      <label class="form-label" for="q5Input">
+        <span class="ru-only">5. ЧТО ДОЛЖНО ИЗМЕНИТЬСЯ ЗА 1–3 МЕСЯЦА?</span>
+        <span class="en-only">5. WHAT SHOULD CHANGE IN THE NEXT 1–3 MONTHS?</span>
+      </label>
+      <textarea id="q5Input" class="field" placeholder="Например: хочу понятную систему, чтобы приходили готовые целевые заявки без моей ручной переписки"></textarea>
+
+      <button id="consultBtn" class="btn clay" style="margin-top:16px">
+        <span class="ru-only">Перейти к оплате брони и отправить анкету →</span>
+        <span class="en-only">Lock In My Spot & Send Brief in Messenger →</span>
+      </button>
+      <div id="consultStatus"></div>
+    </div>
+  </section>
+
+  <!-- ==================== ПАНЕЛЬ ВЛАДЕЛЬЦА (#admin) ==================== -->
+  <section id="admin" class="screen">
+    <div class="kicker">Закрытая панель · Toriya Nova</div>
+    <h2>Кто заходил и рассылка через бота</h2>
+
+    <div id="adminAuthBox" class="card">
+      <label class="form-label" for="adminPassInput" style="margin-top:0">ПАРОЛЬ ВЛАДЕЛЬЦА</label>
+      <input id="adminPassInput" type="text" class="field" value="toriya2026">
+      <button id="adminLoginBtn" class="btn" style="margin-top:10px">Открыть панель →</button>
+      <div id="adminAuthErr" class="error"></div>
+    </div>
+
+    <div id="adminContent" style="display:none">
+      <div class="admin-stat-grid" id="adminStats"></div>
+
+      <div class="adm-tabs">
+        <div class="adm-tab on" data-adm="active">За 7 дней</div>
+        <div class="adm-tab" data-adm="all">Вся база</div>
+        <div class="adm-tab" data-adm="broadcast">Рассылка в бот</div>
+      </div>
+
+      <div class="adm-pane on" id="adm-active">
+        <p class="small">Кто заходил недавно, что выбрал и на каком шаге остановился:</p>
+        <div id="adminVisitorsList"></div>
+      </div>
+
+      <div class="adm-pane" id="adm-all">
+        <p class="small">Все люди за всё время:</p>
+        <div id="adminAllUsersList"></div>
+      </div>
+
+      <div class="adm-pane" id="adm-broadcast">
+        <div class="card">
+          <div class="kicker">Отправить сообщение всем через бота</div>
+          <div class="tpl-pills">
+            <button type="button" class="tpl-pill" data-tpl="msg2h">Через 2 ч: Карта проекта</button>
+            <button type="button" class="tpl-pill" data-tpl="msg1d">Через 1 дн: Мини-кейс</button>
+            <button type="button" class="tpl-pill" data-tpl="msg3d">Через 3 дн: 2 места на разбор</button>
+          </div>
+          <label class="form-label" for="broadcastText">ТЕКСТ СООБЩЕНИЯ:</label>
+          <textarea id="broadcastText" class="field" style="min-height:110px">Блин, вы почти дошли. Вот как выглядит Карта проекта, чтобы было понятно, за что вы платите на разборе — посмотрите пример структуры внутри приложения:</textarea>
+          <label class="form-label" for="broadcastBtnText">ТЕКСТ НА КНОПКЕ:</label>
+          <input id="broadcastBtnText" type="text" class="field" value="📄 Посмотреть пример Карты проекта">
+          <button id="broadcastSendBtn" class="btn clay" style="margin-top:12px">📢 Отправить всем в бот →</button>
+          <div id="broadcastStatus" style="margin-top:8px;font-size:13px;font-weight:600"></div>
+        </div>
+      </div>
+
+      <button id="adminRefreshBtn" class="btn ghost" style="margin-top:8px">🔄 Обновить список</button>
+    </div>
+  </section>
+
+  <div class="footer">TORIYA NOVA · <a data-doc href="/privacy.html">Политика</a> · <a data-doc href="/consent.html">Согласие</a></div>
+</div>
+
+<script>
+window.__errs=[];addEventListener('error',function(e){var t=(e.message||'ошибка')+' @'+String(e.filename||'').split('/').pop()+':'+e.lineno;window.__errs.push(t)});
+(function(){var N=function(){};if(/tgWebApp/.test(location.hash+location.search)||window.TelegramWebviewProxy){document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>')}else{window.Telegram={WebApp:{initData:'',initDataUnsafe:{},ready:N,expand:N,setHeaderColor:N,setBackgroundColor:N,onEvent:N,requestWriteAccess:N,BackButton:{show:N,hide:N,onClick:N},HapticFeedback:{impactOccurred:N,selectionChanged:N,notificationOccurred:N},openLink:function(u){window.open(u,'_blank')},openTelegramLink:function(u){window.open(u,'_blank')},viewportHeight:innerHeight,viewportStableHeight:innerHeight}}}})();
+</script>
+<script>
+const $=id=>document.getElementById(id);
+const CONFIG={
+  consultationUrl:'https://t.me/toriya_nova',
+  fbMessengerUrl:'https://m.me/toriya.nova',
+  botAppUrl:'https://t.me/lidmini_bot?startapp=',
+  ownerId:'6894849502'
+},CONSENT_V='2026-11-11';
+
+const tg=window.Telegram&&window.Telegram.WebApp||null;
+const web=!(tg&&tg.initData);
+const isLocal=location.protocol==='file:'||['localhost','127.0.0.1'].includes(location.hostname);
+const screens=['s0','cases','price','order','admin'];
+const NOSTACK=['s0'];
+
+const qs=new URLSearchParams(location.search);
+const ref=document.referrer||'';
+const ua=navigator.userAgent||'';
+const isEnUrl=/^\/en(\/|$)/i.test(location.pathname)||qs.get('lang')==='en'||/facebook|fbAN|fbAV/i.test(ref+ua);
+
+const state={
+  lang:isEnUrl?'en':'ru',
+  consent:false,
+  admTab:'active',
+  role:'Эксперт / Практик',
+  check:30000,
+  situation:'2 · Всё держится на мне',
+  step:'map7500',
+  stepLabel:isEnUrl?'System Architecture Session + Project Map · $120 USD':'Архитектурный разбор «Из хаоса в систему» + Карта проекта · 7 500 ₽',
+  timeWindow:'Утро / первая половина дня (10:00–14:00 МСК)',
+  adminKey:sessionStorage.getItem('tn_adm_key')||'toriya2026',
+  sending:false
+};
+
+const SIT_RECS={
+  '1':'Покажу, какой вариант подойдёт именно вам: если люди спрашивают цену и исчезают — можно начать с короткого Мини-разбора (2 500 ₽) или сразу собрать полную Карту проекта (7 500 ₽).',
+  '2':'Покажу, какой вариант подойдёт именно вам: когда всё держится на вас вручную — рекомендую Архитектурный разбор (7 500 ₽), чтобы выстроить систему и получить готовую Карту проекта.',
+  '3':'Покажу, какой вариант подойдёт именно вам: когда много идей и продуктов, но нет единой системы — идеально подойдёт Архитектурный разбор «Из хаоса в систему» (7 500 ₽).'
+};
+
+function updateLossCalculator(){
+  const box=$('lossCalcBox');
+  if(!box)return;
+  const lost3=(state.check*3).toLocaleString('ru-RU');
+  const sitCode=state.situation.slice(0,1);
+  const recText=SIT_RECS[sitCode]||SIT_RECS['2'];
+  box.innerHTML=`📊 <b>Математика вашей воронки:</b> при чеке <b>${state.check.toLocaleString('ru-RU')} ₽</b> даже 3 человека в месяц, которые ушли «подумать» после вопроса о цене, — это <b>минус ${lost3} ₽ каждый месяц</b>.<br><span style="display:block;margin-top:5px;color:#E2DFD9">${recText}</span>`;
+}
+
+function setLang(lang){
+  state.lang=lang==='en'?'en':'ru';
+  document.body.classList.toggle('lang-en',state.lang==='en');
+  document.body.classList.toggle('lang-ru',state.lang==='ru');
+  $('btnLangRu').classList.toggle('on',state.lang==='ru');
+  $('btnLangEn').classList.toggle('on',state.lang==='en');
+  $('topBackBtn').textContent=state.lang==='en'?'← Back to previous step':'← Назад на предыдущий шаг';
+  $('changeTierBtn').textContent=state.lang==='en'?'← Change':'← Выбрать другое';
+  setRoute(cur||'s0');
+}
+
+const autoSrc=/facebook|fbAN|fbAV/i.test(ref+ua)?'facebook_us':/threads|barcelona/i.test(ref+ua)?'threads':/instagram/i.test(ref+ua)?'instagram':'';
+const src=qs.get('src')||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||autoSrc||(state.lang==='en'?'facebook_en':web?'web_direct':'tg_direct');
+
+if(web&&!isLocal&&state.lang==='ru'){
+  const tb=$('threadsBar');
+  if(tb){
+    tb.classList.add('show');
+    const a=tb.querySelector('a');
+    if(a)a.href=CONFIG.botAppUrl+encodeURIComponent(src||'threads');
+  }
+}
+
+function webId(){
+  let id='';try{id=localStorage.getItem('tn_webid')||''}catch{}
+  if(!/^[a-f0-9-]{36}$/.test(id)){
+    id=crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16)});
+    try{localStorage.setItem('tn_webid',id)}catch{}
+  }
+  return id;
+}
+
+async function apiPost(url,payload){
+  const initData=tg&&tg.initData||'';
+  const r=await fetch(url,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Telegram-Init-Data':initData,'X-Web-Id':initData?'':webId()},
+    body:JSON.stringify({...payload,initData})
+  });
+  return r.json();
+}
+
+function track(event,meta={}){
+  if(isLocal)return;
+  apiPost('/api/event',{event,meta:{...meta,src,lang:state.lang}}).catch(()=>{});
+}
+function haptic(k,v){try{tg.HapticFeedback[k](v)}catch{}}
+function openTg(u){if(!web&&tg.openTelegramLink&&u.startsWith('https://t.me/'))tg.openTelegramLink(u);else location.href=u}
+
+function switchAdminTab(tab){
+  state.admTab=tab;
+  document.querySelectorAll('.adm-tab').forEach(b=>b.classList.toggle('on',b.dataset.adm===tab));
+  document.querySelectorAll('.adm-pane').forEach(p=>p.classList.toggle('on',p.id==='adm-'+tab));
+}
+
+const ROUTE_RU=[
+  ['Экран 1 из 4 · Узнавание',['s0']],
+  ['Экран 2 из 4 · Доказательство',['cases']],
+  ['Экран 3 из 4 · Выбор формата',['price']],
+  ['Экран 4 из 4 · Бронь и анкета',['order']]
+];
+const ROUTE_EN=[
+  ['Step 1 of 4 · Recognition',['s0']],
+  ['Step 2 of 4 · Proof',['cases']],
+  ['Step 3 of 4 · Your Option',['price']],
+  ['Step 4 of 4 · Reserve & Brief',['order']]
+];
+let routeK=-1;
+function setRoute(id){
+  const ROUTE=state.lang==='en'?ROUTE_EN:ROUTE_RU;
+  const bar=$('routebar'),cap=$('routecap');
+  const k=ROUTE.findIndex(r=>r[1].includes(id));
+  if(k<0){bar.classList.remove('on');return}
+  if(!bar.dataset.built){
+    bar.innerHTML=ROUTE.map((r,i)=>(i?'<b class="l"></b>':'')+'<i class="n"></i>').join('');
+    bar.dataset.built='1';
+  }
+  bar.classList.add('on');
+  bar.querySelectorAll('.n').forEach((n,i)=>{n.className='n'+(i<k?' done':i===k?' cur':'')});
+  bar.querySelectorAll('.l').forEach((l,i)=>l.classList.toggle('done',i<k));
+  cap.textContent=ROUTE[k][0];
+  if(k>routeK&&routeK>=0)haptic('impactOccurred','light');
+  routeK=k;
+}
+
+let cur=null,backing=false;const navStack=[];
+function syncBack(){
+  const hide=NOSTACK.includes(cur);
+  try{hide?tg.BackButton.hide():tg.BackButton.show()}catch{}
+  const bb=$('backBar');
+  if(bb)bb.classList.toggle('show',!hide);
+}
+function goBack(){
+  let prev=navStack.pop();
+  if(!prev){
+    prev=cur==='order'?'price':cur==='price'?'cases':cur==='cases'?'s0':'s0';
+  }
+  backing=true;
+  show(prev);
+  backing=false;
+}
+
+function renderOrderScreen(){
+  if($('chosenTierTitle'))$('chosenTierTitle').textContent=state.stepLabel;
+}
+
+function forceScrollTop(){
+  window.scrollTo(0,0);
+  document.documentElement.scrollTop=0;
+  document.body.scrollTop=0;
+}
+
+function show(id){
+  if(!screens.includes(id))return;
+  screens.forEach(x=>{const el=$(x);if(el)el.classList.toggle('active',x===id)});
+  forceScrollTop();
+  setTimeout(forceScrollTop,40);
+  if(cur!==id){
+    if(!backing&&cur&&!NOSTACK.includes(cur))navStack.push(cur);
+    cur=id;
+    if(id!=='admin')track('screen_view',{screen:id});
+    if(id==='order')renderOrderScreen();
+    if(id==='admin')loadAdminDashboard();
+  }
+  syncBack();
+  setRoute(id);
+}
+
+$('btnLangRu').onclick=()=>setLang('ru');
+$('btnLangEn').onclick=()=>setLang('en');
+$('topBackBtn').onclick=goBack;
+$('changeTierBtn').onclick=()=>show('price');
+
+$('toggleMapPreviewBtn').onclick=()=>{
+  const box=$('mapPreviewBox');
+  box.classList.toggle('open');
+  track('map_preview_open',{open:box.classList.contains('open')});
+  haptic('selectionChanged');
+};
+
+$('startFunnelBtn').onclick=()=>{
+  state.consent=true;
+  try{localStorage.setItem('tn_consent',CONSENT_V)}catch{}
+  track('consent',{processing:true,privacy:true,messages:true,v:CONSENT_V});
+  if(!web){
+    try{if(!tg.initDataUnsafe?.user?.allows_write_to_pm)tg.requestWriteAccess(()=>{})}catch{}
+  }
+  haptic('impactOccurred','light');
+  show('cases');
+};
+
+const TPL_TEXTS={
+  msg2h:`Блин, вы почти дошли. Вот как выглядит Карта проекта, чтобы было понятно, за что платите на разборе — откройте пример структуры по кнопке ниже:`,
+  msg1d:`Мини-кейс: бренд одежды перестал терять людей между вопросом «сколько стоит?» и заказом, когда мы собрали путь клиента в мини-приложении. Посмотрите, как это устроено:`,
+  msg3d:`На эту неделю осталось 2 места на архитектурный разбор проекта (или мини-разбор за 2 500 ₽). Если актуально перестать терять заявки в переписках — забирайте место:`
+};
+
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href^="#"]');
+  if(a){e.preventDefault();show(a.getAttribute('href').slice(1));return}
+
+  const l=e.target.closest('a[data-doc]');
+  if(l){
+    e.preventDefault();
+    const u=location.origin+l.getAttribute('href');
+    try{web?window.open(u,'_blank'):tg.openLink(u)}catch{window.open(u,'_blank')}
+    return;
+  }
+
+  /* Выбор роли (Эксперт / Продюсер) */
+  const rp=e.target.closest('.r-pill[data-role]');
+  if(rp){
+    document.querySelectorAll('.r-pill').forEach(el=>el.classList.remove('on'));
+    rp.classList.add('on');
+    const isProd=rp.dataset.role==='producer';
+    state.role=isProd?'Продюсер / Трафик':'Эксперт / Практик';
+    $('partnerOfferCard')?.classList.toggle('show',isProd);
+    track('role_pick',{role:state.role});
+    haptic('selectionChanged');
+    return;
+  }
+
+  /* Выбор среднего чека */
+  const cp=e.target.closest('.c-pill[data-check]');
+  if(cp){
+    document.querySelectorAll('.c-pill').forEach(el=>el.classList.remove('on'));
+    cp.classList.add('on');
+    state.check=Number(cp.dataset.check)||30000;
+    updateLossCalculator();
+    track('check_pick',{check:state.check,lostMonthly:state.check*3});
+    haptic('selectionChanged');
+    return;
+  }
+
+  /* Выбор ситуации */
+  const sc=e.target.closest('.sit-card[data-sit]');
+  if(sc){
+    document.querySelectorAll('.sit-card').forEach(el=>el.classList.remove('on'));
+    sc.classList.add('on');
+    const code=sc.dataset.sit;
+    const title=sc.querySelector('b')?.textContent||'';
+    state.situation=`${code} · ${title}`;
+    updateLossCalculator();
+    track('situation_pick',{situation:state.situation});
+    haptic('selectionChanged');
+    return;
+  }
+
+  /* Выбор тарифа */
+  const tb=e.target.closest('.tier-pick-btn[data-step]');
+  if(tb){
+    state.step=tb.dataset.step;
+    state.stepLabel=tb.dataset.label;
+    track('tier_pick',{step:state.step,label:state.stepLabel,role:state.role,check:state.check,situation:state.situation});
+    haptic('impactOccurred','light');
+    setTimeout(()=>show('order'),80);
+    return;
+  }
+
+  /* Выбор окна (Утро / Вечер) */
+  const wc=e.target.closest('.win-card[data-win]');
+  if(wc){
+    document.querySelectorAll('.win-card').forEach(el=>el.classList.remove('on'));
+    wc.classList.add('on');
+    state.timeWindow=wc.dataset.win;
+    track('slot_pick',{date:'window',time:state.timeWindow});
+    haptic('selectionChanged');
+    return;
+  }
+
+  const at=e.target.closest('.adm-tab[data-adm]');
+  if(at){
+    switchAdminTab(at.dataset.adm);
+    haptic('selectionChanged');
+    return;
+  }
+
+  const tpl=e.target.closest('.tpl-pill[data-tpl]');
+  if(tpl){
+    const key=tpl.dataset.tpl;
+    if(TPL_TEXTS[key])$('broadcastText').value=TPL_TEXTS[key];
+    haptic('selectionChanged');
+    return;
+  }
+
+  const dm=e.target.closest('.bot-dm-btn[data-uid]');
+  if(dm){
+    const targetId=dm.dataset.uid,targetName=dm.dataset.name||'клиенту';
+    const msg=prompt(`Напишите сообщение для ${targetName} (придёт от лица бота):`,`${targetName}, здравствуйте! Блин, вы почти дошли до конца в моём приложении. Вот ссылка, где можно посмотреть пример Карты проекта — загляните:`);
+    if(!msg||!msg.trim())return;
+    apiPost('/api/admin',{password:state.adminKey,action:'send_one',userId:targetId,text:msg.trim()}).then(r=>{
+      alert(r&&r.ok?'✅ Сообщение доставлено!':'❌ Не удалось отправить: '+(r?.error||''));
+    });
+    return;
+  }
+});
+
+$('broadcastSendBtn').onclick=async()=>{
+  const text=($('broadcastText').value||'').trim();
+  const btnText=($('broadcastBtnText').value||'📄 Посмотреть пример Карты проекта').trim();
+  const status=$('broadcastStatus');
+  if(!text){
+    status.style.color='var(--danger)';
+    status.textContent='Напишите текст сообщения.';
+    return;
+  }
+  if(!confirm('Отправить это сообщение всем пользователям базы через бота?'))return;
+  const b=$('broadcastSendBtn');
+  b.disabled=true;
+  status.style.color='var(--ink)';
+  status.textContent='⏳ Идёт рассылка…';
+  try{
+    const res=await apiPost('/api/admin',{password:state.adminKey,action:'broadcast',text,btnText});
+    if(res&&res.ok){
+      status.style.color='var(--ok)';
+      status.textContent=`✅ Доставлено в личку: ${res.sentCount} из ${res.totalTargets}.`;
+    }else{
+      status.style.color='var(--danger)';
+      status.textContent='Ошибка: '+(res?.error||'не удалось отправить');
+    }
+  }catch(e){
+    status.style.color='var(--danger)';
+    status.textContent='Ошибка соединения.';
+  }finally{
+    b.disabled=false;
+  }
+};
+
+$('consultBtn').onclick=async()=>{
+  if(state.sending)return;
+  const q1=($('q1Input')?.value||'').trim();
+  const q2=($('q2Input')?.value||'').trim();
+  const q3=($('q3Input')?.value||'').trim();
+  const q4=($('q4Input')?.value||'').trim();
+  const q5=($('q5Input')?.value||'').trim();
+  const status=$('consultStatus');
+
+  if(!q1||!q2){
+    status.className='error';
+    status.textContent=state.lang==='en'?'Please answer at least questions 1 and 2 above.':'Заполните, пожалуйста, хотя бы первые два вопроса анкеты.';
+    return;
+  }
+
+  state.sending=true;
+  const b=$('consultBtn');
+  b.disabled=true;
+  b.textContent=state.lang==='en'?'Locking in your spot…':'Закрепляю бронь и открываю чат…';
+
+  const fullBrief=[
+    `Роль: ${state.role} | Чек: ${state.check.toLocaleString('ru-RU')} ₽ (теряет ~${(state.check*3).toLocaleString('ru-RU')} ₽/мес)`,
+    `1) Ниша/кому: ${q1}`,
+    `2) Путь сейчас: ${q2}`,
+    q3?`3) Отнимает время: ${q3}`:'',
+    q4?`4) Инструменты: ${q4}`:'',
+    q5?`5) Цель на 1–3 мес: ${q5}`:''
+  ].filter(Boolean).join('\n');
+
+  const draft=state.lang==='en'
+    ? `Hi Toriya! I'd like to lock in my spot:\n\n• Format: ${state.stepLabel}\n• Situation: ${state.situation}\n• Time Window: ${state.timeWindow}\n\nMy Project Brief:\n${fullBrief}`
+    : `Привет, Тория! Хочу закрепить место и оплатить бронь:\n\n• Формат: ${state.stepLabel}\n• Ситуация: ${state.situation}\n• Окно: ${state.timeWindow}\n\nАнкета проекта:\n${fullBrief}`;
+
+  track('consultation_click',{step:state.step,slot:state.timeWindow,role:state.role,check:state.check,situation:state.situation});
+
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(draft).catch(()=>{});
+    }
+  }catch{}
+
+  const go=()=>{
+    if(state.lang==='en'){
+      setTimeout(()=>{location.href=`${CONFIG.fbMessengerUrl}?text=${encodeURIComponent(draft)}`},450);
+    }else{
+      setTimeout(()=>openTg(CONFIG.consultationUrl+'?text='+encodeURIComponent(draft)),300);
+    }
+  };
+
+  try{
+    if(!isLocal){
+      await apiPost('/api/consultation',{
+        product:`${q1} (${state.role}, чек ${state.check} ₽)`,
+        request:fullBrief,
+        formats:[state.stepLabel,state.situation,`Окно: ${state.timeWindow}`],
+        slotDate:'',
+        slotTime:state.timeWindow,
+        intent:state.lang==='en'?'facebook_us':'miniapp',
+        src:state.lang==='en'?('us_'+src):src
+      });
+    }
+    status.className='success';
+    status.textContent=state.lang==='en'
+      ? '✓ Brief saved! Opening Messenger to complete booking…'
+      : '✓ Анкета сохранена! Открываю диалог с Торией для оплаты брони…';
+    track('consultation_sent',{step:state.step,slot:state.timeWindow});
+    haptic('notificationOccurred','success');
+    go();
+  }catch(e){
+    go();
+  }finally{
+    setTimeout(()=>{
+      state.sending=false;
+      b.disabled=false;
+      b.innerHTML=state.lang==='en'
+        ?'<span class="en-only">Lock In My Spot & Send Brief in Messenger →</span>'
+        :'<span class="ru-only">Перейти к оплате брони и отправить анкету →</span>';
+    },1200);
+  }
+};
+
+const currentTgUserId=String(tg?.initDataUnsafe?.user?.id||'');
+if(currentTgUserId===CONFIG.ownerId){
+  $('adminEntryBtn').classList.add('show');
+}
+let logoTaps=0,logoTimer=null;
+$('brandLogo').onclick=()=>{
+  logoTaps++;
+  clearTimeout(logoTimer);
+  logoTimer=setTimeout(()=>{logoTaps=0},1200);
+  if(logoTaps>=4){logoTaps=0;$('adminEntryBtn').classList.add('show');show('admin')}
+};
+$('adminEntryBtn').onclick=()=>show('admin');
+
+function renderVisitorCard(v){
+  const isTg=!String(v.id).startsWith('web:');
+  return `
+    <div class="visitor-card">
+      <div class="visitor-top">
+        <div>
+          <b>${v.name} ${v.username?`(@${v.username})`:''}</b>
+          <div class="small" style="margin:2px 0 0">ID: <code>${v.id}</code> ${v.src?`· 🔗 <b>${v.src}</b>`:''}</div>
+        </div>
+        <span class="visitor-badge${v.consulted?' ok':''}">${v.consulted?'✅ Заявка':'⏸ '+v.idleText}</span>
+      </div>
+      <div class="small" style="margin:0">📍 Шаг: <b>${v.stage}</b> · Был: ${v.lastSeen}</div>
+      <div class="visitor-why">💡 ${v.reason}</div>
+      <div class="visitor-actions">
+        <span class="small" style="margin:0">Авто-писем: ${v.reminders}/3</span>
+        <div style="display:flex;gap:12px;align-items:center">
+          ${isTg?`<button type="button" class="bot-dm-btn" data-uid="${v.id}" data-name="${v.name}">🤖 Написать через бота</button>`:''}
+          ${v.contactUrl?`<a href="${v.contactUrl}" target="_blank">✉️ В личку →</a>`:'<span class="small" style="margin:0">Facebook / Браузер</span>'}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function loadAdminDashboard(){
+  const err=$('adminAuthErr');
+  err.textContent='';
+  try{
+    const res=await apiPost('/api/admin',{password:state.adminKey,action:'dashboard'});
+    if(!res||!res.ok){
+      $('adminAuthBox').style.display='block';
+      $('adminContent').style.display='none';
+      err.textContent='Ответ сервера: '+(res?.error||'проверьте пароль');
+      return;
+    }
+    sessionStorage.setItem('tn_adm_key',state.adminKey);
+    $('adminAuthBox').style.display='none';
+    $('adminContent').style.display='block';
+
+    $('adminStats').innerHTML=`
+      <div class="admin-stat"><b>${res.stats.allTimeUsers}</b><span>Вся база</span></div>
+      <div class="admin-stat"><b>${res.stats.totalUsers}</b><span>За 7 дней</span></div>
+      <div class="admin-stat"><b>${res.stats.onlyFirstScreen}</b><span>На 1 экране</span></div>
+      <div class="admin-stat"><b>${res.stats.leads}</b><span>Заявки</span></div>
+    `;
+
+    $('adminVisitorsList').innerHTML=(res.visitors&&res.visitors.length)
+      ? res.visitors.map(renderVisitorCard).join('')
+      : '<div class="card"><p class="small" style="margin:0">За 7 дней визитов пока нет.</p></div>';
+
+    $('adminAllUsersList').innerHTML=(res.allUsers&&res.allUsers.length)
+      ? res.allUsers.map(renderVisitorCard).join('')
+      : '<div class="card"><p class="small" style="margin:0">База пока пуста.</p></div>';
+  }catch(e){err.textContent='Ошибка соединения с сервером.'}
+}
+
+$('adminLoginBtn').onclick=()=>{
+  state.adminKey=$('adminPassInput').value.trim();
+  loadAdminDashboard();
+};
+$('adminRefreshBtn').onclick=()=>loadAdminDashboard();
+
+setLang(state.lang);
+
+if(!web){
+  try{
+    tg.ready();tg.expand();
+    tg.setHeaderColor('#F3EDE2');tg.setBackgroundColor('#F3EDE2');
+    tg.BackButton.onClick(goBack);
+    setTimeout(()=>{
+      try{if(!tg.initDataUnsafe?.user?.allows_write_to_pm)tg.requestWriteAccess(()=>{})}catch{}
+    },900);
+  }catch{}
+}
+const go0=qs.get('go');
+if(go0==='map'){
+  show('price');
+  setTimeout(()=>{$('mapPreviewBox')?.classList.add('open')},150);
+}else{
+  show(go0==='booking'||go0==='price'?'price':go0==='order'?'order':go0==='admin'?'admin':go0==='cases'?'cases':'s0');
+}
+track('app_open',{tz:new Date().getTimezoneOffset(),web,src,lang:state.lang,ref:ref.slice(0,80)});
+</script>
+</body>
+</html>
