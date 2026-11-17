@@ -1,0 +1,1108 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<!-- TORIYA NOVA BUILD V34 — EXORCIST OF CHAOS (HUMAN LANGUAGE + NO-SCROLL + EYE-COMFORT VELVET) -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1A141B">
+<meta name="description" content="TORIYA NOVA — Экзорцист бизнес-хаоса. Изгоняю рутину и потерянные заявки, собираю понятные системы в Telegram.">
+<title>TORIYA NOVA — EXORCIST OF CHAOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Комфортный гибрид: тёмный бархатный фон вселенной + тёплые светлые карточки для лёгкого чтения */
+  --bg:#1A141B;           /* Тёмный винный бархат снаружи */
+  --paper:#F8F4EC;        /* Тёплый пергамент для чтения без нагрузки на глаза */
+  --paper-soft:#EFE9DC;   /* Мягкий бежевый для плашек */
+  --dark-card:#241B26;    /* Глубокий бархат для акцентов */
+  --ink:#1D1820;          /* Чёткий тёмный текст на карточках */
+  --text:#4A424F;         /* Мягкий основной текст */
+  --light-text:#F5EFE6;   /* Светлый текст для шапки */
+  --muted:#7D7382;
+  --gold:#C89B54;         /* Древнее золото */
+  --gold-light:#E8C686;
+  --wine:#7A2037;         /* Кровавое вино */
+  --wine-bg:#F9EBEF;
+  --ok:#2E6B47;
+  --ok-bg:#E7F3EC;
+  --line:#DFD6C7;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Manrope',-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:'DM Mono',monospace;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{
+  margin:0;padding:0;width:100%;height:100dvh;overflow:hidden;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(122,32,55,.42),transparent 55%),
+    var(--bg);
+  color:var(--light-text);font:14.5px/1.45 var(--sans);
+  -webkit-font-smoothing:antialiased;
+}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+
+.app{
+  max-width:500px;height:100dvh;margin:0 auto;
+  padding:0 14px calc(12px + env(safe-area-inset-bottom));
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+
+/* Шапка вселенной */
+.top{
+  height:52px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(200,155,84,.25);flex:none;
+}
+.brand{font:italic 600 18px var(--serif);color:var(--gold-light);cursor:pointer;user-select:none;line-height:1}
+.brand small{display:block;font:500 8.5px var(--mono);letter-spacing:.18em;color:#B8AEB8;margin-top:3px}
+.top-right{display:flex;align-items:center;gap:8px}
+.top-badge{font:500 9.5px var(--mono);color:var(--gold);padding:4px 8px;border-radius:99px;border:1px solid rgba(200,155,84,.3)}
+.admin-entry-btn{
+  display:none;padding:5px 9px;border-radius:99px;
+  border:1px solid var(--gold);background:var(--wine);
+  color:#fff;font:600 10px var(--mono);
+}
+.admin-entry-btn.show{display:inline-flex;align-items:center;gap:4px}
+
+/* Полоса прогресса экзорцизма */
+.stepbar{flex:none;padding:8px 0 2px;display:none}
+.stepbar.visible{display:block}
+.stepbar-meta{display:flex;justify-content:space-between;align-items:center;font:600 10px var(--mono);color:#C4BAC6;margin-bottom:5px}
+.stepbar-back{color:var(--gold-light);font:700 11.5px var(--sans);padding:2px 0}
+.stepbar-track{height:4px;background:rgba(255,255,255,.12);border-radius:4px;overflow:hidden}
+.stepbar-fill{height:100%;width:20%;background:linear-gradient(90deg,var(--wine),var(--gold-light));transition:width .3s ease}
+
+/* Экран без скролла (1 экран = 1 шаг) */
+.screen{
+  display:none;flex:1;min-height:0;
+  flex-direction:column;justify-content:space-between;
+  padding:8px 0 4px;animation:fadeSlide .26s ease;
+}
+.screen.active{display:flex}
+.screen.scrollable{overflow-y:auto;justify-content:flex-start;gap:10px;padding-bottom:14px}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.kicker{font:600 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);margin-bottom:4px}
+.kicker::before{content:"✦ ";color:#D95B78}
+h1,h2,h3,p{margin:0}
+h1,h2{font-family:var(--serif);color:var(--light-text);line-height:1.12}
+h1{font-size:clamp(24px,6.6vw,31px);margin-bottom:6px}
+h2{font-size:clamp(20px,5.5vw,25px);margin-bottom:4px}
+h3{font-family:var(--serif);font-size:17px;color:var(--ink);margin-bottom:4px}
+em{color:var(--gold-light);font-style:italic}
+.sub{font-size:13.5px;color:#D8CFD9;line-height:1.42}
+
+/* Светлая пергаментная карточка — глаза отдыхают, текст читается мгновенно */
+.paper-card{
+  background:var(--paper);color:var(--ink);
+  border:1.5px solid var(--gold);border-radius:18px;
+  padding:14px 15px;box-shadow:0 14px 32px -12px rgba(0,0,0,.55);
+}
+.paper-card p{color:var(--text);font-size:13px;line-height:1.42}
+
+/* Кнопки */
+.btn{
+  width:100%;min-height:50px;border-radius:999px;padding:13px 18px;
+  background:linear-gradient(110deg,#DFB874,#B88438);
+  color:#1A1318;border:1px solid var(--gold-light);
+  font:800 13px var(--sans);letter-spacing:.05em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 10px 24px -10px rgba(200,155,84,.5);
+  transition:transform .12s;flex:none;
+}
+.btn.ghost{
+  background:rgba(255,255,255,.06);color:var(--light-text);
+  border:1px solid rgba(200,155,84,.35);box-shadow:none;
+  min-height:42px;font-size:12px;text-transform:none;font-weight:600;
+}
+.btn:active{transform:scale(.985)}
+.btn[disabled]{opacity:.4;pointer-events:none}
+
+/* СЛАЙД 0: Иллюстрация Экзорциста + 3 узнаваемые боли */
+.exorcist-banner{
+  background:linear-gradient(135deg,#2B1522 0%,#19131C 100%);
+  border:1px solid rgba(200,155,84,.45);border-radius:16px;
+  padding:12px 14px;display:flex;align-items:center;gap:12px;
+}
+.sigil-circle{
+  width:52px;height:52px;border-radius:50%;flex:none;
+  border:1.5px dashed var(--gold);display:grid;place-items:center;
+  background:radial-gradient(circle,rgba(200,155,84,.22),transparent 70%);
+  color:var(--gold-light);font:24px var(--serif);
+  animation:pulseGlow 3s infinite ease-in-out;
+}
+@keyframes pulseGlow{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+.symptom-list{display:grid;gap:8px;margin-top:8px}
+.sym-row{
+  display:flex;align-items:center;gap:10px;
+  background:var(--paper-soft);padding:9px 11px;border-radius:12px;
+  font-size:12.5px;color:var(--ink);
+}
+.sym-row b{display:block;color:var(--wine);font-size:12.5px}
+
+/* СЛАЙД 1: Бестиарий Демонов (человеческим языком!) */
+.demon-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0}
+.demon-card{
+  text-align:left;padding:11px;border-radius:15px;
+  background:var(--paper);color:var(--ink);
+  border:2px solid transparent;
+  display:flex;flex-direction:column;justify-content:space-between;gap:6px;
+  transition:.15s;opacity:.88;
+}
+.demon-card.selected{
+  opacity:1;border-color:var(--gold);background:#FFFDF9;
+  box-shadow:0 0 0 3px rgba(200,155,84,.28);transform:translateY(-1px);
+}
+.demon-top{display:flex;justify-content:space-between;align-items:center}
+.demon-tag{font:700 9px var(--mono);color:var(--wine);background:var(--wine-bg);padding:3px 7px;border-radius:6px}
+.demon-chk{
+  width:20px;height:20px;border-radius:50%;border:1.5px solid #C5B9A5;
+  display:grid;place-items:center;font-size:11px;color:transparent;
+}
+.demon-card.selected .demon-chk{background:var(--wine);border-color:var(--wine);color:#fff}
+.demon-card b{font-size:13px;color:var(--ink);display:block;line-height:1.2}
+.demon-card span{font-size:11.5px;color:var(--text);line-height:1.32;display:block;margin-top:2px}
+
+/* СЛАЙД 2: Сколько демон сжирает денег и нервов */
+.pills{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:5px}
+.pill{
+  padding:9px 4px;border-radius:10px;border:1.5px solid var(--line);
+  background:var(--paper-soft);color:var(--ink);font:700 12px var(--sans);text-align:center;
+}
+.pill.selected{background:var(--wine);color:#fff;border-color:var(--wine)}
+
+.verdict-card{
+  background:linear-gradient(145deg,#2D1522,#1B141E);
+  border:1.5px solid var(--gold);border-radius:16px;padding:13px 15px;color:#F5EFE6;
+}
+.verdict-sum{font:600 28px/1.1 var(--serif);color:var(--gold-light);margin:4px 0}
+
+/* СЛАЙД 3: СИМУЛЯТОР РЕАЛЬНОЙ ЖИЗНИ (ТО САМОЕ ОЗАРЕНИЕ!) */
+.chat-sim{
+  background:var(--paper);color:var(--ink);border-radius:16px;padding:12px 13px;
+  border:1.5px solid var(--gold);
+}
+.chat-incoming{
+  background:var(--paper-soft);border-left:3px solid var(--wine);
+  padding:8px 10px;border-radius:0 10px 10px 10px;font-size:12.5px;color:var(--ink);
+}
+.chat-incoming small{display:block;font:600 9.5px var(--mono);color:var(--wine);margin-bottom:2px}
+
+.act-list{display:grid;gap:6px}
+.act-btn{
+  width:100%;text-align:left;padding:10px 12px;border-radius:12px;
+  background:var(--paper);color:var(--ink);border:1.5px solid transparent;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  font:600 12.5px/1.28 var(--sans);transition:.15s;
+}
+.act-btn span.tag-pill{
+  font:700 9px var(--mono);padding:3px 7px;border-radius:6px;
+  background:var(--paper-soft);color:var(--text);flex:none;
+}
+.act-btn.trap{background:var(--wine-bg);border-color:var(--wine);color:#5E1628}
+.act-btn.trap span.tag-pill{background:var(--wine);color:#fff}
+.act-btn.exorcism{background:var(--ok-bg);border-color:var(--ok);color:#1B462D}
+.act-btn.exorcism span.tag-pill{background:var(--ok);color:#fff}
+
+.aha-box{
+  padding:11px 13px;border-radius:14px;font-size:12.5px;line-height:1.38;
+  background:rgba(255,255,255,.08);color:var(--light-text);
+  border:1px solid rgba(200,155,84,.35);
+}
+.aha-box.boom{background:#3A1725;border-color:#E06C75;color:#FFE8EC}
+.aha-box.bingo{background:#F8F4EC;border:2px solid var(--gold);color:var(--ink)}
+
+/* СЛАЙД 4: АРТЕФАКТЫ И СЕССИЯ (ВКЛАДКИ НА 1 ЭКРАНЕ) */
+.tabs-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;background:rgba(255,255,255,.08);padding:4px;border-radius:12px}
+.t-tab{padding:7px 4px;border-radius:9px;font:700 11px var(--sans);color:#C4BAC6;text-align:center}
+.t-tab.on{background:var(--paper);color:var(--ink)}
+.t-pane{display:none;flex:1;min-height:0;flex-direction:column;justify-content:space-between;padding:6px 0}
+.t-pane.on{display:flex}
+
+.gift-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+.gift-item{background:var(--paper-soft);padding:8px 9px;border-radius:10px;font-size:11.5px;color:var(--ink)}
+.gift-item b{display:block;color:var(--wine);font-size:11.5px;margin-bottom:2px}
+
+.proof-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.proof-shot{background:#161219;color:#F5EFE6;border-radius:12px;padding:8px;border:1px solid rgba(200,155,84,.35)}
+.proof-shot img{width:100%;max-height:135px;object-fit:cover;border-radius:8px;display:block}
+.proof-mock{background:#221C26;border-radius:8px;padding:8px;font-size:10.5px;line-height:1.35;color:#E5DCE8}
+
+/* СЛАЙД 5: АНКЕТА ЗАПИСИ */
+.inp{
+  width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);
+  background:#fff;color:var(--ink);font-size:13.5px;outline:none;margin-top:6px;
+}
+.inp:focus{border-color:var(--wine)}
+.win-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:6px}
+.win-btn{
+  padding:9px;border-radius:10px;border:1.5px solid var(--line);
+  background:var(--paper-soft);color:var(--ink);text-align:left;font-size:11.5px;
+}
+.win-btn.selected{border-color:var(--wine);background:var(--wine-bg)}
+.win-btn b{display:block;font-size:12px;color:var(--wine)}
+
+/* Админка */
+.admin-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.admin-stat{background:var(--paper);color:var(--ink);border-radius:10px;padding:8px 4px;text-align:center}
+.admin-stat b{display:block;font:600 18px var(--serif);color:var(--wine)}
+.admin-stat span{font-size:9.5px;color:var(--text)}
+.visitor-card{background:var(--paper);color:var(--ink);border-radius:12px;padding:10px;margin-bottom:8px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ШАПКА EXORCIST OF CHAOS -->
+  <header class="top">
+    <div class="brand" id="brandLogo">TORIYA NOVA<small>EXORCIST OF CHAOS</small></div>
+    <div class="top-right">
+      <span class="top-badge">THE PORTAL</span>
+      <button type="button" id="adminEntryBtn" class="admin-entry-btn">📊 БАЗА</button>
+    </div>
+  </header>
+
+  <!-- ПРОГРЕСС-БАР БЕЗ СКРОЛЛА -->
+  <div class="stepbar" id="stepBar">
+    <div class="stepbar-meta">
+      <button type="button" class="stepbar-back" id="prevStepBtn">← Назад</button>
+      <span id="stepTitle">ШАГ 1 ИЗ 5</span>
+    </div>
+    <div class="stepbar-track"><div class="stepbar-fill" id="stepFill"></div></div>
+  </div>
+
+  <!-- ==================== ЭКРАН 0: ВХОД ВО ВСЕЛЕННУЮ ==================== -->
+  <section class="screen active" id="s0">
+    <div>
+      <div class="kicker">Toriya Nova · Экзорцист бизнес-хаоса</div>
+      <h1>Хватит работать <em>секретарём</em> в собственном проекте.</h1>
+      <p class="sub">У каждого дела есть свои демоны: они крадут ваших клиентов в переписках и заставляют вас жить в телефоне 24/7.</p>
+    </div>
+
+    <div class="exorcist-banner">
+      <div class="sigil-circle">✦</div>
+      <div>
+        <div style="font:700 10px var(--mono);color:var(--gold-light);letter-spacing:.1em">ПРИЗНАКИ ЗАХВАТА ХАОСОМ:</div>
+        <div style="font-size:12.5px;color:#EAE2EC;margin-top:2px">Если узнаёте себя хотя бы в одном пункте — в вашем проекте поселился демон.</div>
+      </div>
+    </div>
+
+    <div class="paper-card">
+      <h3>Как это выглядит в жизни:</h3>
+      <div class="symptom-list">
+        <div class="sym-row">
+          <span>👻</span>
+          <div><b>Спрашивают «сколько стоит?» — и в туман</b>Вы расписываете всё от души, а человек читает и молчит.</div>
+        </div>
+        <div class="sym-row">
+          <span>🦜</span>
+          <div><b>День сурка в личке</b>По 20 раз на неделе объясняете одно и то же руками и голосовыми.</div>
+        </div>
+        <div class="sym-row">
+          <span>⛓</span>
+          <div><b>Отложили телефон — деньги встали</b>Запись, оплаты, напоминания и ссылки держатся только на вашей голове.</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button class="btn" id="startBtn">Поймать моего демона (за 60 сек) →</button>
+      <button class="btn ghost" style="margin-top:6px" onclick="go('s4');switchTab('proof')">Сначала посмотреть, как это работает вживую</button>
+    </div>
+  </section>
+
+  <!-- ==================== ЭКРАН 1: БЕСТИАРИЙ (ПРО СЕБЯ ЛЮБИМОГО) ==================== -->
+  <section class="screen" id="s1">
+    <div>
+      <div class="kicker">Шаг 1 из 5 · Охота на хаос</div>
+      <h2>Кто из этой четвёрки <em>пьёт вашу кровь</em> сильнее всего?</h2>
+      <p class="sub">Не выбирайте «правильный» ответ — ткните туда, где больше всего бесит прямо сейчас:</p>
+    </div>
+
+    <div class="demon-grid" id="demonGrid">
+      <button type="button" class="demon-card selected" data-demon="lost">
+        <div class="demon-top">
+          <span class="demon-tag">THE LOST</span>
+          <span class="demon-chk">✓</span>
+        </div>
+        <div>
+          <b>Демон «Я подумаю»</b>
+          <span>Лайкают, берут бесплатную пользу, спрашивают цену — и пропадают с концами.</span>
+        </div>
+      </button>
+
+      <button type="button" class="demon-card" data-demon="messenger">
+        <div class="demon-top">
+          <span class="demon-tag">THE MESSENGER</span>
+          <span class="demon-chk">✓</span>
+        </div>
+        <div>
+          <b>Демон Переписок</b>
+          <span>Весь день строчу ответы в личке, консультирую бесплатно и подбираю окошки.</span>
+        </div>
+      </button>
+
+      <button type="button" class="demon-card" data-demon="loop">
+        <div class="demon-top">
+          <span class="demon-tag">THE LOOP</span>
+          <span class="demon-chk">✓</span>
+        </div>
+        <div>
+          <b>Демон Рутины</b>
+          <span>Сама проверяю оплаты, скидываю ссылки, напоминаю о встречах и ничего не успеваю.</span>
+        </div>
+      </button>
+
+      <button type="button" class="demon-card" data-demon="hydra">
+        <div class="demon-top">
+          <span class="demon-tag">THE HYDRA</span>
+          <span class="demon-chk">✓</span>
+        </div>
+        <div>
+          <b>Демон Каши в голове</b>
+          <span>Много классных идей и услуг, но клиенту со стороны сложно понять, что и как у меня купить.</span>
+        </div>
+      </button>
+    </div>
+
+    <button class="btn" onclick="go('s2')">Вывести его на чистую воду →</button>
+  </section>
+
+  <!-- ==================== ЭКРАН 2: СКОЛЬКО ОН СЪЕДАЕТ ==================== -->
+  <section class="screen" id="s2">
+    <div>
+      <div class="kicker">Шаг 2 из 5 · Цена вопроса</div>
+      <h2>Во сколько вам обходится <em>этот демон?</em></h2>
+      <p class="sub">Нажмите две кнопки — посмотрим, сколько ваших денег он съедает каждый месяц:</p>
+    </div>
+
+    <div class="paper-card">
+      <div style="font-weight:700;font-size:13px;color:var(--ink)">1. Сколько в среднем стоит ваша услуга / продукт?</div>
+      <div class="pills" id="checkPills">
+        <button type="button" class="pill" data-val="15000">15 000 ₽</button>
+        <button type="button" class="pill selected" data-val="30000">30 000 ₽</button>
+        <button type="button" class="pill" data-val="50000">50 000 ₽</button>
+        <button type="button" class="pill" data-val="100000">100 000+ ₽</button>
+      </div>
+
+      <div style="font-weight:700;font-size:13px;color:var(--ink);margin-top:12px">2. Сколько человек в месяц спрашивают, но так и не покупают?</div>
+      <div class="pills" id="countPills">
+        <button type="button" class="pill" data-val="2">2 чел.</button>
+        <button type="button" class="pill selected" data-val="3">3 чел.</button>
+        <button type="button" class="pill" data-val="5">5 чел.</button>
+        <button type="button" class="pill" data-val="10">10+ чел.</button>
+      </div>
+    </div>
+
+    <div class="verdict-card">
+      <div style="font:600 9.5px var(--mono);color:var(--gold-light);letter-spacing:.1em" id="calcDemonTag">ДОСЬЕ: THE LOST (ДЕМОН «Я ПОДУМАЮ»)</div>
+      <div class="verdict-sum" id="calcMonthly">−90 000 ₽ каждый месяц</div>
+      <div style="font-size:12.5px;color:#E2DAE6" id="calcYearly">За год этот демон тихо съедает у вас <b>1 080 000 ₽</b> и кучу вечеров, которые вы могли провести с семьёй.</div>
+    </div>
+
+    <button class="btn" onclick="go('s3')">Попробовать изгнать его самой →</button>
+  </section>
+
+  <!-- ==================== ЭКРАН 3: ИГРА-ОЗАРЕНИЕ (БЕЗ ЗАУМИ!) ==================== -->
+  <section class="screen" id="s3">
+    <div>
+      <div class="kicker">Шаг 3 из 5 · Эксперимент на вашей ситуации</div>
+      <h2 id="simHeading">Почему привычные действия <em>не работают?</em></h2>
+      <p class="sub">Представьте: вечер вторника. Нажмите, как вы ответите клиенту — и посмотрите, что у него в голове:</p>
+    </div>
+
+    <!-- Сообщение от клиента из жизни -->
+    <div class="chat-sim">
+      <div class="chat-incoming">
+        <small id="simSender">💬 СООБЩЕНИЕ ОТ КЛИЕНТА В 21:40:</small>
+        <span id="simMessage">«Здравствуйте! Увидела ваш пост. Подскажите, а сколько стоит и как всё проходит?»</span>
+      </div>
+    </div>
+
+    <!-- 3 жизненных варианта действий -->
+    <div class="act-list" id="simOptions"></div>
+
+    <!-- Озарение! -->
+    <div class="aha-box" id="ahaBox">
+      👆 <b>Нажмите на любую кнопку выше:</b> сначала проверьте, что будет при обычном ответе, а потом включите <b>Ритуал Тории ✦</b>.
+    </div>
+
+    <button class="btn" id="afterSimBtn" disabled onclick="go('s4')">Хочу такую систему себе! →</button>
+  </section>
+
+  <!-- ==================== ЭКРАН 4: КАК МЫ ИЗГОНИМ ХАОС (THE BLUEPRINT) ==================== -->
+  <section class="screen" id="s4">
+    <div class="tabs-bar">
+      <button type="button" class="t-tab on" data-tab="offer" onclick="switchTab('offer')">🏛 План изгнания</button>
+      <button type="button" class="t-tab" data-tab="proof" onclick="switchTab('proof')">👀 Живые скрины</button>
+      <button type="button" class="t-tab" data-tab="cases" onclick="switchTab('cases')">🔥 Примеры</button>
+    </div>
+
+    <!-- Вкладка 1: Человеческое описание THE BLUEPRINT -->
+    <div class="t-pane on" id="pane-offer">
+      <div class="paper-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <span class="demon-tag">ШАГ №1 · THE BLUEPRINT</span>
+            <h3 style="font-size:20px;margin-top:4px">Архитектурная сессия</h3>
+            <p>Личный разбор со мной (60–90 мин) + готовая Карта вашей системы</p>
+          </div>
+          <div style="font:600 24px var(--serif);color:var(--wine);white-space:nowrap">15 000 ₽</div>
+        </div>
+
+        <p style="margin-top:8px">Вам не нужно разбираться в программах и схемах — <b>это моя работа</b>. Мы созвонимся, я разложу ваш проект по полочкам и дам готовый план:</p>
+
+        <div class="gift-grid">
+          <div class="gift-item"><b>1. Маршрут без лички</b>Как сделать, чтобы клиент сам всё понимал и шёл к оплате без 20 вопросов.</div>
+          <div class="gift-item"><b>2. Макет вашего приложения</b>Что именно будет внутри вашего личного мини-приложения в Telegram.</div>
+          <div class="gift-item"><b>3. Авто-возврат «молчунов»</b>Что и когда бот напишет тем, кто ушёл «подумать», чтобы они вернулись.</div>
+          <div class="gift-item"><b>4. Точная смета под ключ</b>Понятный расчёт сборки (базовое приложение от 30 000 ₽).</div>
+        </div>
+
+        <div style="margin-top:10px;padding:9px 11px;border-radius:10px;background:var(--ok-bg);color:var(--ok);font-size:12px;font-weight:600">
+          ✓ Ваши 15 000 ₽ не сгорают: если в течение 7 дней мы идём в сборку приложения, эта сумма полностью входит в стоимость!
+        </div>
+      </div>
+    </div>
+
+    <!-- Вкладка 2: Живые скрины бота (как это выглядит у владельца) -->
+    <div class="t-pane" id="pane-proof">
+      <div class="paper-card">
+        <span class="demon-tag">МАГИЯ ВНУТРИ TELEGRAM</span>
+        <h3 style="margin-top:4px">Вы отдыхаете — помощник ведёт клиента</h3>
+        <p>Посмотрите, что приходит вам в телефон, пока человек ходит по вашему приложению:</p>
+
+        <div class="proof-grid">
+          <div class="proof-shot">
+            <div style="font:700 9px var(--mono);color:var(--gold-light);margin-bottom:4px">👀 ВИДИТЕ КАЖДЫЙ ШАГ</div>
+            <img src="/img/bot_steps.jpg" alt="Шаги клиента" onerror="if(!this.dataset.t1){this.dataset.t1=1;this.src='/img/bot_steps.PNG'}else if(!this.dataset.t2){this.dataset.t2=1;this.src='/img/bot_steps.png'}else{this.style.display='none';this.nextElementSibling.style.display='block'}">
+            <div class="proof-mock" style="display:none">
+              👀 <b>К вам зашёл клиент!</b><br>
+              📍 Посмотрел примеры<br>
+              🎯 Выбрал вашу услугу<br>
+              ⏸ Задумался на записи
+            </div>
+            <div style="font-size:10.5px;margin-top:5px;color:#D8CFD9">Вы сразу видите, кто зашёл и чем интересовался.</div>
+          </div>
+
+          <div class="proof-shot">
+            <div style="font:700 9px var(--mono);color:#8CE0A8;margin-bottom:4px">🤖 САМ ВОЗВРАЩАЕТ УТРОМ</div>
+            <img src="/img/bot_remind.jpg" alt="Дожим утром" onerror="if(!this.dataset.t1){this.dataset.t1=1;this.src='/img/bot_remind.PNG'}else if(!this.dataset.t2){this.dataset.t2=1;this.src='/img/bot_remind.png'}else{this.style.display='none';this.nextElementSibling.style.display='block'}">
+            <div class="proof-mock" style="display:none">
+              <b>Помощник · 09:00</b><br>
+              Доброе утро! Вы вчера смотрели условия, но не выбрали окошко.<br>
+              <span style="color:var(--gold-light)">Занять место ↗</span>
+            </div>
+            <div style="font-size:10.5px;margin-top:5px;color:#D8CFD9">Если человек отвлёкся вечером — утром бот сам мягко вернёт его.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Вкладка 3: Реальные примеры (Бренд одежды + Расписание репетитора) -->
+    <div class="t-pane" id="pane-cases">
+      <div class="paper-card">
+        <span class="demon-tag">ИЗГНАНИЕ ХАОСА НА ПРАКТИКЕ</span>
+        <h3 style="margin-top:4px">Как живут те, кто уже убрал рутину</h3>
+
+        <div style="background:var(--paper-soft);padding:10px 11px;border-radius:12px;margin-top:6px">
+          <b style="font-size:13px;color:var(--wine)">👗 Бренд одежды Lemoon 8/9 (отзыв Софьи):</b>
+          <p style="font-size:12px;margin-top:3px">«Запустили распродажу −70% через мини-приложение Тории в Telegram. Клиентки сами выбирают модели и размеры, заявки прилетают уже готовыми — мы перестали терять людей в бесконечных переписках!»</p>
+        </div>
+
+        <div style="background:var(--paper-soft);padding:10px 11px;border-radius:12px;margin-top:8px">
+          <b style="font-size:13px;color:var(--wine)">🗓 Моя собственная система записи:</b>
+          <p style="font-size:12px;margin-top:3px">Когда у меня отменяется окошко, я не сижу в расстройстве и не уговариваю клиентов. Приложение само показывает свободные слоты (осталось 1 окно!), создаёт ажиотаж и закрывает запись без моего участия.</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" id="toOrderBtn">Записаться на разбор и изгнать хаос →</button>
+  </section>
+
+  <!-- ==================== ЭКРАН 5: ПРОСТАЯ ЗАЯВКА В 3 ПОЛЯ ==================== -->
+  <section class="screen" id="s5">
+    <div>
+      <div class="kicker">Шаг 5 из 5 · Вызов Экзорциста</div>
+      <h2>Давайте наведём <em>порядок в вашем проекте</em></h2>
+      <p class="sub">Напишите пару слов о себе — я посмотрю вашу ситуацию до нашей встречи, и мы подберём день в Telegram:</p>
+    </div>
+
+    <div class="paper-card">
+      <input class="inp" id="fName" placeholder="1. Как вас зовут и чем вы занимаетесь?" style="margin-top:0">
+      <input class="inp" id="fPath" placeholder="2. Откуда сейчас приходят клиенты и как покупают?">
+      <input class="inp" id="fPain" placeholder="3. Что больше всего бесит или отнимает время?">
+
+      <div style="font-weight:700;font-size:12px;color:var(--ink);margin-top:10px">Когда вам удобнее созвониться (по МСК)?</div>
+      <div class="win-grid" id="timeChoices">
+        <button type="button" class="win-btn selected" data-time="Утро/день (10:00–14:00 МСК)">
+          <b>☀ Первая половина</b>10:00 – 14:00 МСК
+        </button>
+        <button type="button" class="win-btn" data-time="День/вечер (15:00–19:00 МСК)">
+          <b>🌆 Вторая половина</b>15:00 – 19:00 МСК
+        </button>
+      </div>
+
+      <div style="margin-top:9px;padding:8px 10px;border-radius:9px;background:var(--paper-soft);font-size:11.5px;display:flex;justify-content:space-between">
+        <span>Пойман: <b id="summaryDemon" style="color:var(--wine)">Демон «Я подумаю»</b></span>
+        <span>Резерв: <b id="summaryLoss" style="color:var(--ok)">+90 000 ₽/мес</b></span>
+      </div>
+      <div id="formMsg" style="font-size:12px;font-weight:700;color:var(--wine);margin-top:5px"></div>
+    </div>
+
+    <button class="btn" id="sendBtn">Написать Тории в Telegram ↗</button>
+  </section>
+
+  <!-- ==================== АДМИН-ПАНЕЛЬ (4 ТАПА ПО ЛОГОТИПУ) ==================== -->
+  <section class="screen scrollable" id="admin">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2>Панель владельца</h2>
+      <button type="button" class="top-badge" onclick="go('s0')">✕ Закрыть</button>
+    </div>
+
+    <div id="adminAuthBox" class="paper-card">
+      <div style="font-weight:700;font-size:12px">ПАРОЛЬ ВЛАДЕЛЬЦА</div>
+      <input id="adminPassInput" type="text" class="inp" value="toriya2026">
+      <button id="adminLoginBtn" class="btn" style="margin-top:10px">Открыть базу →</button>
+      <div id="adminAuthErr" style="color:var(--wine);font-size:12px;margin-top:6px"></div>
+    </div>
+
+    <div id="adminContent" style="display:none">
+      <div class="admin-stat-grid" id="adminStats"></div>
+      <div class="tabs-bar" style="margin:10px 0">
+        <button type="button" class="t-tab on" data-adm="active">За 7 дней</button>
+        <button type="button" class="t-tab" data-adm="all">Вся база</button>
+        <button type="button" class="t-tab" data-adm="broadcast">Рассылка</button>
+      </div>
+      <div id="adm-active"><div id="adminVisitorsList"></div></div>
+      <div id="adm-all" style="display:none"><div id="adminAllUsersList"></div></div>
+      <div id="adm-broadcast" style="display:none">
+        <div class="paper-card">
+          <textarea id="broadcastText" class="inp" style="min-height:80px;margin-top:0">Вы начали ловить своего демона в моём приложении, но не дошли до финала! Загляните внутрь и посмотрите, как избавиться от рутины в переписках:</textarea>
+          <input id="broadcastBtnText" type="text" class="inp" value="✦ Открыть портал Тории">
+          <button id="broadcastSendBtn" class="btn" style="margin-top:10px">📢 Отправить всем в бот</button>
+          <div id="broadcastStatus" style="font-size:12px;margin-top:6px"></div>
+        </div>
+      </div>
+      <button id="adminRefreshBtn" class="btn ghost" style="margin-top:8px">🔄 Обновить список</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){var N=function(){};if(/tgWebApp/.test(location.hash+location.search)||window.TelegramWebviewProxy){document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>')}else{window.Telegram={WebApp:{initData:'',initDataUnsafe:{},ready:N,expand:N,setHeaderColor:N,setBackgroundColor:N,onEvent:N,requestWriteAccess:N,BackButton:{show:N,hide:N,onClick:N},HapticFeedback:{impactOccurred:N,selectionChanged:N,notificationOccurred:N},openLink:function(u){window.open(u,'_blank')},openTelegramLink:function(u){window.open(u,'_blank')}}}}})();
+</script>
+<script>
+const TELEGRAM_USERNAME = "toriya_nova";
+const OWNER_ID = "6894849502";
+const tg = window.Telegram && window.Telegram.WebApp || null;
+const web = !(tg && tg.initData);
+const isLocal = location.protocol === "file:" || ["localhost","127.0.0.1"].includes(location.hostname);
+const qs = new URLSearchParams(location.search);
+const src = qs.get("src") || (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) || (web ? "web_direct" : "tg_direct");
+
+/* БЕСТИАРИЙ И ЖИЗНЕННЫЕ СИМУЛЯЦИИ (ЧЕЛОВЕЧЕСКИМ ЯЗЫКОМ!) */
+const DEMONS = {
+  lost:{
+    code:"THE LOST",
+    humanName:"Демон «Я подумаю»",
+    sender:"💬 СООБЩЕНИЕ В ЛИЧКУ В 21:40:",
+    incoming:"«Здравствуйте! Увидела ваш пост. Подскажите, а сколько стоит и как всё проходит?»",
+    actions:[
+      {
+        text:"Честно написать цену и подробно расписать условия в сообщении",
+        tag:"Как делают все",
+        ok:false,
+        reaction:"😱 <b>Что в голове у клиента:</b> Человек увидел просто цифру в тексте без наглядной ценности, испугался, написал вежливое «Спасибо, я подумаю!» — и закрыл диалог навсегда. Минус продажа!"
+      },
+      {
+        text:"Отправить бесплатный гайд / PDF-файл, чтобы человек прогрелся",
+        tag:"Частый совет",
+        ok:false,
+        reaction:"🥱 <b>Что в голове у клиента:</b> Он скачал ваш файлик, закинул в папку «Прочитаю потом» и через 5 минут забыл, кто вы. А писать ему первой в личку «Ну как, прочитали?» — неловко."
+      },
+      {
+        text:"Отправить одну кнопку на ваше мини-приложение в Telegram",
+        tag:"Ритуал Тории ✦",
+        ok:true,
+        reaction:"🔥 <b>ДА БЛЯ, ТОЧНО! Вот как это работает:</b> Клиент прямо внутри Telegram сам нажимает кнопочки, видит живые примеры, понимает, за что платит, и <b>сам выбирает окошко для записи</b>! А если отвлекли дети — утром ваш бот мягко напомнит и вернёт его за руку."
+      }
+    ]
+  },
+  messenger:{
+    code:"THE MESSENGER",
+    humanName:"Демон Переписок",
+    sender:"💬 5 ОДИНАКОВЫХ СООБЩЕНИЙ ЗА ВЕЧЕР:",
+    incoming:"«А какой формат мне подойдёт? А есть место на четверг? А расскажите подробнее...»",
+    actions:[
+      {
+        text:"Полчаса наговаривать каждому душевные голосовые и подбирать время",
+        tag:"Как сейчас",
+        ok:false,
+        reaction:"🥵 <b>Что в итоге:</b> Вы выжаты как лимон, вечер прошёл в телефоне, а трое из пяти послушали голосовые и пропали. Вы отработали бесплатным консультантом!"
+      },
+      {
+        text:"Переслать длинный заготовленный шаблон текста с прайсом",
+        tag:"Шаблон",
+        ok:false,
+        reaction:"😑 <b>Что в голове у клиента:</b> «Ого, какая скучная простыня букв, потом почитаю…» В итоге никто ничего не читает, и всё равно переспрашивают одно и то же."
+      },
+      {
+        text:"Дать ссылку на мини-приложение, которое само проведёт клиента за 2 минуты",
+        tag:"Ритуал Тории ✦",
+        ok:true,
+        reaction:"🔥 <b>ВОТ ОНО!</b> Приложение за 2 минуты делает всю рутину за вас: показывает тарифы, отвечает на частые вопросы и даёт выбрать свободное время. К вам в личку приходит уже прогретый человек с готовой заявкой!"
+      }
+    ]
+  },
+  loop:{
+    code:"THE LOOP",
+    humanName:"Демон Рутины",
+    sender:"💬 ВАШ ОБЫЧНЫЙ РАБОЧИЙ ДЕНЬ:",
+    incoming:"«Тория, я оплатила, проверьте скрин! А куда нажать? А во сколько у нас завтра встреча?»",
+    actions:[
+      {
+        text:"Держать всё под личным контролем в телефоне и заметках",
+        tag:"Героизм",
+        ok:false,
+        reaction:"🤯 <b>Что в итоге:</b> Вы боитесь выключить звук на телефоне даже в выходной. Стоит вам заболеть или уехать — вся работа встаёт колом."
+      },
+      {
+        text:"Попросить клиента саму следить за расписанием и ссылками",
+        tag:"Надежда",
+        ok:false,
+        reaction:"📉 <b>Что в итоге:</b> Клиенты путаются, забывают про встречи, отменяют в последнюю минуту, а вы теряете деньги на пустых окошках."
+      },
+      {
+        text:"Передать расписание, запись и напоминания вашему умному боту",
+        tag:"Ритуал Тории ✦",
+        ok:true,
+        reaction:"🔥 <b>БИНГО!</b> Когда у меня самой отменили урок, я за 10 секунд открыла слот в боте — и родители сразу увидели, что окошек почти нет. Система сама держит границы, напоминает и записывает людей без вашей нервотрёпки!"
+      }
+    ]
+  },
+  hydra:{
+    code:"THE HYDRA",
+    humanName:"Демон Каши в голове",
+    sender:"💬 МЫСЛИ КЛИЕНТА В ВАШЕМ БЛОГЕ:",
+    incoming:"«Вижу, что вы крутой специалист и много всего умеете… но с чего мне начать и что именно купить?»",
+    actions:[
+      {
+        text:"Написать ещё один пост со списком всех своих регалий и услуг",
+        tag:"Ещё пост",
+        ok:false,
+        reaction:"🌀 <b>Что в голове у клиента:</b> Пост улетел вниз ленты уже завтра. Человек запутался в ваших форматах ещё сильнее и пошёл туда, где всё разложено по полочкам."
+      },
+      {
+        text:"Звать всех подряд на бесплатные созвоны, чтобы разобраться",
+        tag:"Созвоны",
+        ok:false,
+        reaction:"⏳ <b>Что в итоге:</b> Вы тратите по часу жизни на людей, которые пришли просто «поговорить за жизнь» и изначально не собирались ничего покупать."
+      },
+      {
+        text:"Упаковать все ваши услуги в красивую интерактивную витрину в Telegram",
+        tag:"Ритуал Тории ✦",
+        ok:true,
+        reaction:"🔥 <b>ДА БЛЯ, ТОЧНО!</b> Человек нажимает на свою проблему в приложении — и система сама показывает ему ровно ту услугу, которая ему нужна прямо сейчас. Никакой каши, всё дорого и понятно с первой секунды!"
+      }
+    ]
+  }
+};
+
+const state = {
+  demon:"lost",
+  check:30000,
+  count:3,
+  solved:false,
+  time:"Утро/день (10:00–14:00 МСК)",
+  adminKey:sessionStorage.getItem("tn_adm_key") || "toriya2026",
+  sending:false
+};
+
+function webId(){
+  let id="";try{id=localStorage.getItem("tn_webid")||""}catch{}
+  if(!/^[a-f0-9-]{36}$/.test(id)){
+    id=crypto.randomUUID?crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==="x"?r:(r&3|8)).toString(16)});
+    try{localStorage.setItem("tn_webid",id)}catch{}
+  }
+  return id;
+}
+
+async function apiPost(url,payload){
+  const initData = tg && tg.initData || "";
+  const r = await fetch(url,{
+    method:"POST",
+    headers:{"Content-Type":"application/json","X-Telegram-Init-Data":initData,"X-Web-Id":initData?"":webId()},
+    body:JSON.stringify({...payload,initData})
+  });
+  return r.json();
+}
+
+function track(event,meta={}){
+  if(isLocal)return;
+  apiPost("/api/event",{event,meta:{...meta,src,lang:"ru"}}).catch(()=>{});
+}
+function haptic(k,v){try{tg.HapticFeedback[k](v)}catch{}}
+function openTg(u){if(!web && tg.openTelegramLink && u.startsWith("https://t.me/"))tg.openTelegramLink(u);else location.href=u;}
+
+const screens = ["s0","s1","s2","s3","s4","s5","admin"];
+const stepMeta = {
+  s1:{title:"ШАГ 1 ИЗ 5 · ВАШ ДЕМОН", pct:20, prev:"s0"},
+  s2:{title:"ШАГ 2 ИЗ 5 · ЦЕНА ПОТЕРЬ", pct:40, prev:"s1"},
+  s3:{title:"ШАГ 3 ИЗ 5 · ЭКСПЕРИМЕНТ", pct:60, prev:"s2"},
+  s4:{title:"ШАГ 4 ИЗ 5 · ПЛАН ИЗГНАНИЯ", pct:80, prev:"s3"},
+  s5:{title:"ШАГ 5 ИЗ 5 · ВАШИ КООРДИНАТЫ", pct:100, prev:"s4"}
+};
+let curScreen = "s0";
+
+function go(id){
+  if(!screens.includes(id))return;
+  screens.forEach(s=>document.getElementById(s).classList.toggle("active",s===id));
+  curScreen = id;
+  const meta = stepMeta[id];
+  const bar = document.getElementById("stepBar");
+  if(meta){
+    bar.classList.add("visible");
+    document.getElementById("stepTitle").textContent = meta.title;
+    document.getElementById("stepFill").style.width = meta.pct + "%";
+  }else{
+    bar.classList.remove("visible");
+  }
+  try{id==="s0"?tg.BackButton.hide():tg.BackButton.show()}catch{}
+  if(id==="s3")renderLifeSimulator();
+  if(id==="s5")updateSummary();
+  if(id==="admin")loadAdminDashboard();
+  else track("screen_view",{screen:id});
+}
+
+document.getElementById("prevStepBtn").addEventListener("click",()=>{
+  const prev = stepMeta[curScreen]?.prev || "s0";
+  go(prev);
+});
+
+document.getElementById("startBtn").addEventListener("click",()=>{
+  track("consent",{processing:true,privacy:true,messages:true,v:"2026-11-17-v34"});
+  if(!web){try{if(!tg.initDataUnsafe?.user?.allows_write_to_pm)tg.requestWriteAccess(()=>{})}catch{}}
+  haptic("impactOccurred","light");
+  go("s1");
+});
+
+/* Шаг 1: Выбор демона */
+document.querySelectorAll(".demon-card").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".demon-card").forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");
+    state.demon = btn.dataset.demon;
+    state.solved = false;
+    updateCalculator();
+    const d = DEMONS[state.demon];
+    track("situation_pick",{situation:`${d.code} · ${d.humanName}`});
+    haptic("selectionChanged");
+  });
+});
+
+/* Шаг 2: Калькулятор */
+function updateCalculator(){
+  const d = DEMONS[state.demon];
+  const monthly = state.check * state.count;
+  const yearly = monthly * 12;
+  document.getElementById("calcDemonTag").textContent = `ДОСЬЕ: ${d.code} (${d.humanName.toUpperCase()})`;
+  document.getElementById("calcMonthly").textContent = `−${monthly.toLocaleString("ru-RU")} ₽ каждый месяц`;
+  document.getElementById("calcYearly").textContent = `За год этот демон тихо крадёт у вас ~${yearly.toLocaleString("ru-RU")} ₽ и десятки вечеров вашей жизни.`;
+}
+
+document.querySelectorAll("#checkPills .pill").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll("#checkPills .pill").forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");
+    state.check = Number(btn.dataset.val);
+    updateCalculator();
+    track("check_pick",{check:state.check,lostMonthly:state.check*state.count});
+    haptic("selectionChanged");
+  });
+});
+
+document.querySelectorAll("#countPills .pill").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll("#countPills .pill").forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");
+    state.count = Number(btn.dataset.val);
+    updateCalculator();
+    track("loss_count_pick",{count:state.count,lostMonthly:state.check*state.count});
+    haptic("selectionChanged");
+  });
+});
+
+/* Шаг 3: Жизненный симулятор с озарением */
+function renderLifeSimulator(){
+  const d = DEMONS[state.demon];
+  document.getElementById("simSender").textContent = d.sender;
+  document.getElementById("simMessage").textContent = d.incoming;
+
+  const box = document.getElementById("simOptions");
+  const aha = document.getElementById("ahaBox");
+  const nextBtn = document.getElementById("afterSimBtn");
+  box.innerHTML = "";
+  aha.className = "aha-box";
+  aha.innerHTML = `👆 <b>Проверьте сами:</b> нажмите на привычный вариант выше, а затем на <b>Ритуал Тории ✦</b> — и почувствуйте разницу!`;
+  nextBtn.disabled = !state.solved;
+
+  d.actions.forEach(act=>{
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "act-btn";
+    b.innerHTML = `<span>${act.text}</span><span class="tag-pill">${act.tag}</span>`;
+    b.onclick = ()=>{
+      if(act.ok){
+        b.classList.add("exorcism");
+        b.querySelector(".tag-pill").textContent = "ИЗГНАН ✓";
+        aha.className = "aha-box bingo";
+        aha.innerHTML = act.reaction;
+        state.solved = true;
+        nextBtn.disabled = false;
+        track("exorcism_bingo",{demon:state.demon});
+        haptic("notificationOccurred","success");
+      }else{
+        b.classList.add("trap");
+        b.querySelector(".tag-pill").textContent = "СЛИВ ✕";
+        aha.className = "aha-box boom";
+        aha.innerHTML = act.reaction + `<br><b style="color:var(--gold-light);display:block;margin-top:5px">👉 А теперь нажмите на 3-ю кнопку («Ритуал Тории ✦») и посмотрите, как это лечится!</b>`;
+        track("exorcism_trap",{demon:state.demon,trap:act.text});
+        haptic("notificationOccurred","warning");
+      }
+    };
+    box.appendChild(b);
+  });
+}
+
+/* Шаг 4: Переключение вкладок */
+function switchTab(tab){
+  document.querySelectorAll("#s4 .t-tab").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
+  ["offer","proof","cases"].forEach(p=>{
+    document.getElementById("pane-"+p).classList.toggle("on",p===tab);
+  });
+  track("blueprint_tab",{tab});
+  haptic("selectionChanged");
+}
+
+document.getElementById("toOrderBtn").addEventListener("click",()=>{
+  const d = DEMONS[state.demon];
+  track("tier_pick",{step:"blueprint15000",label:"THE BLUEPRINT · 15 000 ₽",check:state.check,situation:d.humanName});
+  haptic("impactOccurred","light");
+  go("s5");
+});
+
+/* Шаг 5: Отправка заявки в Telegram */
+function updateSummary(){
+  const d = DEMONS[state.demon];
+  const monthly = (state.check * state.count).toLocaleString("ru-RU");
+  document.getElementById("summaryDemon").textContent = d.humanName;
+  document.getElementById("summaryLoss").textContent = `+${monthly} ₽/мес`;
+}
+
+document.querySelectorAll("#timeChoices .win-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll("#timeChoices .win-btn").forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");
+    state.time = btn.dataset.time;
+    track("slot_pick",{date:"window",time:state.time});
+    haptic("selectionChanged");
+  });
+});
+
+document.getElementById("sendBtn").addEventListener("click",async()=>{
+  if(state.sending)return;
+  const name = document.getElementById("fName").value.trim();
+  const path = document.getElementById("fPath").value.trim();
+  const pain = document.getElementById("fPain").value.trim();
+  const msgEl = document.getElementById("formMsg");
+
+  if(!name || !path){
+    msgEl.style.color = "var(--wine)";
+    msgEl.textContent = "Заполните, пожалуйста, первые два поля.";
+    return;
+  }
+  msgEl.textContent = "";
+  state.sending = true;
+  const btn = document.getElementById("sendBtn");
+  btn.disabled = true;
+  btn.textContent = "Перехожу в диалог с Торией…";
+
+  const d = DEMONS[state.demon];
+  const monthly = (state.check * state.count).toLocaleString("ru-RU");
+  const message = [
+    "Привет, Тория! Прошла твой портал EXORCIST OF CHAOS — хочу на разбор THE BLUEPRINT (15 000 ₽).",
+    "",
+    "• Кто я и чем занимаюсь: " + name,
+    "• Мой главный демон: " + d.code + " (" + d.humanName + ")",
+    "• Сколько он съедает: ~" + monthly + " ₽/мес (при чеке " + state.check.toLocaleString("ru-RU") + " ₽)",
+    "• Как сейчас покупают: " + path,
+    "• Что больше всего бесит: " + (pain || "Расскажу на встрече"),
+    "• Удобное время: " + state.time,
+    "",
+    "Пришли, пожалуйста, детали и реквизиты для записи!"
+  ].join("\n");
+
+  track("consultation_click",{step:"blueprint15000",slot:state.time,check:state.check,situation:d.humanName});
+
+  try{if(navigator.clipboard && navigator.clipboard.writeText)navigator.clipboard.writeText(message).catch(()=>{})}catch{}
+
+  try{
+    if(!isLocal){
+      await apiPost("/api/consultation",{
+        product:`${name} (чек ${state.check} ₽)`,
+        request:message,
+        formats:["THE BLUEPRINT · 15 000 ₽",`${d.code} (${d.humanName})`,`Окно: ${state.time}`],
+        slotDate:"",
+        slotTime:state.time,
+        intent:"miniapp_v34_human_exorcist",
+        src
+      });
+    }
+    msgEl.style.color = "var(--ok)";
+    msgEl.textContent = "✓ Заявка сохранена! Открываю Telegram…";
+    track("consultation_sent",{step:"blueprint15000",slot:state.time});
+    haptic("notificationOccurred","success");
+  }catch(e){}
+
+  const url = "https://t.me/" + TELEGRAM_USERNAME + "?text=" + encodeURIComponent(message);
+  setTimeout(()=>openTg(url),250);
+  setTimeout(()=>{
+    state.sending = false;
+    btn.disabled = false;
+    btn.textContent = "Написать Тории в Telegram ↗";
+  },1400);
+});
+
+/* Секретный вход в админку (4 тапа по логотипу TORIYA NOVA) */
+const currentTgUserId = String(tg?.initDataUnsafe?.user?.id || "");
+if(currentTgUserId === OWNER_ID){
+  document.getElementById("adminEntryBtn").classList.add("show");
+}
+let logoTaps=0,logoTimer=null;
+document.getElementById("brandLogo").addEventListener("click",()=>{
+  logoTaps++;
+  clearTimeout(logoTimer);
+  logoTimer=setTimeout(()=>{logoTaps=0},1200);
+  if(logoTaps>=4){
+    logoTaps=0;
+    document.getElementById("adminEntryBtn").classList.add("show");
+    go("admin");
+  }
+});
+document.getElementById("adminEntryBtn").addEventListener("click",()=>go("admin"));
+
+document.addEventListener("click",e=>{
+  const at = e.target.closest("[data-adm]");
+  if(at){
+    const tab = at.dataset.adm;
+    document.querySelectorAll("[data-adm]").forEach(b=>b.classList.toggle("on",b.dataset.adm===tab));
+    ["active","all","broadcast"].forEach(p=>{
+      document.getElementById("adm-"+p).style.display = p===tab ? "block" : "none";
+    });
+    return;
+  }
+  const dm = e.target.closest(".bot-dm-btn[data-uid]");
+  if(dm){
+    const targetId=dm.dataset.uid,targetName=dm.dataset.name||"клиенту";
+    const msg=prompt(`Сообщение для ${targetName} (от лица бота):`,`${targetName}, здравствуйте! Вы ловили своего демона в моём приложении TORIYA NOVA, но не дошли до финала. Если актуально избавиться от рутины в переписках — напишите мне или оставьте заявку внутри:`);
+    if(!msg||!msg.trim())return;
+    apiPost("/api/admin",{password:state.adminKey,action:"send_one",userId:targetId,text:msg.trim()}).then(r=>{
+      alert(r&&r.ok?"✅ Доставлено!":"❌ Ошибка: "+(r?.error||""));
+    });
+  }
+});
+
+function renderVisitorCard(v){
+  const isTg=!String(v.id).startsWith("web:");
+  return `
+    <div class="visitor-card">
+      <div style="display:flex;justify-content:space-between">
+        <b>${v.name} ${v.username?`(@${v.username})`:""}</b>
+        <span style="color:var(--wine);font-weight:700">${v.consulted?"✅ Заявка":"⏸ "+v.idleText}</span>
+      </div>
+      <div style="font-size:11px;color:var(--muted)">📍 Шаг: <b>${v.stage}</b> · Был: ${v.lastSeen}</div>
+      <div style="margin:4px 0;padding:5px 7px;background:var(--paper-soft);border-radius:6px">${v.reason}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px">
+        <span style="font-size:11px;color:var(--muted)">Дожимов: ${v.reminders}/3</span>
+        <div style="display:flex;gap:10px">
+          ${isTg?`<button type="button" class="bot-dm-btn" style="color:var(--ok);font-weight:700" data-uid="${v.id}" data-name="${v.name}">🤖 Бот</button>`:""}
+          ${v.contactUrl?`<a href="${v.contactUrl}" target="_blank" style="color:var(--wine);font-weight:700">✉️ Личка →</a>`:""}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function loadAdminDashboard(){
+  const err=document.getElementById("adminAuthErr");
+  err.textContent="";
+  try{
+    const res=await apiPost("/api/admin",{password:state.adminKey,action:"dashboard"});
+    if(!res||!res.ok){
+      document.getElementById("adminAuthBox").style.display="block";
+      document.getElementById("adminContent").style.display="none";
+      err.textContent="Ответ сервера: "+(res?.error||"проверьте пароль");
+      return;
+    }
+    sessionStorage.setItem("tn_adm_key",state.adminKey);
+    document.getElementById("adminAuthBox").style.display="none";
+    document.getElementById("adminContent").style.display="block";
+    document.getElementById("adminStats").innerHTML=`
+      <div class="admin-stat"><b>${res.stats.allTimeUsers}</b><span>Всего</span></div>
+      <div class="admin-stat"><b>${res.stats.totalUsers}</b><span>7 дней</span></div>
+      <div class="admin-stat"><b>${res.stats.onlyFirstScreen}</b><span>Экран 1</span></div>
+      <div class="admin-stat"><b>${res.stats.leads}</b><span>Заявки</span></div>
+    `;
+    document.getElementById("adminVisitorsList").innerHTML=(res.visitors&&res.visitors.length)
+      ? res.visitors.map(renderVisitorCard).join("")
+      : '<div class="paper-card"><p>За 7 дней визитов пока нет.</p></div>';
+    document.getElementById("adminAllUsersList").innerHTML=(res.allUsers&&res.allUsers.length)
+      ? res.allUsers.map(renderVisitorCard).join("")
+      : '<div class="paper-card"><p>База пуста.</p></div>';
+  }catch(e){err.textContent="Ошибка соединения."}
+}
+
+document.getElementById("adminLoginBtn").addEventListener("click",()=>{
+  state.adminKey=document.getElementById("adminPassInput").value.trim();
+  loadAdminDashboard();
+});
+document.getElementById("adminRefreshBtn").addEventListener("click",()=>loadAdminDashboard());
+
+document.getElementById("broadcastSendBtn").addEventListener("click",async()=>{
+  const text=(document.getElementById("broadcastText").value||"").trim();
+  const btnText=(document.getElementByById("broadcastBtnText").value||"✦ Открыть портал Тории").trim();
+  const status=document.getElementById("broadcastStatus");
+  if(!text)return;
+  if(!confirm("Отправить рассылку всем в бот?"))return;
+  const b=document.getElementById("broadcastSendBtn");
+  b.disabled=true;
+  status.textContent="⏳ Отправка…";
+  try{
+    const res=await apiPost("/api/admin",{password:state.adminKey,action:"broadcast",text,btnText});
+    status.textContent = res&&res.ok ? `✅ Доставлено: ${res.sentCount} из ${res.totalTargets}` : "Ошибка отправки";
+  }catch(e){status.textContent="Ошибка сети";}
+  finally{b.disabled=false;}
+});
+
+if(!web){
+  try{
+    tg.ready();tg.expand();
+    tg.setHeaderColor("#1A141B");tg.setBackgroundColor("#1A141B");
+    tg.BackButton.onClick(()=>{
+      const prev = stepMeta[curScreen]?.prev || "s0";
+      go(prev);
+    });
+  }catch{}
+}
+
+updateCalculator();
+track("app_open",{tz:new Date().getTimezoneOffset(),web,src,lang:"ru",v:"v34"});
+</script>
+</body>
+</html>
