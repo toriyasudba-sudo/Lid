@@ -1,0 +1,1275 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<!-- TORIYA NOVA BUILD V36 — THE CHAOSVERSE RPG (HYBRID DARK TECH + BOSS FIGHT + LAB GIFT) -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#111014">
+<meta name="description" content="TORIYA NOVA — Exorcist of Chaos. Интерактивная игра-диагностика бизнес-хаоса.">
+<title>TORIYA NOVA — EXORCIST OF CHAOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#111014;         /* Void Black 60% */
+  --wine:#541D2B;         /* Blood Wine 20% */
+  --wine-bright:#8A2842;
+  --gold:#B18A4B;         /* Ancient Gold 15% */
+  --gold-light:#DFB976;
+  --ash:#D8D1C7;          /* Ash Silver 5% */
+  --paper:#F6F2E9;        /* Пергамент для лёгкого чтения карточек */
+  --paper-soft:#EAE3D5;
+  --ink:#16141A;
+  --text:#3E3945;
+  --ok:#2E6B47;
+  --ok-bg:#E4F2E9;
+  --danger:#7D2235;
+  --danger-bg:#F9E6EA;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Manrope',-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:'DM Mono',monospace;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{
+  margin:0;padding:0;width:100%;height:100dvh;overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(84,29,43,.55),transparent 58%),
+    linear-gradient(rgba(177,138,75,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(177,138,75,.05) 1px,transparent 1px),
+    var(--void);
+  background-size:100% 100%, 26px 26px, 26px 26px, 100% 100%;
+  color:var(--ash);font:14px/1.4 var(--sans);
+  -webkit-font-smoothing:antialiased;
+}
+button,input,textarea,a{font:inherit;color:inherit;text-decoration:none}
+button{cursor:pointer;border:0;background:none}
+
+.app{
+  max-width:500px;height:100dvh;margin:0 auto;
+  padding:0 14px calc(10px + env(safe-area-inset-bottom));
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+
+/* Шапка THE CHAOSVERSE */
+.top{
+  height:48px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(177,138,75,.28);flex:none;
+}
+.brand{font:italic 600 17px var(--serif);color:var(--gold-light);cursor:pointer;user-select:none;line-height:1}
+.brand small{display:block;font:500 8px var(--mono);letter-spacing:.18em;color:var(--ash);opacity:.75;margin-top:3px}
+.top-right{display:flex;align-items:center;gap:6px}
+.lvl-pill{
+  font:500 9px var(--mono);color:var(--gold-light);
+  padding:4px 8px;border-radius:99px;border:1px solid rgba(177,138,75,.4);
+  background:rgba(84,29,43,.45);letter-spacing:.08em;
+}
+.admin-entry-btn{
+  display:none;padding:4px 9px;border-radius:99px;
+  border:1px solid var(--gold);background:var(--wine);
+  color:#fff;font:600 9.5px var(--mono);
+}
+.admin-entry-btn.show{display:inline-flex;align-items:center;gap:4px}
+
+/* Верхний игровой бар (Уровень + возврат) */
+.stepbar{flex:none;padding:6px 0 2px;display:none}
+.stepbar.visible{display:block}
+.stepbar-meta{display:flex;justify-content:space-between;align-items:center;font:500 9.5px var(--mono);color:var(--ash);margin-bottom:4px}
+.stepbar-back{color:var(--gold-light);font:700 11.5px var(--sans);padding:2px 0}
+.stepbar-track{height:4px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden}
+.stepbar-fill{height:100%;width:20%;background:linear-gradient(90deg,var(--wine-bright),var(--gold-light));transition:width .3s ease}
+
+/* Экраны */
+.screen{
+  display:none;flex:1;min-height:0;
+  flex-direction:column;justify-content:space-between;
+  padding:6px 0 4px;animation:fadeSlide .24s ease;
+}
+.screen.active{display:flex}
+.screen.scrollable{overflow-y:auto;justify-content:flex-start;gap:8px;padding-bottom:14px}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.kicker{font:500 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);margin-bottom:2px}
+.kicker::before{content:"✦ ";color:var(--wine-bright)}
+h1,h2,h3,p{margin:0}
+h1,h2{font-family:var(--serif);color:#FFF;line-height:1.1}
+h1{font-size:clamp(22px,6.2vw,28px);margin-bottom:4px}
+h2{font-size:clamp(19px,5.2vw,23px);margin-bottom:3px}
+h3{font-family:var(--serif);font-size:16px;color:var(--ink);margin-bottom:3px}
+em{color:var(--gold-light);font-style:italic}
+.sub{font-size:12.5px;color:var(--ash);line-height:1.36}
+
+/* Пергаментный блок с углами-скобами как в Лаборатории */
+.paper-card{
+  background:var(--paper);color:var(--ink);
+  border:1.5px solid var(--gold);border-radius:16px;
+  padding:11px 13px;position:relative;
+  box-shadow:0 14px 32px -14px rgba(0,0,0,.7);
+}
+.paper-card p{color:var(--text);font-size:12px;line-height:1.36}
+
+/* Кнопки */
+.btn{
+  width:100%;min-height:46px;border-radius:999px;padding:11px 16px;
+  background:linear-gradient(110deg,#DFB976,#9E7638);
+  color:#111014;border:1px solid var(--gold-light);
+  font:800 12px var(--sans);letter-spacing:.05em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 10px 24px -10px rgba(177,138,75,.55);
+  transition:transform .12s;flex:none;
+}
+.btn.ghost{
+  background:rgba(84,29,43,.35);color:var(--gold-light);
+  border:1px solid rgba(177,138,75,.45);box-shadow:none;
+  min-height:38px;font-size:11.5px;text-transform:none;font-weight:700;
+}
+.btn:active{transform:scale(.985)}
+.btn[disabled]{opacity:.4;pointer-events:none}
+
+/* ЭКРАН 0: Визитка Экзорциста */
+.hero-badge{
+  background:linear-gradient(135deg,rgba(84,29,43,.75),rgba(17,16,20,.9));
+  border:1px solid var(--gold);border-radius:14px;
+  padding:9px 12px;display:flex;align-items:center;gap:11px;
+}
+.sigil{
+  width:42px;height:42px;border-radius:50%;flex:none;
+  border:1.5px dashed var(--gold-light);display:grid;place-items:center;
+  color:var(--gold-light);font:20px var(--serif);
+  animation:spinSlow 18s linear infinite;
+}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+
+.lore-grid{display:grid;gap:6px;margin-top:6px}
+.lore-item{
+  display:flex;align-items:center;gap:9px;
+  background:var(--paper-soft);padding:7px 10px;border-radius:11px;
+  font-size:11.8px;color:var(--ink);line-height:1.3;
+}
+.lore-item b{display:block;color:var(--wine);font-size:12px}
+
+/* ЭКРАН 1: Бестиарий из 5 демонов */
+.demon-list{display:grid;gap:6px}
+.d-row{
+  text-align:left;padding:8px 11px;border-radius:13px;
+  background:var(--paper);color:var(--ink);
+  border:2px solid transparent;
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:9px;
+  transition:.14s;opacity:.88;
+}
+.d-row.selected{
+  opacity:1;border-color:var(--gold);background:#FFFDF9;
+  box-shadow:0 0 0 3px rgba(177,138,75,.3);
+}
+.d-icon{
+  width:34px;height:34px;border-radius:9px;background:var(--wine);
+  color:var(--gold-light);display:grid;place-items:center;font-size:16px;
+}
+.d-code{font:700 8.5px var(--mono);color:var(--wine);letter-spacing:.08em}
+.d-row b{font-size:12.5px;color:var(--ink);display:block;line-height:1.15}
+.d-row span.d-sub{font-size:11px;color:var(--text);display:block;margin-top:2px;line-height:1.25}
+.d-chk{
+  width:20px;height:20px;border-radius:50%;border:1.5px solid #BFB4A3;
+  display:grid;place-items:center;font-size:11px;color:transparent;
+}
+.d-row.selected .d-chk{background:var(--wine);border-color:var(--wine);color:#fff}
+
+/* ЭКРАН 2: Твердая математика */
+.pills{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:5px}
+.pill{
+  padding:8px 4px;border-radius:9px;border:1.5px solid #D5CBB8;
+  background:var(--paper-soft);color:var(--ink);font:700 11.5px var(--sans);text-align:center;
+}
+.pill.selected{background:var(--wine);color:#fff;border-color:var(--wine)}
+.math-card{
+  background:linear-gradient(145deg,#381420,#141118);
+  border:1.5px solid var(--gold);border-radius:15px;padding:11px 13px;color:#fff;
+}
+.math-sum{font:600 25px/1.1 var(--serif);color:var(--gold-light);margin:3px 0}
+
+/* ЭКРАН 3: БОСС-ФАЙТ (2 РАУНДА С ПОЛОСКОЙ HP!) */
+.boss-bar{
+  background:linear-gradient(135deg,#2D121D,#16131B);
+  border:1.5px solid var(--gold);border-radius:14px;padding:9px 12px;
+}
+.boss-top{display:flex;justify-content:space-between;align-items:center;font:700 10px var(--mono);color:var(--gold-light)}
+.hp-wrap{height:9px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden;margin:5px 0 3px;border:1px solid rgba(255,255,255,.15)}
+.hp-fill{height:100%;width:100%;background:linear-gradient(90deg,#D9385A,#FF7B54);transition:width .35s ease}
+.hp-fill.dead{background:var(--ok)}
+
+.act-list{display:grid;gap:6px}
+.act-btn{
+  width:100%;text-align:left;padding:9px 11px;border-radius:11px;
+  background:var(--paper);color:var(--ink);border:1.5px solid transparent;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  font:600 11.8px/1.25 var(--sans);transition:.15s;
+}
+.act-btn span.tag-pill{
+  font:700 8.5px var(--mono);padding:3px 6px;border-radius:5px;
+  background:var(--paper-soft);color:var(--text);flex:none;
+}
+.act-btn.trap{background:var(--danger-bg);border-color:var(--danger);color:#5E1422}
+.act-btn.trap span.tag-pill{background:var(--danger);color:#fff}
+.act-btn.exorcism{background:var(--ok-bg);border-color:var(--ok);color:#174228}
+.act-btn.exorcism span.tag-pill{background:var(--ok);color:#fff}
+
+/* Мини-игра из Лаборатории: выкини лишнее звено из цепочки */
+.chain-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.c-chip{
+  padding:6px 9px;border-radius:8px;font:700 11px var(--sans);
+  background:var(--paper-soft);color:var(--ink);border:1.5px solid #C8BFAEE0;
+}
+.c-chip.bad-node{border-color:var(--danger);background:var(--danger-bg);color:var(--danger);animation:pulseBad 1.4s infinite}
+.c-chip.removed{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);text-decoration:line-through;animation:none}
+@keyframes pulseBad{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+
+.aha-box{
+  padding:9px 11px;border-radius:12px;font-size:11.8px;line-height:1.34;
+  background:rgba(255,255,255,.07);color:var(--ash);
+  border:1px solid rgba(177,138,75,.35);
+}
+.aha-box.boom{background:#3A1421;border-color:#E06C75;color:#FFE8EC}
+.aha-box.bingo{background:var(--paper);border:2px solid var(--gold);color:var(--ink)}
+
+/* ЭКРАН 4: УРОВНИ МИССИЙ + ПОДАРОК В ЛАБОРАТОРИЮ */
+.tabs-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:11px;flex:none}
+.t-tab{padding:6px 4px;border-radius:8px;font:700 10.5px var(--sans);color:var(--ash);text-align:center}
+.t-tab.on{background:var(--gold-light);color:var(--void)}
+.t-pane{display:none;flex:1;min-height:0;flex-direction:column;justify-content:space-between;padding:4px 0}
+.t-pane.on{display:flex}
+
+.mission-list{display:grid;gap:6px}
+.m-card{
+  background:var(--paper);color:var(--ink);border-radius:13px;padding:9px 11px;
+  border:2px solid transparent;cursor:pointer;text-align:left;transition:.14s;
+}
+.m-card.selected{border-color:var(--gold);background:#FFFDF9;box-shadow:0 0 0 2px rgba(177,138,75,.35)}
+.m-head{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.m-lvl{font:700 8.5px var(--mono);padding:2px 6px;border-radius:4px;background:var(--wine);color:#fff}
+.m-price{font:700 15px var(--serif);color:var(--wine)}
+.m-card b{display:block;font-size:13px;color:var(--ink);margin-top:2px}
+.m-card p{font-size:11.3px;color:var(--text);margin-top:2px;line-height:1.28}
+
+.lab-gift-bar{
+  background:linear-gradient(135deg,rgba(84,29,43,.85),rgba(25,20,30,.95));
+  border:1px dashed var(--gold-light);border-radius:12px;
+  padding:8px 11px;display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.lab-gift-bar span{font-size:11px;color:var(--ash);line-height:1.28}
+.lab-gift-bar b{color:var(--gold-light);display:block;font-size:11.5px}
+.lab-gift-btn{
+  flex:none;padding:6px 10px;border-radius:8px;background:var(--gold-light);
+  color:var(--void);font:800 10px var(--mono);text-transform:uppercase;
+}
+
+.proof-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:5px}
+.proof-shot{background:#17141C;color:var(--ash);border-radius:11px;padding:7px;border:1px solid rgba(177,138,75,.35)}
+.proof-shot img{width:100%;max-height:120px;object-fit:cover;border-radius:7px;display:block}
+.proof-mock{background:#221D28;border-radius:7px;padding:7px;font-size:10px;line-height:1.3;color:#E5DCE8}
+
+/* ЭКРАН 5: ЗАЯВКА */
+.inp{
+  width:100%;padding:9px 11px;border-radius:9px;border:1.5px solid #D5CBB8;
+  background:#fff;color:var(--ink);font-size:12.8px;outline:none;margin-top:5px;
+}
+.inp:focus{border-color:var(--wine)}
+.win-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:5px}
+.win-btn{
+  padding:7px 9px;border-radius:9px;border:1.5px solid #D5CBB8;
+  background:var(--paper-soft);color:var(--ink);text-align:left;font-size:11px;
+}
+.win-btn.selected{border-color:var(--wine);background:var(--danger-bg)}
+.win-btn b{display:block;font-size:11.5px;color:var(--wine)}
+
+.admin-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.admin-stat{background:var(--paper);color:var(--ink);border-radius:10px;padding:8px 4px;text-align:center}
+.admin-stat b{display:block;font:600 18px var(--serif);color:var(--wine)}
+.admin-stat span{font-size:9.5px;color:var(--text)}
+.visitor-card{background:var(--paper);color:var(--ink);border-radius:12px;padding:10px;margin-bottom:8px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ШАПКА ВСЕЛЕННОЙ -->
+  <header class="top">
+    <div class="brand" id="brandLogo">TORIYA NOVA<small>EXORCIST OF CHAOS</small></div>
+    <div class="top-right">
+      <span class="lvl-pill" id="topLvlBadge">LEVEL 01 · THE PORTAL</span>
+      <button type="button" id="adminEntryBtn" class="admin-entry-btn">📊 CRM</button>
+    </div>
+  </header>
+
+  <!-- ПРОГРЕСС-БАР МИССИИ -->
+  <div class="stepbar" id="stepBar">
+    <div class="stepbar-meta">
+      <button type="button" class="stepbar-back" id="prevStepBtn">← Назад</button>
+      <span id="stepTitle">МИССИЯ 1 ИЗ 5</span>
+    </div>
+    <div class="stepbar-track"><div class="stepbar-fill" id="stepFill"></div></div>
+  </div>
+
+  <!-- ==================== ЭКРАН 0: THE PORTAL (ВХОД В ИГРУ) ==================== -->
+  <section class="screen active" id="s0">
+    <div>
+      <div class="kicker">The Chaosverse · Бизнес-экзорцизм из Нячанга</div>
+      <h1>У каждого бизнеса есть свои <em>демоны.</em> Я знаю, как их изгнать.</h1>
+      <p class="sub">Я не учу «дышать маткой на денежный поток» и не заставляю вас неделями плясать в сторис. Я официально увольняю экспертов с должности бесплатной секретарши в собственном блоге.</p>
+    </div>
+
+    <div class="hero-badge">
+      <div class="sigil">✦</div>
+      <div>
+        <div style="font:700 9.5px var(--mono);color:var(--gold-light);letter-spacing:.08em">ПРАВИЛА ИГРЫ (60 СЕКУНД):</div>
+        <div style="font-size:11.8px;color:var(--ash);margin-top:2px">Найдите паразита, который жрёт ваши заявки, победите его в 2 хода — и заберите Карту изгнания + бесплатный доступ в мою Лабораторию.</div>
+      </div>
+    </div>
+
+    <div class="paper-card">
+      <h3>Признаки того, что ваш блог захватил Хаос:</h3>
+      <div class="lore-grid">
+        <div class="lore-item">
+          <span>📁</span>
+          <div><b>Кладбище PDF-гайдов в «Загрузках»</b>Люди молча скачивают ваш файл, хоронят его между фоткой счётчика за воду и рецептом кабачковой икры — и исчезают.</div>
+        </div>
+        <div class="lore-item">
+          <span>🦜</span>
+          <div><b>Попугай в директе: «Спасибо, я подумаю»</b>Вы полчаса наговариваете голосовые на вопрос «А сколько стоит?», а в ответ — две синие галочки и тишина.</div>
+        </div>
+        <div class="lore-item">
+          <span>⛓</span>
+          <div><b>Бизнес растёт, а свободы всё меньше</b>Оплаты, ссылки, окошки и напоминания держатся только на вашей памяти и ручном управлении.</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button class="btn" id="startBtn">Начать охоту на демона →</button>
+      <button class="btn ghost" style="margin-top:5px" onclick="go('s4');switchTab('proof')">Сразу посмотреть артефакты и живые скрины</button>
+    </div>
+  </section>
+
+  <!-- ==================== ЭКРАН 1: БЕСТИАРИЙ (5 ДЕМОНОВ) ==================== -->
+  <section class="screen" id="s1">
+    <div>
+      <div class="kicker">Миссия 1 из 5 · Бестиарий Хаоса</div>
+      <h2>Кто из этой пятёрки <em>хозяйничает</em> у вас прямо сейчас?</h2>
+      <p class="sub">Выберите главного монстра — мы вызовем его на бой на следующем экране:</p>
+    </div>
+
+    <div class="demon-list" id="demonGrid">
+      <button type="button" class="d-row selected" data-demon="lost">
+        <div class="d-icon">👻</div>
+        <div>
+          <span class="d-code">ДОСЬЕ №01 · THE LOST</span>
+          <b>Демон потерянных заявок («Я подумаю»)</b>
+          <span class="d-sub">Скачивают PDF-гайд или спрашивают цену — и сливаются до оплаты.</span>
+        </div>
+        <div class="d-chk">✓</div>
+      </button>
+
+      <button type="button" class="d-row" data-demon="messenger">
+        <div class="d-icon">🦜</div>
+        <div>
+          <span class="d-code">ДОСЬЕ №02 · THE MESSENGER</span>
+          <b>Демон переписок (Секретарша 24/7)</b>
+          <span class="d-sub">Все вопросы идут через вас. Вы живёте в мессенджере и повторяете одно и то же.</span>
+        </div>
+        <div class="d-chk">✓</div>
+      </button>
+
+      <button type="button" class="d-row" data-demon="loop">
+        <div class="d-icon">⛓</div>
+        <div>
+          <span class="d-code">ДОСЬЕ №03 · THE LOOP</span>
+          <b>Демон рутины (День сурка)</b>
+          <span class="d-sub">Ручная запись, проверка скринов оплаты, пересылка ссылок и напоминаний.</span>
+        </div>
+        <div class="d-chk">✓</div>
+      </button>
+
+      <button type="button" class="d-row" data-demon="hydra">
+        <div class="d-icon">🐉</div>
+        <div>
+          <span class="d-code">ДОСЬЕ №04 · THE HYDRA</span>
+          <b>Демон костылей (10 сервисов и таблиц)</b>
+          <span class="d-sub">Боты, таблицы, сайты с VPN — всё вразнобой, а вы платите абонентку.</span>
+        </div>
+        <div class="d-chk">✓</div>
+      </button>
+
+      <button type="button" class="d-row" data-demon="mirror">
+        <div class="d-icon">🪞</div>
+        <div>
+          <span class="d-code">ДОСЬЕ №05 · THE MIRROR</span>
+          <b>Демон невидимости («Крутой, но ничё не понятно»)</b>
+          <span class="d-sub">Продукт сильный, но клиенту со стороны сложно понять, что и как у вас купить.</span>
+        </div>
+        <div class="d-chk">✓</div>
+      </button>
+    </div>
+
+    <button class="btn" onclick="go('s2')">Оценить урон от этого демона →</button>
+  </section>
+
+  <!-- ==================== ЭКРАН 2: ТВЕРДАЯ МАТЕМАТИКА ==================== -->
+  <section class="screen" id="s2">
+    <div>
+      <div class="kicker">Миссия 2 из 5 · Твёрдая математика</div>
+      <h2>Сколько денег этот демон <em>жрёт каждый месяц?</em></h2>
+      <p class="sub">Я учитель математики по второму призванию — давайте посчитаем как взрослые люди:</p>
+    </div>
+
+    <div class="paper-card">
+      <div style="font-weight:700;font-size:12px;color:var(--ink)">1. Средний чек вашего продукта / работы:</div>
+      <div class="pills" id="checkPills">
+        <button type="button" class="pill" data-val="15000">15 000 ₽</button>
+        <button type="button" class="pill selected" data-val="30000">30 000 ₽</button>
+        <button type="button" class="pill" data-val="50000">50 000 ₽</button>
+        <button type="button" class="pill" data-val="100000">100 000 ₽</button>
+      </div>
+
+      <div style="font-weight:700;font-size:12px;color:var(--ink);margin-top:10px">2. Сколько человек в месяц уходят «подумать» или молчат после PDF?</div>
+      <div class="pills" id="countPills">
+        <button type="button" class="pill" data-val="2">2 чел.</button>
+        <button type="button" class="pill selected" data-val="3">3 чел.</button>
+        <button type="button" class="pill" data-val="5">5 чел.</button>
+        <button type="button" class="pill" data-val="10">10+ чел.</button>
+      </div>
+    </div>
+
+    <div class="math-card">
+      <div style="font:600 9.5px var(--mono);color:var(--gold-light);letter-spacing:.08em" id="calcDemonTag">УРОН ОТ ДЕМОНА: THE LOST</div>
+      <div class="math-sum" id="calcMonthly">−90 000 ₽ каждый месяц</div>
+      <div style="font-size:11.8px;color:var(--ash);line-height:1.35" id="calcYearly">За год это <b>1 080 000 ₽</b> — стоимость хорошей зимовки у океана во Вьетнаме, которую вы просто дарите хаосу.</div>
+    </div>
+
+    <button class="btn" onclick="go('s3')">Выйти на Босс-файт и изгнать его →</button>
+  </section>
+
+  <!-- ==================== ЭКРАН 3: БОСС-ФАЙТ (2 РАУНДА ИЗ ЛАБОРАТОРИИ!) ==================== -->
+  <section class="screen" id="s3">
+    <!-- Шкала здоровья Демона (HP) -->
+    <div class="boss-bar">
+      <div class="boss-top">
+        <span id="bossName">БОСС: THE LOST (ДЕМОН «Я ПОДУМАЮ»)</span>
+        <span id="bossHpText">HP: 100%</span>
+      </div>
+      <div class="hp-wrap"><div class="hp-fill" id="bossHpFill"></div></div>
+      <div style="font-size:11px;color:var(--ash)" id="bossStatusText">⚔️ Раунд 1 из 2: выберите правильный ход, чтобы снести броню демона!</div>
+    </div>
+
+    <!-- РАУНД 1: Ловушка симптома vs Удар по причине -->
+    <div id="round1Box" style="display:flex;flex-direction:column;gap:6px">
+      <div class="paper-card" style="padding:9px 11px">
+        <div style="font:700 9px var(--mono);color:var(--wine)" id="simSender">💬 АТАКА ДЕМОНА В 21:40:</div>
+        <div style="font-size:12px;font-weight:600;color:var(--ink);margin-top:2px" id="simMessage">«Здравствуйте! Читаю ваш канал. А сколько стоит и как всё проходит?»</div>
+      </div>
+      <div class="act-list" id="simOptions"></div>
+    </div>
+
+    <!-- РАУНД 2: Мини-игра из Лаборатории (Выкини костыль из цепочки!) -->
+    <div id="round2Box" style="display:none;flex-direction:column;gap:6px">
+      <div class="paper-card">
+        <div style="font:700 9.5px var(--mono);color:var(--wine)">⚡ РАУНД 2 · ДОБИВАЕМ БОССА (ЗАДАНИЕ ИЗ ЛАБОРАТОРИИ)</div>
+        <h3 style="margin-top:2px">Уберите слабое звено из вашей воронки!</h3>
+        <p>Нажмите на <b>красное звено</b> ниже, где у вас рвётся цепочка и теряются деньги, чтобы заменить его на продающий Mini App:</p>
+        <div class="chain-chips" id="chainNodes">
+          <span class="c-chip">1. Пост / Reels</span>
+          <span class="c-chip">→</span>
+          <button type="button" class="c-chip bad-node" id="killBadNodeBtn">❌ 2. Мёртвый PDF + 20 переписок в личке (НАЖМИ!)</button>
+          <span class="c-chip">→</span>
+          <span class="c-chip">3. Оплата и старт</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="aha-box" id="ahaBox">
+      👆 <b>Ход 1:</b> посмотрите, что будет при обычном ответе эксперта, а затем ударьте по боссу приёмом <b>«Экзорцизм Тории ✦»</b>.
+    </div>
+
+    <button class="btn" id="afterSimBtn" disabled onclick="go('s4')">Забрать награду и Карту изгнания →</button>
+  </section>
+
+  <!-- ==================== ЭКРАН 4: МИССИИ (LEVEL 01-04) + ПОДАРОК В ЛАБОРАТОРИЮ ==================== -->
+  <section class="screen" id="s4">
+    <div class="tabs-bar">
+      <button type="button" class="t-tab on" data-tab="offer" onclick="switchTab('offer')">⚔️ Миссии</button>
+      <button type="button" class="t-tab" data-tab="proof" onclick="switchTab('proof')">👀 Скрины бота</button>
+      <button type="button" class="t-tab" data-tab="partner" onclick="switchTab('partner')">🤝 Продюсерам</button>
+    </div>
+
+    <!-- Вкладка 1: Продуктовая лестница LEVEL 02 – 04 + Бесплатный тренажёр LEVEL 01 -->
+    <div class="t-pane on" id="pane-offer">
+      <!-- Подарок за прохождение игры: прямая ссылка на твою Лабораторию! -->
+      <div class="lab-gift-bar">
+        <div>
+          <b>🎁 ВАШ ТРОФЕЙ (LEVEL 01 · 0 ₽):</b>
+          <span>Мой бесплатный тренажёр системного мышления (20 кейсов + уроки). Хотите поковыряться сами — идите учитесь!</span>
+        </div>
+        <a href="https://toriyasudba-sudo.github.io/toriya-architecture-lab/" target="_blank" class="lab-gift-btn" onclick="track('lab_gift_click')">В Лабораторию ↗</a>
+      </div>
+
+      <div class="mission-list">
+        <!-- LEVEL 02: 2 500 ₽ -->
+        <div class="m-card" data-tier="level2_2500" data-label="LEVEL 02 · THE DIAGNOSTIC (Мини-разбор 20 мин) · 2 500 ₽">
+          <div class="m-head">
+            <span class="m-lvl">LEVEL 02 · THE DIAGNOSTIC</span>
+            <span class="m-price">2 500 ₽</span>
+          </div>
+          <b>Мини-разбор «Допрос с пристрастием» (20 минут)</b>
+          <p>Для тех, кто хочет быстро найти своего демона: разберём 1–2 узких места и накидаем поэкранный план вашего будущего Mini App.</p>
+        </div>
+
+        <!-- LEVEL 03: 15 000 ₽ -->
+        <div class="m-card selected" data-tier="level3_15000" data-label="LEVEL 03 · THE BLUEPRINT (Архитектурная сессия + Карта) · 15 000 ₽">
+          <div class="m-head">
+            <span class="m-lvl" style="background:var(--gold);color:#111014">★ LEVEL 03 · THE BLUEPRINT (ХИТ)</span>
+            <span class="m-price">15 000 ₽</span>
+          </div>
+          <b>Архитектурная сессия + полная Карта изгнания</b>
+          <p>Глубокая распаковка (60–90 мин): схема пути клиента, структура Mini App, сценарии дожима и смета. <b>100% суммы (15 000 ₽) засчитывается в разработку при старте за 7 дней!</b></p>
+        </div>
+
+        <!-- LEVEL 04: от 30 000 ₽ -->
+        <div class="m-card" data-tier="level4_30000" data-label="LEVEL 04 · THE FORGE (Продающий Mini App под ключ за 3 дня) · от 30 000 ₽">
+          <div class="m-head">
+            <span class="m-lvl" style="background:#1D1820">LEVEL 04 · THE FORGE</span>
+            <span class="m-price">от 30 000 ₽</span>
+          </div>
+          <b>Продающий Mini App под ключ за 3 дня (0 ₽ абонентки)</b>
+          <p>Вы пьёте кофе — я за 72 часа собираю ваш бутик продаж в эстетике Dior/LV внутри Telegram (с карточкой лида и автодожимом в 09:00).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Вкладка 2: Живые скрины бота + кейс Lemoon -->
+    <div class="t-pane" id="pane-proof">
+      <div class="paper-card">
+        <span class="d-code">АРТЕФАКТЫ В ДЕЙСТВИИ</span>
+        <h3 style="margin-top:2px">Как выглядит «Новая территория (The Order)»</h3>
+        <p>Вместо мёртвых PDF вам в телефон падает карточка прогретого клиента, а бот в 09:00 сам возвращает тех, у кого на середине теста убежала каша:</p>
+
+        <div class="proof-grid">
+          <div class="proof-shot">
+            <div style="font:700 8.5px var(--mono);color:var(--gold-light);margin-bottom:3px">👀 КАРТОЧКА ЛИДА ВАМ</div>
+            <img src="/img/bot_steps.jpg" alt="Шаги клиента" onerror="if(!this.dataset.t1){this.dataset.t1=1;this.src='/img/bot_steps.PNG'}else if(!this.dataset.t2){this.dataset.t2=1;this.src='/img/bot_steps.png'}else{this.style.display='none';this.nextElementSibling.style.display='block'}">
+            <div class="proof-mock" style="display:none">
+              👀 <b>Зашёл клиент (@nick)</b><br>
+              📍 Прошёл диагностику<br>
+              🎯 Выбрал ваш тариф<br>
+              ⏸ Остановился на анкете
+            </div>
+          </div>
+
+          <div class="proof-shot">
+            <div style="font:700 8.5px var(--mono);color:#8CE0A8;margin-bottom:3px">🤖 АВТОДОЖИМ В 09:00</div>
+            <img src="/img/bot_remind.jpg" alt="Дожим утром" onerror="if(!this.dataset.t1){this.dataset.t1=1;this.src='/img/bot_remind.PNG'}else if(!this.dataset.t2){this.dataset.t2=1;this.src='/img/bot_remind.png'}else{this.style.display='none';this.nextElementSibling.style.display='block'}">
+            <div class="proof-mock" style="display:none">
+              <b>Бот · 09:00 утра</b><br>
+              Доброе утро! Вы вчера смотрели примеры, но отвлеклись.<br>
+              <span style="color:var(--gold-light)">Забрать окошко ↗</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--paper-soft);padding:8px 10px;border-radius:10px;margin-top:7px;font-size:11.5px;color:var(--ink)">
+          <b style="color:var(--wine)">👗 Кейс Lemoon 8/9 (Софья):</b> «Сделали сейл −70% через Mini App Тории — девочки сами выбирают размер и шлют готовый заказ. Ноль потерь в переписках!»
+        </div>
+      </div>
+    </div>
+
+    <!-- Вкладка 3: Для продюсеров и трафик-спецов -->
+    <div class="t-pane" id="pane-partner">
+      <div class="paper-card">
+        <span class="d-code">ДЛЯ ПРОДЮСЕРОВ, ЗАПУСКОВ И ТРАФИК-СПЕЦОВ</span>
+        <h3 style="margin-top:3px">Хватит сливать дорогой трафик на мёртвые PDF</h3>
+        <p>Мой Mini App работает как пре-квалификатор: поднимает конверсию в квал-заявку в 2–3 раза и передаёт отделу продаж горячего лида с бюджетом и выбранным тарифом.</p>
+
+        <div style="display:grid;gap:6px;margin-top:8px">
+          <div style="background:var(--paper-soft);padding:8px 10px;border-radius:10px;font-size:11.5px">
+            <b style="color:var(--wine)">1. Совместный запуск / Реанимация спящей базы (Фикс + %):</b>
+            За 3 дня ставим Mini App на вашу текущую базу в канале и вытаскиваем первые 300–500к кассы без нового закупа рекламы.
+          </div>
+          <div style="background:var(--paper-soft);padding:8px 10px;border-radius:10px;font-size:11.5px">
+            <b style="color:var(--wine)">2. Агентские 20–25% или White Label для закупщиков:</b>
+            Стыкуете меня со своим клиентом в чате на троих — я сама закрываю сделку за 20 минут и перевожу вам комиссию в день оплаты.
+          </div>
+        </div>
+
+        <button type="button" class="btn ghost" style="margin-top:8px;color:var(--wine);border-color:var(--wine)" onclick="selectPartnerMission()">
+          Выбрать «Партнёрский запуск / Коллаборация» →
+        </button>
+      </div>
+    </div>
+
+    <button class="btn" id="toOrderBtn">Активировать выбранную миссию →</button>
+  </section>
+
+  <!-- ==================== ЭКРАН 5: ФИНАЛЬНЫЕ КООРДИНАТЫ ==================== -->
+  <section class="screen" id="s5">
+    <div>
+      <div class="kicker">Миссия 5 из 5 · Переход в The Order</div>
+      <h2>Остался <em>один шаг</em> до изгнания хаоса</h2>
+      <p class="sub">Заполните 3 строчки — ваша карточка (с пойманным демоном и расчётом) сразу улетит ко мне в личку Telegram:</p>
+    </div>
+
+    <div class="paper-card">
+      <div style="font-size:11px;padding:6px 9px;border-radius:8px;background:var(--danger-bg);color:var(--wine);font-weight:700;margin-bottom:4px" id="pickedTierBadge">
+        Миссия: LEVEL 03 · THE BLUEPRINT · 15 000 ₽
+      </div>
+
+      <input class="inp" id="fName" placeholder="1. Ваше имя и ниша (эксперт, психолог, продюсер, бизнес)">
+      <input class="inp" id="fPath" placeholder="2. Ссылка на ваш блог/канал и что сейчас продаёте">
+      <input class="inp" id="fPain" placeholder="3. Какую главную задачу хотите закрыть за 3 дня?">
+
+      <div style="font-weight:700;font-size:11.5px;color:var(--ink);margin-top:8px">Два окошка на выбор (у меня во Вьетнаме +4 к МСК, поймаемся легко):</div>
+      <div class="win-grid" id="timeChoices">
+        <button type="button" class="win-btn selected" data-time="Первая половина дня (10:00–14:00 МСК)">
+          <b>☀ Слот 1: До обеда</b>10:00 – 14:00 по МСК
+        </button>
+        <button type="button" class="win-btn" data-time="Вторая половина дня (15:00–19:00 МСК)">
+          <b>🌆 Слот 2: После обеда</b>15:00 – 19:00 по МСК
+        </button>
+      </div>
+
+      <div id="formMsg" style="font-size:11.5px;font-weight:700;color:var(--wine);margin-top:5px"></div>
+    </div>
+
+    <button class="btn" id="sendBtn">Отправить карточку Тории в Telegram ↗</button>
+  </section>
+
+  <!-- ==================== АДМИНКА (4 ТАПА ПО ЛОГОТИПУ) ==================== -->
+  <section class="screen scrollable" id="admin">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2>Панель Экзорциста (CRM)</h2>
+      <button type="button" class="lvl-pill" onclick="go('s0')">✕ Закрыть</button>
+    </div>
+
+    <div id="adminAuthBox" class="paper-card">
+      <div style="font-weight:700;font-size:12px">ПАРОЛЬ ВЛАДЕЛЬЦА</div>
+      <input id="adminPassInput" type="text" class="inp" value="toriya2026">
+      <button id="adminLoginBtn" class="btn" style="margin-top:10px">Открыть базу →</button>
+      <div id="adminAuthErr" style="color:var(--wine);font-size:12px;margin-top:6px"></div>
+    </div>
+
+    <div id="adminContent" style="display:none">
+      <div class="admin-stat-grid" id="adminStats"></div>
+      <div class="tabs-bar" style="margin:10px 0">
+        <button type="button" class="t-tab on" data-adm="active">За 7 дней</button>
+        <button type="button" class="t-tab" data-adm="all">Вся база</button>
+        <button type="button" class="t-tab" data-adm="broadcast">Рассылка</button>
+      </div>
+      <div id="adm-active"><div id="adminVisitorsList"></div></div>
+      <div id="adm-all" style="display:none"><div id="adminAllUsersList"></div></div>
+      <div id="adm-broadcast" style="display:none">
+        <div class="paper-card">
+          <textarea id="broadcastText" class="inp" style="min-height:80px;margin-top:0">Привет! Вчера на середине нашего Босс-файта с демонами рутины у вас, кажется, убежала каша 🥣 Загляните добить босса и забрать бесплатный доступ в мою Архитектурную Лабораторию:</textarea>
+          <input id="broadcastBtnText" type="text" class="inp" value="⚔️ Добить демона и забрать подарок">
+          <button id="broadcastSendBtn" class="btn" style="margin-top:10px">📢 Отправить всем в бот</button>
+          <div id="broadcastStatus" style="font-size:12px;margin-top:6px"></div>
+        </div>
+      </div>
+      <button id="adminRefreshBtn" class="btn ghost" style="margin-top:8px">🔄 Обновить список</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){var N=function(){};if(/tgWebApp/.test(location.hash+location.search)||window.TelegramWebviewProxy){document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>')}else{window.Telegram={WebApp:{initData:'',initDataUnsafe:{},ready:N,expand:N,setHeaderColor:N,setBackgroundColor:N,onEvent:N,requestWriteAccess:N,BackButton:{show:N,hide:N,onClick:N},HapticFeedback:{impactOccurred:N,selectionChanged:N,notificationOccurred:N},openLink:function(u){window.open(u,'_blank')},openTelegramLink:function(u){window.open(u,'_blank')}}}}})();
+</script>
+<script>
+const TELEGRAM_USERNAME = "toriya_nova";
+const OWNER_ID = "6894849502";
+const tg = window.Telegram && window.Telegram.WebApp || null;
+const web = !(tg && tg.initData);
+const isLocal = location.protocol === "file:" || ["localhost","127.0.0.1"].includes(location.hostname);
+const qs = new URLSearchParams(location.search);
+const src = qs.get("src") || (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) || (web ? "web_direct" : "tg_direct");
+
+/* БЕСТИАРИЙ 5 ДЕМОНОВ THE CHAOSVERSE */
+const DEMONS = {
+  lost:{
+    code:"THE LOST",
+    humanName:"Демон потерянных заявок («Я подумаю»)",
+    badNode:"❌ 2. Мёртвый PDF в Загрузках + «Я подумаю» (УБРАТЬ!)",
+    sender:"💬 АТАКА ДЕМОНА В 21:40:",
+    incoming:"«Здравствуйте! Скачала ваш гайд, интересненько. А сколько стоит ваша работа?»",
+    actions:[
+      {
+        text:"Честно написать цену в личку и ждать ответа",
+        tag:"Обычный ход",
+        ok:false,
+        reaction:"💀 <b>Демон хохочет (100% HP):</b> Человек увидел голую цифру без прогрева, написал «Спасибо, я подумаю!» и ушёл закрывать гештальт на Вайлдберриз."
+      },
+      {
+        text:"Скинуть ещё один полезный PDF-файл на 20 страниц",
+        tag:"Ловушка",
+        ok:false,
+        reaction:"🥱 <b>Демон толстеет (100% HP):</b> Ваш файл лёг в папку «Загрузки» ровно между фоткой счётчика за воду и рецептом кабачковой икры. Про вас забыли."
+      },
+      {
+        text:"Пустить клиента через 2-минутный интерактивный Mini App про него любимого",
+        tag:"Удар Экзорциста ✦",
+        ok:true,
+        reaction:"⚔️ <b>БАМ! Минус 50% HP боссу!</b> Пока человек жмёт на кнопки про СЕБЯ — он сам продаёт себе вашу услугу! Осталось добить демона во 2-м раунде."
+      }
+    ]
+  },
+  messenger:{
+    code:"THE MESSENGER",
+    humanName:"Демон переписок (Секретарша 24/7)",
+    badNode:"❌ 2. 48 голосовых в директе вручную (УБРАТЬ!)",
+    sender:"💬 17 ОДИНАКОВЫХ СООБЩЕНИЙ В ДИРЕКТЕ:",
+    incoming:"«А какой формат мне подойдёт? А расскажите подробнее? А на этой неделе есть место?»",
+    actions:[
+      {
+        text:"Наговорить каждому душевное голосовое на 4 минуты",
+        tag:"Героизм",
+        ok:false,
+        reaction:"🤡 <b>Демон потирает лапки (100% HP):</b> Вы бесплатно отработали психотерапевтом в голосовых, горло болит, а клиент сказал «Супер, спасибо!» и исчез."
+      },
+      {
+        text:"Вывалить длинную простыню текста с описанием всех тарифов",
+        tag:"Простыня",
+        ok:false,
+        reaction:"😴 <b>Слив (100% HP):</b> На словах «Тариф Базовый включает…» клиент уснул и закрыл диалог."
+      },
+      {
+        text:"Уволить себя из секретарш: дать кнопку на Mini App с авто-квалификацией",
+        tag:"Удар Экзорциста ✦",
+        ok:true,
+        reaction:"⚔️ <b>КРИТИЧЕСКИЙ УДАР (−50% HP)!</b> Приложение само выясняет боль, показывает кейсы и присылает вам готовую карточку клиента с выбранным тарифом!"
+      }
+    ]
+  },
+  loop:{
+    code:"THE LOOP",
+    humanName:"Демон рутины (День сурка)",
+    badNode:"❌ 2. Ручная проверка чеков и окошек (УБРАТЬ!)",
+    sender:"💬 ВАШ ВЫХОДНОЙ ДЕНЬ:",
+    incoming:"«Я скинула оплату, проверьте! А перенесите меня на четверг? А где ссылка?»",
+    actions:[
+      {
+        text:"Держать все оплаты, переносы и ссылки в своей голове",
+        tag:"На износе",
+        ok:false,
+        reaction:"🤯 <b>Демон побеждает (100% HP):</b> Бизнес растёт, а вашей свободы всё меньше. Стоит вам уехать на день к океану — всё встаёт колом."
+      },
+      {
+        text:"Завести ещё три Google-таблицы для контроля",
+        tag:"Костыль",
+        ok:false,
+        reaction:"📉 <b>Мимо (100% HP):</b> С телефона таблица тормозит, и вечером вы тратите час, чтобы перенести туда данные из чатов вручную."
+      },
+      {
+        text:"Связать витрину, слоты и автодожим в единую систему внутри Telegram",
+        tag:"Удар Экзорциста ✦",
+        ok:true,
+        reaction:"⚔️ <b>ТОЧНО В ЦЕЛЬ (−50% HP)!</b> Вы пьёте кофе, а система сама выдаёт доступы, закрывает окошки и утром напоминает молчунам!"
+      }
+    ]
+  },
+  hydra:{
+    code:"THE HYDRA",
+    humanName:"Демон костылей (10 сервисов)",
+    badNode:"❌ 2. Склеенные сервисы + абонентка + VPN (УБРАТЬ!)",
+    sender:"💬 СООБЩЕНИЕ ОТ ПОДПИСЧИКА:",
+    incoming:"«У меня ваш сайт с VPN не грузится, а письмо с доступом улетело в спам!»",
+    actions:[
+      {
+        text:"Платить каждый месяц за 5 разных конструкторов и чинить костыли",
+        tag:"Абонентка",
+        ok:false,
+        reaction:"💸 <b>Демон жрёт бюджет (100% HP):</b> На каждом переходе со стороннего сайта отваливается половина трафика, а абонентка капает каждый месяц."
+      },
+      {
+        text:"Отправлять всем инструкцию «как настроить VPN, чтобы купить»",
+        tag:"Квест",
+        ok:false,
+        reaction:"🏃‍♀️ <b>Клиент сбежал (100% HP):</b> Никто не будет проходить квест ради того, чтобы отдать вам деньги."
+      },
+      {
+        text:"Собрать свой нативный Mini App внутри Telegram (0 ₽ абонентки навсегда)",
+        tag:"Удар Экзорциста ✦",
+        ok:true,
+        reaction:"⚔️ <b>МИНУС ГОЛОВА ГИДРЫ (−50% HP)!</b> Открывается за 1 секунду прямо внутри Telegram при любом VPN и не просит абонентской платы!"
+      }
+    ]
+  },
+  mirror:{
+    code:"THE MIRROR",
+    humanName:"Демон невидимости («Ничё не понятно»)",
+    badNode:"❌ 2. Хаос в актуальных и «Пишите в ЛС» (УБРАТЬ!)",
+    sender:"💬 МЫСЛИ КЛИЕНТА В ВАШЕМ БЛОГЕ:",
+    incoming:"«Вижу, что эксперт крутой… но с чем конкретно к ней идти и как купить — чёрт ногу сломит!»",
+    actions:[
+      {
+        text:"Написать ещё один длинный пост про свои 10 дипломов и регалии",
+        tag:"Снова пост",
+        ok:false,
+        reaction:"🪞 <b>Демон смеётся (100% HP):</b> Пост улетел вверх ленты, а клиент пошёл к тому, у кого путь к покупке разложен как в бутике."
+      },
+      {
+        text:"Ждать, пока клиент сам догадается написать в личку",
+        tag:"Ждун",
+        ok:false,
+        reaction:"🦗 <b>Сверчки (100% HP):</b> Людям неловко писать первыми в пустоту, когда непонятны правила игры и порядок цен."
+      },
+      {
+        text:"Упаковать смыслы в бутиковый Mini App (эстетика Dior / LV)",
+        tag:"Удар Экзорциста ✦",
+        ok:true,
+        reaction:"⚔️ <b>ЗЕРКАЛО РАЗБИТО (−50% HP)!</b> Клиент за 2 минуты видит всю мощь вашего продукта и сам выбирает нужный тариф!"
+      }
+    ]
+  }
+};
+
+const state = {
+  demon:"lost",
+  check:30000,
+  count:3,
+  round1Done:false,
+  solved:false,
+  tier:"level3_15000",
+  tierLabel:"LEVEL 03 · THE BLUEPRINT (Архитектурная сессия + Карта) · 15 000 ₽",
+  time:"Первая половина дня (10:00–14:00 МСК)",
+  adminKey:sessionStorage.getItem("tn_adm_key") || "toriya2026",
+  sending:false
+};
+
+function webId(){
+  let id="";try{id=localStorage.getItem("tn_webid")||""}catch{}
+  if(!/^[a-f0-9-]{36}$/.test(id)){
+    id=crypto.randomUUID?crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==="x"?r:(r&3|8)).toString(16)});
+    try{localStorage.setItem("tn_webid",id)}catch{}
+  }
+  return id;
+}
+
+async function apiPost(url,payload){
+  const initData = tg && tg.initData || "";
+  const r = await fetch(url,{
+    method:"POST",
+    headers:{"Content-Type":"application/json","X-Telegram-Init-Data":initData,"X-Web-Id":initData?"":webId()},
+    body:JSON.stringify({...payload,initData})
+  });
+  return r.json();
+}
+
+function track(event,meta={}){
+  if(isLocal)return;
+  apiPost("/api/event",{event,meta:{...meta,src,lang:"ru"}}).catch(()=>{});
+}
+function haptic(k,v){try{tg.HapticFeedback[k](v)}catch{}}
+function openTg(u){if(!web && tg.openTelegramLink && u.startsWith("https://t.me/"))tg.openTelegramLink(u);else location.href=u;}
+
+const screens = ["s0","s1","s2","s3","s4","s5","admin"];
+const stepMeta = {
+  s1:{title:"МИССИЯ 1/5 · БЕСТИАРИЙ", badge:"LEVEL 01 · SCAN", pct:20, prev:"s0"},
+  s2:{title:"МИССИЯ 2/5 · УРОН В РУБЛЯХ", badge:"LEVEL 02 · MATH", pct:40, prev:"s1"},
+  s3:{title:"МИССИЯ 3/5 · БОСС-ФАЙТ", badge:"BOSS FIGHT", pct:60, prev:"s2"},
+  s4:{title:"МИССИЯ 4/5 · АРТЕФАКТЫ И УРОВНИ", badge:"THE ARTIFACTS", pct:80, prev:"s3"},
+  s5:{title:"МИССИЯ 5/5 · THE ORDER", badge:"FINAL STEP", pct:100, prev:"s4"}
+};
+let curScreen = "s0";
+
+function go(id){
+  if(!screens.includes(id))return;
+  screens.forEach(s=>document.getElementById(s).classList.toggle("active",s===id));
+  curScreen = id;
+  const meta = stepMeta[id];
+  const bar = document.getElementById("stepBar");
+  if(meta){
+    bar.classList.add("visible");
+    document.getElementById("stepTitle").textContent = meta.title;
+    document.getElementById("stepFill").style.width = meta.pct + "%";
+    document.getElementById("topLvlBadge").textContent = meta.badge;
+  }else{
+    bar.classList.remove("visible");
+    document.getElementById("topLvlBadge").textContent = "LEVEL 01 · THE PORTAL";
+  }
+  try{id==="s0"?tg.BackButton.hide():tg.BackButton.show()}catch{}
+  if(id==="s3")renderBossFight();
+  if(id==="s5")updateSummary();
+  if(id==="admin")loadAdminDashboard();
+  else track("screen_view",{screen:id});
+}
+
+document.getElementById("prevStepBtn").addEventListener("click",()=>{
+  const prev = stepMeta[curScreen]?.prev || "s0";
+  go(prev);
+});
+
+document.getElementById("startBtn").addEventListener("click",()=>{
+  track("consent",{processing:true,privacy:true,messages:true,v:"2026-11-18-v36"});
+  if(!web){try{if(!tg.initDataUnsafe?.user?.allows_write_to_pm)tg.requestWriteAccess(()=>{})}catch{}}
+  haptic("impactOccurred","light");
+  go("s1");
+});
+
+/* Выбор демона */
+document.querySelectorAll("#demonGrid .d-row").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll("#demonGrid .d-row").forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");
+    state.demon = btn.dataset.demon;
+    state.round1Done = false;
+    state.solved = false;
+    updateCalculator();
+    const d = DEMONS[state.demon];
+    track("situation_pick",{situation:`${d.code} · ${d.humanName}`});
+    haptic("selectionChanged");
+  });
+});
+
+function updateCalculator(){
+  const d = DEMONS[state.demon];
+  const monthly = state.check * state.count;
+  const yearly = monthly * 12;
+  document.getElementById("calcDemonTag").textContent = `УРОН ОТ ДЕМОНА: ${d.code}`;
+  document.getElementById("calcMonthly").textContent = `−${monthly.toLocaleString("ru-RU")} ₽ каждый месяц`;
+  document.getElementById("calcYearly").innerHTML = `За год это <b>${yearly.toLocaleString("ru-RU")} ₽</b> — стоимость хорошей зимовки у океана во Вьетнаме, которую вы дарите хаосу.`;
+}
+
+document.querySelectorAll("#checkPills .pill").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll("#checkPills .pill").forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");
+    state.check = Number(btn.dataset.val);
+    updateCalculator();
+    track("check_pick",{check:state.check,lostMonthly:state.check*state.count});
+    haptic("selectionChanged");
+  });
+});
+
+document.querySelectorAll("#countPills .pill").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll("#countPills .pill").forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");
+    state.count = Number(btn.dataset.val);
+    updateCalculator();
+    track("loss_count_pick",{count:state.count,lostMonthly:state.check*state.count});
+    haptic("selectionChanged");
+  });
+});
+
+/* ЭКРАН 3: 2-РАУНДОВЫЙ БОСС-ФАЙТ */
+function renderBossFight(){
+  const d = DEMONS[state.demon];
+  document.getElementById("bossName").textContent = `БОСС: ${d.code}`;
+  document.getElementById("simSender").textContent = d.sender;
+  document.getElementById("simMessage").textContent = d.incoming;
+
+  const hpFill = document.getElementById("bossHpFill");
+  const hpText = document.getElementById("bossHpText");
+  const statusText = document.getElementById("bossStatusText");
+  const r1 = document.getElementById("round1Box");
+  const r2 = document.getElementById("round2Box");
+  const badNodeBtn = document.getElementById("killBadNodeBtn");
+  const aha = document.getElementById("ahaBox");
+  const nextBtn = document.getElementById("afterSimBtn");
+
+  hpFill.style.width = "100%";
+  hpFill.classList.remove("dead");
+  hpText.textContent = "HP: 100%";
+  statusText.textContent = "⚔️ Раунд 1 из 2: выберите удар, чтобы пробить броню демона!";
+  r1.style.display = "flex";
+  r2.style.display = "none";
+  badNodeBtn.className = "c-chip bad-node";
+  badNodeBtn.textContent = d.badNode;
+  nextBtn.disabled = true;
+
+  aha.className = "aha-box";
+  aha.innerHTML = `👆 <b>Раунд 1:</b> нажмите на привычный ход или сразу ударьте <b>«Ударом Экзорциста ✦»</b>!`;
+
+  const box = document.getElementById("simOptions");
+  box.innerHTML = "";
+  d.actions.forEach(act=>{
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "act-btn";
+    b.innerHTML = `<span>${act.text}</span><span class="tag-pill">${act.tag}</span>`;
+    b.onclick = ()=>{
+      if(act.ok){
+        b.classList.add("exorcism");
+        b.querySelector(".tag-pill").textContent = "−50% HP ✓";
+        hpFill.style.width = "50%";
+        hpText.textContent = "HP: 50%";
+        statusText.textContent = "🔥 Броня пробита! Раунд 2: выкиньте слабое звено из цепочки ниже!";
+        aha.className = "aha-box bingo";
+        aha.innerHTML = act.reaction;
+        setTimeout(()=>{
+          r1.style.display = "none";
+          r2.style.display = "flex";
+        },550);
+        track("boss_round1_win",{demon:state.demon});
+        haptic("notificationOccurred","success");
+      }else{
+        b.classList.add("trap");
+        b.querySelector(".tag-pill").textContent = "ПРОМАХ ✕";
+        aha.className = "aha-box boom";
+        aha.innerHTML = act.reaction + `<br><b style="color:var(--gold-light);display:block;margin-top:3px">👉 А теперь жмите 3-ю кнопку («Удар Экзорциста ✦»)!</b>`;
+        track("boss_trap",{demon:state.demon,trap:act.text});
+        haptic("notificationOccurred","warning");
+      }
+    };
+    box.appendChild(b);
+  });
+
+  badNodeBtn.onclick = ()=>{
+    if(state.solved)return;
+    state.solved = true;
+    badNodeBtn.className = "c-chip removed";
+    badNodeBtn.textContent = "✦ 2. Интерактивный Mini App (Готовая заявка за 2 мин!)";
+    hpFill.style.width = "0%";
+    hpFill.classList.add("dead");
+    hpText.textContent = "HP: 0% · ИЗГНАН!";
+    statusText.textContent = "🏆 ПОБЕДА! Демон изгнан, цепочка перестроена!";
+    aha.className = "aha-box bingo";
+    aha.innerHTML = `🏆 <b>ДЕМОН ПОВЕРЖЕН!</b> Мы выкинули «кладбище PDF» и ручные переписки: теперь человек сам проходит 2-минутный тест-маршрут, а вам в Telegram падает готовая карточка прогретого клиента. <b>Жмите кнопку ниже и забирайте трофеи!</b>`;
+    nextBtn.disabled = false;
+    track("boss_defeated",{demon:state.demon});
+    haptic("notificationOccurred","success");
+  };
+}
+
+function switchTab(tab){
+  document.querySelectorAll("#s4 .t-tab").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
+  ["offer","proof","partner"].forEach(p=>{
+    document.getElementById("pane-"+p).classList.toggle("on",p===tab);
+  });
+  track("mission_tab",{tab});
+  haptic("selectionChanged");
+}
+
+document.querySelectorAll(".m-card").forEach(card=>{
+  card.addEventListener("click",()=>{
+    document.querySelectorAll(".m-card").forEach(c=>c.classList.remove("selected"));
+    card.classList.add("selected");
+    state.tier = card.dataset.tier;
+    state.tierLabel = card.dataset.label;
+    haptic("selectionChanged");
+  });
+});
+
+function selectPartnerMission(){
+  state.tier = "partner_launch";
+  state.tierLabel = "ПАРТНЁРСКИЙ ЗАПУСК / КОЛЛАБОРАЦИЯ (Фикс + % или Агентские 20–25%)";
+  track("tier_pick",{step:state.tier,label:state.tierLabel});
+  go("s5");
+}
+
+document.getElementById("toOrderBtn").addEventListener("click",()=>{
+  const d = DEMONS[state.demon];
+  track("tier_pick",{step:state.tier,label:state.tierLabel,check:state.check,situation:d.humanName});
+  haptic("impactOccurred","light");
+  go("s5");
+});
+
+function updateSummary(){
+  document.getElementById("pickedTierBadge").textContent = `Выбрано: ${state.tierLabel}`;
+}
+
+document.querySelectorAll("#timeChoices .win-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll("#timeChoices .win-btn").forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");
+    state.time = btn.dataset.time;
+    track("slot_pick",{date:"window",time:state.time});
+    haptic("selectionChanged");
+  });
+});
+
+document.getElementById("sendBtn").addEventListener("click",async()=>{
+  if(state.sending)return;
+  const name = document.getElementById("fName").value.trim();
+  const path = document.getElementById("fPath").value.trim();
+  const pain = document.getElementById("fPain").value.trim();
+  const msgEl = document.getElementById("formMsg");
+
+  if(!name || !path){
+    msgEl.style.color = "var(--danger)";
+    msgEl.textContent = "Заполните первые два поля, чтобы я подготовилась к разбору.";
+    return;
+  }
+  msgEl.textContent = "";
+  state.sending = true;
+  const btn = document.getElementById("sendBtn");
+  btn.disabled = true;
+  btn.textContent = "Открываю личку с Торией…";
+
+  const d = DEMONS[state.demon];
+  const monthly = (state.check * state.count).toLocaleString("ru-RU");
+  const message = [
+    "Привет, Тория! Я прошла Босс-файт в THE CHAOSVERSE — пора изгонять хаос!",
+    "",
+    "• Миссия: " + state.tierLabel,
+    "• Изгнанный босс: " + d.code + " (" + d.humanName + ")",
+    "• Урон от демона: ~" + monthly + " ₽/мес (при чеке " + state.check.toLocaleString("ru-RU") + " ₽)",
+    "• Кто я: " + name,
+    "• Блог и продукт: " + path,
+    "• Главная задача: " + (pain || "Обсудим на созвоне"),
+    "• Удобное окно: " + state.time
+  ].join("\n");
+
+  track("consultation_click",{step:state.tier,slot:state.time,check:state.check,situation:d.humanName});
+
+  try{if(navigator.clipboard && navigator.clipboard.writeText)navigator.clipboard.writeText(message).catch(()=>{})}catch{}
+
+  try{
+    if(!isLocal){
+      await apiPost("/api/consultation",{
+        product:`${name} (${path})`,
+        request:message,
+        formats:[state.tierLabel,`${d.code}`,`Окно: ${state.time}`],
+        slotDate:"",
+        slotTime:state.time,
+        intent:"miniapp_v36_chaosverse_rpg",
+        src
+      });
+    }
+    msgEl.style.color = "var(--ok)";
+    msgEl.textContent = "✓ Карточка отправлена! Открываю диалог…";
+    track("consultation_sent",{step:state.tier,slot:state.time});
+    haptic("notificationOccurred","success");
+  }catch(e){}
+
+  const url = "https://t.me/" + TELEGRAM_USERNAME + "?text=" + encodeURIComponent(message);
+  setTimeout(()=>openTg(url),250);
+  setTimeout(()=>{
+    state.sending = false;
+    btn.disabled = false;
+    btn.textContent = "Отправить карточку Тории в Telegram ↗";
+  },1400);
+});
+
+const currentTgUserId = String(tg?.initDataUnsafe?.user?.id || "");
+if(currentTgUserId === OWNER_ID){
+  document.getElementById("adminEntryBtn").classList.add("show");
+}
+let logoTaps=0,logoTimer=null;
+document.getElementById("brandLogo").addEventListener("click",()=>{
+  logoTaps++;
+  clearTimeout(logoTimer);
+  logoTimer=setTimeout(()=>{logoTaps=0},1200);
+  if(logoTaps>=4){
+    logoTaps=0;
+    document.getElementById("adminEntryBtn").classList.add("show");
+    go("admin");
+  }
+});
+document.getElementById("adminEntryBtn").addEventListener("click",()=>go("admin"));
+
+document.addEventListener("click",e=>{
+  const at = e.target.closest("[data-adm]");
+  if(at){
+    const tab = at.dataset.adm;
+    document.querySelectorAll("[data-adm]").forEach(b=>b.classList.toggle("on",b.dataset.adm===tab));
+    ["active","all","broadcast"].forEach(p=>{
+      document.getElementById("adm-"+p).style.display = p===tab ? "block" : "none";
+    });
+    return;
+  }
+  const dm = e.target.closest(".bot-dm-btn[data-uid]");
+  if(dm){
+    const targetId=dm.dataset.uid,targetName=dm.dataset.name||"клиенту";
+    const msg=prompt(`Сообщение для ${targetName} (от лица бота):`,`${targetName}, привет! Вы начали Босс-файт с демоном рутины в моём приложении, но отвлеклись. Загляните добить его и забрать бесплатный доступ в мою Лабораторию:`);
+    if(!msg||!msg.trim())return;
+    apiPost("/api/admin",{password:state.adminKey,action:"send_one",userId:targetId,text:msg.trim()}).then(r=>{
+      alert(r&&r.ok?"✅ Доставлено!":"❌ Ошибка: "+(r?.error||""));
+    });
+  }
+});
+
+function renderVisitorCard(v){
+  const isTg=!String(v.id).startsWith("web:");
+  return `
+    <div class="visitor-card">
+      <div style="display:flex;justify-content:space-between">
+        <b>${v.name} ${v.username?`(@${v.username})`:""}</b>
+        <span style="color:var(--wine);font-weight:700">${v.consulted?"✅ Заявка":"⏸ "+v.idleText}</span>
+      </div>
+      <div style="font-size:11px;color:#6E6574">📍 Шаг: <b>${v.stage}</b> · Был: ${v.lastSeen}</div>
+      <div style="margin:4px 0;padding:5px 7px;background:var(--paper-soft);border-radius:6px">${v.reason}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px">
+        <span style="font-size:11px;color:#6E6574">Дожимов: ${v.reminders}/3</span>
+        <div style="display:flex;gap:10px">
+          ${isTg?`<button type="button" class="bot-dm-btn" style="color:var(--ok);font-weight:700" data-uid="${v.id}" data-name="${v.name}">🤖 Бот</button>`:""}
+          ${v.contactUrl?`<a href="${v.contactUrl}" target="_blank" style="color:var(--wine);font-weight:700">✉️ Личка →</a>`:""}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function loadAdminDashboard(){
+  const err=document.getElementById("adminAuthErr");
+  err.textContent="";
+  try{
+    const res=await apiPost("/api/admin",{password:state.adminKey,action:"dashboard"});
+    if(!res||!res.ok){
+      document.getElementById("adminAuthBox").style.display="block";
+      document.getElementById("adminContent").style.display="none";
+      err.textContent="Ответ сервера: "+(res?.error||"проверьте пароль");
+      return;
+    }
+    sessionStorage.setItem("tn_adm_key",state.adminKey);
+    document.getElementById("adminAuthBox").style.display="none";
+    document.getElementById("adminContent").style.display="block";
+    document.getElementById("adminStats").innerHTML=`
+      <div class="admin-stat"><b>${res.stats.allTimeUsers}</b><span>Всего</span></div>
+      <div class="admin-stat"><b>${res.stats.totalUsers}</b><span>7 дней</span></div>
+      <div class="admin-stat"><b>${res.stats.onlyFirstScreen}</b><span>Экран 1</span></div>
+      <div class="admin-stat"><b>${res.stats.leads}</b><span>Заявки</span></div>
+    `;
+    document.getElementById("adminVisitorsList").innerHTML=(res.visitors&&res.visitors.length)
+      ? res.visitors.map(renderVisitorCard).join("")
+      : '<div class="paper-card"><p>За 7 дней визитов пока нет.</p></div>';
+    document.getElementById("adminAllUsersList").innerHTML=(res.allUsers&&res.allUsers.length)
+      ? res.allUsers.map(renderVisitorCard).join("")
+      : '<div class="paper-card"><p>База пуста.</p></div>';
+  }catch(e){err.textContent="Ошибка соединения."}
+}
+
+document.getElementById("adminLoginBtn").addEventListener("click",()=>{
+  state.adminKey=document.getElementById("adminPassInput").value.trim();
+  loadAdminDashboard();
+});
+document.getElementById("adminRefreshBtn").addEventListener("click",()=>loadAdminDashboard());
+
+document.getElementById("broadcastSendBtn").addEventListener("click",async()=>{
+  const text=(document.getElementById("broadcastText").value||"").trim();
+  const btnText=(document.getElementById("broadcastBtnText").value||"⚔️ Добить демона и забрать подарок").trim();
+  const status=document.getElementById("broadcastStatus");
+  if(!text)return;
+  if(!confirm("Отправить рассылку всем в бот?"))return;
+  const b=document.getElementById("broadcastSendBtn");
+  b.disabled=true;
+  status.textContent="⏳ Отправка…";
+  try{
+    const res=await apiPost("/api/admin",{password:state.adminKey,action:"broadcast",text,btnText});
+    status.textContent = res&&res.ok ? `✅ Доставлено: ${res.sentCount} из ${res.totalTargets}` : "Ошибка отправки";
+  }catch(e){status.textContent="Ошибка сети";}
+  finally{b.disabled=false;}
+});
+
+if(!web){
+  try{
+    tg.ready();tg.expand();
+    tg.setHeaderColor("#111014");tg.setBackgroundColor("#111014");
+    tg.BackButton.onClick(()=>{
+      const prev = stepMeta[curScreen]?.prev || "s0";
+      go(prev);
+    });
+  }catch{}
+}
+
+updateCalculator();
+track("app_open",{tz:new Date().getTimezoneOffset(),web,src,lang:"ru",v:"v36_chaosverse_rpg"});
+</script>
+</body>
+</html>
