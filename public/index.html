@@ -1228,5 +1228,209 @@ if(!web){
 }
 track("app_open",{tz:new Date().getTimezoneOffset(),web,src,lang:"ru",v:"v37.1_chaosverse_bosses"});
 </script>
+  <!-- ===== TORIYA NOVA V38 PATCH · вставить ПЕРЕД </body>, после последнего </script> ===== -->
+<style>
+#fxBg{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.app{position:relative;z-index:1}
+/* появление блоков */
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.screen.active>*:not(.boss-arena){animation:rise .45s ease backwards}
+.screen.active>*:nth-child(2){animation-delay:.07s}.screen.active>*:nth-child(3){animation-delay:.14s}
+.screen.active>*:nth-child(4){animation-delay:.21s}.screen.active>*:nth-child(5){animation-delay:.28s}
+.screen.active>*:nth-child(n+6){animation-delay:.34s}
+/* блик на кнопках */
+.btn{position:relative;overflow:hidden}
+.btn:not(.ghost)::after{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-20deg);animation:shim 4s ease-in-out infinite;pointer-events:none}
+@keyframes shim{0%,70%{left:-60%}100%{left:130%}}
+/* кинематографичный босс */
+.boss-arena{display:block;position:relative;padding:0;overflow:hidden}
+.boss-portrait{width:100%;height:158px;border-radius:0;border:0;border-bottom:1.5px solid var(--gold);font-size:48px}
+.boss-portrait video,.boss-portrait img{width:100%;height:100%;object-fit:cover;display:block}
+.boss-portrait::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,transparent 40%,rgba(20,17,24,.92))}
+.boss-arena>div:nth-child(2){padding:8px 12px 10px}
+.fx{position:absolute;inset:0;pointer-events:none;z-index:3}
+.dmg{position:absolute;left:50%;top:38%;transform:translateX(-50%);font:800 26px var(--serif);color:#FF7B54;
+  text-shadow:0 2px 12px rgba(0,0,0,.8);animation:dmgUp 1s ease forwards;white-space:nowrap}
+.dmg.crit{color:var(--gold-light);font-size:30px}
+@keyframes dmgUp{0%{opacity:0;transform:translate(-50%,10px) scale(.6)}20%{opacity:1;transform:translate(-50%,0) scale(1.15)}100%{opacity:0;transform:translate(-50%,-48px) scale(1)}}
+.stamp{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%) rotate(-10deg) scale(2.2);opacity:0;
+  font:800 22px var(--mono);letter-spacing:.14em;color:var(--gold-light);padding:6px 14px;
+  border:3px double var(--gold-light);border-radius:8px;background:rgba(17,16,20,.55);z-index:4;pointer-events:none}
+.stamp.on{animation:stampIn .5s cubic-bezier(.2,1.5,.4,1) forwards}
+@keyframes stampIn{to{opacity:1;transform:translate(-50%,-50%) rotate(-10deg) scale(1)}}
+.flash{position:fixed;inset:0;pointer-events:none;z-index:50;animation:fl .45s ease forwards}
+.flash.red{background:radial-gradient(circle,transparent 40%,rgba(217,56,90,.5))}
+.flash.gold{background:radial-gradient(circle,rgba(223,185,118,.35),transparent 70%)}
+@keyframes fl{from{opacity:1}to{opacity:0}}
+/* лут */
+.loot-card.drop{animation:drop .55s cubic-bezier(.2,1.4,.4,1) backwards}
+@keyframes drop{from{opacity:0;transform:translateY(-26px) scale(.8)}to{opacity:1;transform:none}}
+/* экран s6 */
+.seal{width:96px;height:96px;margin:6px auto 8px;display:block;filter:drop-shadow(0 0 16px rgba(223,185,118,.5))}
+.seal .ring{stroke-dasharray:290;stroke-dashoffset:290;animation:draw .9s ease .1s forwards}
+.seal .tick{stroke-dasharray:60;stroke-dashoffset:60;animation:draw .5s ease .9s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.btn::after,.screen.active>*{animation:none!important}}
+</style>
+
+<script>
+(function(){
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const $=id=>document.getElementById(id);
+const LAB="https://toriyasudba-sudo.github.io/toriya-architecture-lab/";
+
+/* ---------- SVG-иконки ---------- */
+const IC={
+sword:'<path d="M14.5 3.5L20 4l-.5 5.5-9 9-3-3zM7 17l-3 3M5.5 14.5l4 4"/>',
+folder:'<path d="M3 7h6l2 2h10v10H3z"/>',
+chat:'<path d="M4 5h16v11H9l-5 4z"/>',
+loop:'<path d="M20 12a8 8 0 01-14 5M4 12a8 8 0 0114-5M18 3v4h-4M6 21v-4h4"/>',
+hydra:'<circle cx="12" cy="15" r="4"/><path d="M8 13C6 9 5 6 4 4M12 11V3M16 13c2-4 3-7 4-9"/>',
+trophy:'<path d="M8 4h8v5a4 4 0 01-8 0zM8 6H4c0 3 1 4 4 5M16 6h4c0 3-1 4-4 5M12 13v4M8 20h8M10 17h4"/>',
+scroll:'<path d="M6 4h12v14a2 2 0 01-2 2H8a2 2 0 01-2-2zM9 8h6M9 12h6"/>',
+gem:'<path d="M6 4h12l4 5-10 11L2 9zM2 9h20M9 4l3 5 3-5"/>',
+temple:'<path d="M3 9l9-5 9 5zM5 9v9M9 9v9M15 9v9M19 9v9M3 20h18"/>'};
+const ico=(n,s=18)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none">${IC[n]}</svg>`;
+const pm={lost:'folder',messenger:'chat',loop:'loop',hydra:'hydra'};
+document.querySelectorAll('.portal-item').forEach(el=>{
+  const m=(el.getAttribute('onclick')||'').match(/'(\w+)'/);
+  if(m&&pm[m[1]]){const s=el.firstElementChild;s.innerHTML=ico(pm[m[1]],20);s.style.color='var(--wine)';}
+});
+$('startBtn').innerHTML=ico('sword')+' НАЧАТЬ ОХОТУ';
+document.querySelector('#s1 > .btn').innerHTML=ico('sword')+' ВЫЗВАТЬ БОССА НА БОЙ →';
+$('afterBossBtn').innerHTML=ico('trophy')+' ЗАБРАТЬ КАРТУ ИЗГНАНИЯ →';
+document.querySelectorAll('.loot-ico').forEach((el,i)=>{el.innerHTML=ico(['scroll','gem','temple'][i],24);el.style.color='var(--gold-light)'});
+
+/* ---------- Канвас: пепел и искры ---------- */
+const cv=document.createElement('canvas');cv.id='fxBg';document.body.prepend(cv);
+const cx=cv.getContext('2d');let W,H;const P=[],S=[];
+function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight}rs();addEventListener('resize',rs);
+const mk=()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.5,v:Math.random()*.35+.12,a:Math.random()*.5+.2,p:Math.random()*6});
+if(!reduce)for(let i=0;i<26;i++)P.push(mk());
+function tick(){
+  if(document.hidden){requestAnimationFrame(tick);return}
+  cx.clearRect(0,0,W,H);
+  P.forEach(p=>{p.y-=p.v;p.p+=.01;p.x+=Math.sin(p.p)*.25;if(p.y<-5){p.y=H+5;p.x=Math.random()*W}
+    cx.fillStyle=`rgba(223,185,118,${p.a})`;cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.3);cx.fill()});
+  for(let i=S.length-1;i>=0;i--){const s=S[i];s.x+=s.vx;s.y+=s.vy;s.vy+=.12;s.l-=.016;
+    if(s.l<=0){S.splice(i,1);continue}
+    cx.fillStyle=`rgba(223,185,118,${s.l})`;cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.3);cx.fill()}
+  requestAnimationFrame(tick)}
+tick();
+function burst(x,y,n){if(reduce)return;for(let i=0;i<n;i++){const a=Math.random()*6.3,v=Math.random()*5+2;
+  S.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-3,r:Math.random()*2+1,l:1})}}
+
+/* ---------- Босс: видео, печатная машинка, урон ---------- */
+const arena=$('bossArena');
+arena.insertAdjacentHTML('beforeend','<div class="fx" id="fx"></div><div class="stamp" id="stamp">EXORCISED</div>');
+function floater(t,c){const d=document.createElement('div');d.className='dmg '+(c||'');d.textContent=t;$('fx').appendChild(d);setTimeout(()=>d.remove(),1000)}
+function flash(c){const f=document.createElement('div');f.className='flash '+c;document.body.appendChild(f);setTimeout(()=>f.remove(),480)}
+function hap(k,v){try{Telegram.WebApp.HapticFeedback[k](v)}catch{}}
+let tw=null;
+const _render=window.renderBossFight;
+window.renderBossFight=function(){
+  _render();
+  $('stamp').classList.remove('on');
+  const d=DEMONS[state.demon],pt=$('bossPortrait'),img=pt.querySelector('img');
+  if(!reduce){
+    const v=document.createElement('video');
+    v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.setAttribute('playsinline','');
+    v.preload='auto';v.poster='/img/'+d.img;v.src='/video/'+state.demon+'.mp4';
+    v.onerror=()=>v.remove();            // нет ролика — остаётся картинка
+    pt.prepend(v);v.play&&v.play().catch(()=>{});
+  }
+  const el=$('bossSpeechText'),full=el.textContent;clearInterval(tw);el.textContent='';
+  if(reduce){el.textContent=full;return}
+  let i=0;tw=setInterval(()=>{i++;el.textContent=full.slice(0,i);if(i%7===0)hap('selectionChanged');if(i>=full.length)clearInterval(tw)},16);
+};
+new MutationObserver(()=>{
+  const t=$('bossHpText').textContent;
+  if(t.includes('ИЗГНАН')){floater('ИЗГНАН','crit');$('stamp').classList.add('on');hap('notificationOccurred','success');
+    const r=arena.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,50)}
+  else if(t.includes('50%'))floater('−50% HP · КРИТ!');
+}).observe($('bossHpText'),{childList:true,characterData:true,subtree:true});
+new MutationObserver(()=>{
+  const c=$('ahaBox').className;
+  if(c.includes('boom'))flash('red');else if(c.includes('bingo'))flash('gold');
+}).observe($('ahaBox'),{attributes:true,attributeFilter:['class']});
+
+/* ---------- Экран s6 «Заявка принята» ---------- */
+$('s5').insertAdjacentHTML('afterend',`
+<section class="screen" id="s6">
+  <div style="text-align:center">
+    <svg class="seal" viewBox="0 0 100 100" fill="none" stroke="#DFB976" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <circle class="ring" cx="50" cy="50" r="45"/><circle cx="50" cy="50" r="38" stroke-width="1" opacity=".5"/>
+      <path class="tick" d="M30 52l13 13 27-30"/></svg>
+    <div class="kicker">SIGNAL RECEIVED</div>
+    <h2>Заявка принята</h2>
+    <p class="sub" style="margin-top:4px">Сигнал принят. Я изучу вашу задачу и лично напишу вам в удобное окно.</p>
+  </div>
+  <div class="paper-card"><div style="font:700 9.5px var(--mono);color:var(--wine)">ВАША МИССИЯ</div>
+    <p id="s6Info" style="margin-top:4px;color:var(--ink)"></p></div>
+  <div class="artifact-unlock">
+    <div style="font:700 10px var(--mono);color:var(--gold-light);letter-spacing:.1em">А ПОКА — ВАШ АРТЕФАКТ</div>
+    <div style="font:600 16px var(--serif);color:#fff;margin:3px 0">THE ARCHITECTURE LAB</div>
+    <p style="font-size:11.8px;color:var(--ash);margin-bottom:9px">Исследуйте, как превратить хаос в систему, пока я готовлюсь к разговору.</p>
+    <a href="${LAB}" target="_blank" class="btn" onclick="track('lab_artifact_open',{demon:state.demon,from:'s6'})">${ico('temple')} ПЕРЕЙТИ В ARCHITECTURE LAB →</a>
+  </div>
+</section>`);
+screens.push('s6');
+stepMeta.s6={title:"ЗАЯВКА ПРИНЯТА",badge:"SIGNAL",pct:100,prev:"s0"};
+
+/* ---------- go: конфетти и лут на победе ---------- */
+const _go=window.go;
+window.go=function(id){
+  _go(id);
+  if(id==='s3'){
+    document.querySelectorAll('.loot-card').forEach((c,i)=>{c.classList.remove('drop');void c.offsetWidth;c.style.animationDelay=(.25+i*.12)+'s';c.classList.add('drop')});
+    if(!reduce){burst(innerWidth*.3,innerHeight*.35,35);setTimeout(()=>burst(innerWidth*.7,innerHeight*.35,35),180)}
+  }
+};
+
+/* ---------- Форма s5: контакт + без редиректа ---------- */
+$('fPain').insertAdjacentHTML('afterend','<input class="inp" id="fContact" placeholder="4. Ваш @username в Telegram или другой контакт">');
+try{const u=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user;if(u&&u.username)$('fContact').value='@'+u.username}catch{}
+const old=$('sendBtn'),btn=old.cloneNode(true);old.replaceWith(btn);   // снимаем старый обработчик с редиректом
+btn.addEventListener('click',async()=>{
+  if(state.sending)return;
+  const name=$('fName').value.trim(),path=$('fPath').value.trim(),pain=$('fPain').value.trim(),contact=$('fContact').value.trim();
+  const msgEl=$('formMsg');
+  if(!name||!path){msgEl.style.color="var(--danger)";msgEl.textContent="Заполните первые два поля.";return}
+  const hasTg=!!(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.id);
+  if(!contact&&!hasTg){msgEl.style.color="var(--danger)";msgEl.textContent="Оставьте @username или другой контакт, чтобы я могла написать.";return}
+  msgEl.textContent="";state.sending=true;btn.disabled=true;btn.textContent="Отправляю…";
+  const d=DEMONS[state.demon];
+  const message=["Привет, Тория! Я изгнала демона в THE CHAOSVERSE — пора навести порядок в реальности!","",
+    "• Миссия: "+state.tierLabel,"• Поверженный босс: "+d.name+" ("+d.weakness+")","• Кто я: "+name,
+    "• Блог и продукт: "+path,"• Главная задача: "+(pain||"Обсудим на встрече"),
+    "• Контакт: "+(contact||"(из Telegram-профиля)"),"• Удобное окно: "+state.time].join("\n");
+  track("consultation_click",{step:state.tier,slot:state.time,situation:d.name});
+  let ok=true;
+  try{
+    if(!isLocal){
+      const r=await apiPost("/api/consultation",{product:`${name} (${path})`,request:message,
+        formats:[state.tierLabel,d.name,`Окно: ${state.time}`,`Контакт: ${contact}`],
+        slotDate:"",slotTime:state.time,contact,intent:"miniapp_v38_chaosverse",src});
+      if(r&&r.ok===false)ok=false;
+    }
+  }catch(e){ok=false}
+  state.sending=false;btn.disabled=false;btn.innerHTML="Отправить заявку ↗";
+  if(!ok){ // сервер не принял — не теряем лид, запасной путь в личку
+    try{navigator.clipboard.writeText(message)}catch{}
+    msgEl.style.color="var(--danger)";msgEl.textContent="Не удалось отправить напрямую — открываю Telegram.";
+    setTimeout(()=>openTg("https://t.me/"+TELEGRAM_USERNAME+"?text="+encodeURIComponent(message)),600);return}
+  track("consultation_sent",{step:state.tier,slot:state.time});
+  hap('notificationOccurred','success');
+  $('s6Info').textContent=state.tierLabel+" · "+state.time;
+  go('s6');
+  if(!reduce)setTimeout(()=>burst(innerWidth/2,innerHeight*.28,45),500);
+});
+btn.textContent="Отправить заявку ↗";
+})();
+</script>
+
 </body>
 </html>
